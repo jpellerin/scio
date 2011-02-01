@@ -15,6 +15,8 @@ Topic :: Software Development :: Object Brokering""".split("\n")
 setup(
     name='Scio',
     version='0.9',
+    author_email='oss@leapfrogdevelopment.com',
+    url='http://bitbucket.org/leapfrogdevelopment/scio/overview',
     install_requires=['lxml>=2.2', 'python-dateutil'],
     tests_require=['nose>=1.0', 'Sphinx>=1.0'],
     packages=find_packages(),
