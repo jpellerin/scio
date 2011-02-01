@@ -1,0 +1,48 @@
+<soapenv:Envelope 
+        xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <soapenv:Header>
+    <responseTime 
+        soapenv:actor="http://schemas.xmlsoap.org/soap/actor/next" 
+        soapenv:mustUnderstand="0" 
+        xmlns="https://adwords.google.com/api/adwords/v13">
+        10636
+    </responseTime>
+    <operations
+        soapenv:actor="http://schemas.xmlsoap.org/soap/actor/next"
+        soapenv:mustUnderstand="0"
+        xmlns="https://adwords.google.com/api/adwords/v13">
+        1
+    </operations>
+    <units
+        soapenv:actor="http://schemas.xmlsoap.org/soap/actor/next"
+        soapenv:mustUnderstand="0"
+        xmlns="https://adwords.google.com/api/adwords/v13">
+        1
+    </units>
+    <requestId
+        soapenv:actor="http://schemas.xmlsoap.org/soap/actor/next"
+        soapenv:mustUnderstand="0"
+        xmlns="https://adwords.google.com/api/adwords/v13">
+        eb21e6667abb131c117b58086f75abbd
+    </requestId>
+  </soapenv:Header>
+
+  <soapenv:Body>
+    <estimateKeywordListResponse 
+         xmlns="https://adwords.google.com/api/adwords/v13">
+      <estimateKeywordListReturn>
+        <lowerAvgPosition>2.9376502</lowerAvgPosition>
+        <upperAvgPosition>4.5</upperAvgPosition>
+        <lowerCpc>50000</lowerCpc>
+        <upperCpc>60000</upperCpc>
+        <lowerClicksPerDay>1.2</lowerClicksPerDay>
+        <upperClicksPerDay>3.2</upperClicksPerDay>
+        <id>-1</id>
+      </estimateKeywordListReturn>
+    </estimateKeywordListResponse>
+  </soapenv:Body>
+
+</soapenv:Envelope>

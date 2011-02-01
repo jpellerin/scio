@@ -1,0 +1,4 @@
+Profile & optimize class building
+Support pulling docs from wsdl in autowsdl (see ebay wsdl for example)
+Support freezing generated classes into code
+  (ebay wsdl takes 3 minutes to process!)

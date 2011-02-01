@@ -1,0 +1,3139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.zenfolio.com/api" xmlns:s1="http://www.zenfolio.com/api/AbstractTypes" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://www.zenfolio.com/api" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is Zenfolio Web API. See &lt;A href="/zf/help/?topic=api/introduction"&gt;help&lt;/A&gt; for details.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.zenfolio.com/api">
+      <s:element name="GetChallenge">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="loginName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetChallengeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetChallengeResult" type="tns:AuthChallenge" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AuthChallenge">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PasswordSalt" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="Challenge" type="s:base64Binary" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AuthenticatePlain">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="loginName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthenticatePlainResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AuthenticatePlainResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Authenticate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="challenge" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="proof" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthenticateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AuthenticateResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoadPrivateProfile">
+        <s:complexType />
+      </s:element>
+      <s:element name="LoadPrivateProfileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoadPrivateProfileResult" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="User">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="LoginName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DisplayName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PrimaryEmail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BioPhoto" type="tns:File" />
+          <s:element minOccurs="0" maxOccurs="1" name="Bio" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Views" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="GalleryCount" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="CollectionCount" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhotoCount" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhotoBytes" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserSince" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastUpdated" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="PublicAddress" type="tns:Address" />
+          <s:element minOccurs="0" maxOccurs="1" name="PersonalAddress" type="tns:Address" />
+          <s:element minOccurs="0" maxOccurs="1" name="RecentPhotoSets" type="tns:ArrayOfPhotoSet" />
+          <s:element minOccurs="0" maxOccurs="1" name="FeaturedPhotoSets" type="tns:ArrayOfPhotoSet" />
+          <s:element minOccurs="0" maxOccurs="1" name="RootGroup" type="tns:Group" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferralCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExpiresOn" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Balance" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="DomainName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StorageQuota" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhotoBytesQuota" type="s:long" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="File">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:unsignedInt" />
+          <s:element minOccurs="1" maxOccurs="1" name="Height" type="s:unsignedInt" />
+          <s:element minOccurs="0" maxOccurs="1" name="Sequence" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MimeType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FileHash" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="UrlCore" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Address">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Street" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Street2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Phone2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Fax" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Url" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Other" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfPhotoSet">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PhotoSet" type="tns:PhotoSet" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PhotoSet">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:GroupElement">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Caption" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CreatedOn" type="s:dateTime" />
+              <s:element minOccurs="0" maxOccurs="1" name="ModifiedOn" type="s:dateTime" />
+              <s:element minOccurs="0" maxOccurs="1" name="PhotoCount" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="PhotoBytes" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="Views" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="Type" type="tns:PhotoSetType" />
+              <s:element minOccurs="0" maxOccurs="1" name="FeaturedIndex" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="TitlePhoto" type="tns:Photo" />
+              <s:element minOccurs="0" maxOccurs="1" name="IsRandomTitlePhoto" type="s:boolean" />
+              <s:element minOccurs="0" maxOccurs="1" name="ParentGroups" type="tns:ArrayOfInt1" />
+              <s:element minOccurs="0" maxOccurs="1" name="Photos" type="tns:ArrayOfPhoto" />
+              <s:element minOccurs="0" maxOccurs="1" name="Keywords" type="tns:ArrayOfString1" />
+              <s:element minOccurs="0" maxOccurs="1" name="Categories" type="tns:ArrayOfInt" />
+              <s:element minOccurs="0" maxOccurs="1" name="UploadUrl" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GroupElement">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="GroupIndex" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccessDescriptor" type="tns:AccessDescriptor" />
+          <s:element minOccurs="0" maxOccurs="1" name="Owner" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AccessDescriptor">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="RealmId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccessType" type="tns:AccessType" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsDerived" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccessMask" type="tns:ApiAccessMask" />
+          <s:element minOccurs="0" maxOccurs="1" name="Viewers" type="tns:ArrayOfString" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="AccessType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Private" />
+          <s:enumeration value="UserList" />
+          <s:enumeration value="Password" />
+          <s:enumeration value="Public" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="ApiAccessMask">
+        <s:list>
+          <s:simpleType>
+            <s:restriction base="s:string">
+              <s:enumeration value="ProtectAll" />
+              <s:enumeration value="NoCollections" />
+              <s:enumeration value="None" />
+              <s:enumeration value="NoPrivateSearch" />
+              <s:enumeration value="NoPublicSearch" />
+              <s:enumeration value="NoRecentList" />
+              <s:enumeration value="HideDateCreated" />
+              <s:enumeration value="HideDateModified" />
+              <s:enumeration value="HideDateTaken" />
+              <s:enumeration value="ProtectExif" />
+              <s:enumeration value="ProtectExtraLarge" />
+              <s:enumeration value="ProtectLarge" />
+              <s:enumeration value="ProtectMedium" />
+              <s:enumeration value="HideMetaData" />
+              <s:enumeration value="ProtectOriginals" />
+              <s:enumeration value="HideUserStats" />
+              <s:enumeration value="HideVisits" />
+            </s:restriction>
+          </s:simpleType>
+        </s:list>
+      </s:simpleType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Viewer" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Group">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:GroupElement">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Caption" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CreatedOn" type="s:dateTime" />
+              <s:element minOccurs="0" maxOccurs="1" name="ModifiedOn" type="s:dateTime" />
+              <s:element minOccurs="0" maxOccurs="1" name="CollectionCount" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="SubGroupCount" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="GalleryCount" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="PhotoCount" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="ParentGroups" type="tns:ArrayOfInt1" />
+              <s:element minOccurs="0" maxOccurs="1" name="Elements" type="tns:ArrayOfChoice1" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfInt1">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Id" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfChoice1">
+        <s:choice minOccurs="0" maxOccurs="unbounded">
+          <s:element minOccurs="0" maxOccurs="1" name="PhotoSet" type="tns:PhotoSet" />
+          <s:element minOccurs="0" maxOccurs="1" name="Group" type="tns:Group" />
+        </s:choice>
+      </s:complexType>
+      <s:simpleType name="PhotoSetType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Gallery" />
+          <s:enumeration value="Collection" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Photo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Width" type="s:unsignedInt" />
+          <s:element minOccurs="0" maxOccurs="1" name="Height" type="s:unsignedInt" />
+          <s:element minOccurs="0" maxOccurs="1" name="Sequence" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccessDescriptor" type="tns:AccessDescriptor" />
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Caption" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UploadedOn" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="TakenOn" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Owner" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Gallery" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Views" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Size" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Rotation" type="tns:PhotoRotation" />
+          <s:element minOccurs="0" maxOccurs="1" name="Keywords" type="tns:ArrayOfString1" />
+          <s:element minOccurs="0" maxOccurs="1" name="Categories" type="tns:ArrayOfInt" />
+          <s:element minOccurs="0" maxOccurs="1" name="PricingKey" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="MimeType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OriginalUrl" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UrlCore" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Copyright" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FileHash" type="s:base64Binary" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="PhotoRotation">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="Rotate90" />
+          <s:enumeration value="Rotate180" />
+          <s:enumeration value="Rotate270" />
+          <s:enumeration value="Flip" />
+          <s:enumeration value="Rotate90Flip" />
+          <s:enumeration value="Rotate180Flip" />
+          <s:enumeration value="Rotate270Flip" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfString1">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Keyword" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfInt">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Category" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfPhoto">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Photo" type="tns:Photo" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="LoadPublicProfile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="loginName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoadPublicProfileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoadPublicProfileResult" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoadGroupHierarchy">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="loginName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoadGroupHierarchyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoadGroupHierarchyResult" type="tns:Group" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoadGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="groupId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoadGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoadGroupResult" type="tns:Group" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoadPhotoSet">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photosetId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoadPhotoSetResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoadPhotoSetResult" type="tns:PhotoSet" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoadPhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoadPhotoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoadPhotoResult" type="tns:Photo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="KeyringAddKeyPlain">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="keyring" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="realmId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="KeyringAddKeyPlainResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="KeyringAddKeyPlainResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCategories">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetCategoriesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCategoriesResult" type="tns:ArrayOfCategory" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfCategory">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Category" nillable="true" type="tns:Category" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Category">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Code" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="DisplayName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SearchSetByCategory">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="searchId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="type" type="tns:PhotoSetType" />
+            <s:element minOccurs="1" maxOccurs="1" name="sortOrder" type="tns:SortOrder" />
+            <s:element minOccurs="1" maxOccurs="1" name="categoryCode" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="offset" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="limit" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="SortOrder">
+        <s:restriction base="s:string">
+          <s:enumeration value="Date" />
+          <s:enumeration value="Popularity" />
+          <s:enumeration value="Rank" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="SearchSetByCategoryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchSetByCategoryResult" type="tns:PhotoSetResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PhotoSetResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PhotoSets" type="tns:ArrayOfPhotoSet" />
+          <s:element minOccurs="1" maxOccurs="1" name="TotalCount" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SearchSetByText">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="searchId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="type" type="tns:PhotoSetType" />
+            <s:element minOccurs="1" maxOccurs="1" name="sortOrder" type="tns:SortOrder" />
+            <s:element minOccurs="0" maxOccurs="1" name="query" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="offset" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="limit" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchSetByTextResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchSetByTextResult" type="tns:PhotoSetResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPopularSets">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="type" type="tns:PhotoSetType" />
+            <s:element minOccurs="1" maxOccurs="1" name="offset" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="limit" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPopularSetsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPopularSetsResult" type="tns:ArrayOfPhotoSet1" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfPhotoSet1">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PhotoSet" nillable="true" type="tns:PhotoSet" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetRecentSets">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="type" type="tns:PhotoSetType" />
+            <s:element minOccurs="1" maxOccurs="1" name="offset" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="limit" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRecentSetsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRecentSetsResult" type="tns:ArrayOfPhotoSet1" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchPhotoByCategory">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="searchId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="sortOrder" type="tns:SortOrder" />
+            <s:element minOccurs="1" maxOccurs="1" name="categoryCode" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="offset" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="limit" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchPhotoByCategoryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchPhotoByCategoryResult" type="tns:PhotoResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PhotoResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Photos" type="tns:ArrayOfPhoto" />
+          <s:element minOccurs="1" maxOccurs="1" name="TotalCount" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SearchPhotoByText">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="searchId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="sortOrder" type="tns:SortOrder" />
+            <s:element minOccurs="0" maxOccurs="1" name="query" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="offset" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="limit" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchPhotoByTextResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchPhotoByTextResult" type="tns:PhotoResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPopularPhotos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="offset" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="limit" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPopularPhotosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPopularPhotosResult" type="tns:ArrayOfPhoto1" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfPhoto1">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Photo" nillable="true" type="tns:Photo" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetRecentPhotos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="offset" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="limit" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRecentPhotosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRecentPhotosResult" type="tns:ArrayOfPhoto1" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="parentId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="updater" type="tns:GroupUpdater" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="GroupUpdater">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Caption" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CreateGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateGroupResult" type="tns:Group" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="groupId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteGroupResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="UpdateGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="groupId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="updater" type="tns:GroupUpdater" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateGroupResult" type="tns:Group" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreatePhotoSet">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="groupId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="type" type="tns:PhotoSetType" />
+            <s:element minOccurs="0" maxOccurs="1" name="updater" type="tns:PhotoSetUpdater" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PhotoSetUpdater">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Caption" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Keywords" type="tns:ArrayOfString1" />
+          <s:element minOccurs="0" maxOccurs="1" name="Categories" type="tns:ArrayOfInt" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CreatePhotoSetResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreatePhotoSetResult" type="tns:PhotoSet" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeletePhotoSet">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoSetId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeletePhotoSetResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="UpdatePhotoSet">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoSetId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="updater" type="tns:PhotoSetUpdater" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatePhotoSetResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdatePhotoSetResult" type="tns:PhotoSet" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeletePhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeletePhotoResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="UpdatePhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="updater" type="tns:PhotoUpdater" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="PhotoUpdater">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Caption" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Keywords" type="tns:ArrayOfString1" />
+          <s:element minOccurs="0" maxOccurs="1" name="Categories" type="tns:ArrayOfInt" />
+          <s:element minOccurs="0" maxOccurs="1" name="Copyright" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdatePhotoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdatePhotoResult" type="tns:Photo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CollectionAddPhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="collectionId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="photoId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CollectionAddPhotoResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="CollectionRemovePhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="collectionId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="photoId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CollectionRemovePhotoResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="UpdatePhotoAccess">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="updater" type="tns:AccessUpdater" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AccessUpdater">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="AccessMask" type="tns:ApiAccessMask" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccessType" type="tns:AccessType" />
+          <s:element minOccurs="0" maxOccurs="1" name="Viewers" type="tns:ArrayOfString" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsDerived" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdatePhotoAccessResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdatePhotoAccessResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatePhotoSetAccess">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoSetId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="updater" type="tns:AccessUpdater" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatePhotoSetAccessResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdatePhotoSetAccessResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateGroupAccess">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="groupId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="updater" type="tns:AccessUpdater" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateGroupAccessResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateGroupAccessResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReorderPhotoSet">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoSetId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="shiftOrder" type="tns:ShiftOrder" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="ShiftOrder">
+        <s:restriction base="s:string">
+          <s:enumeration value="CreatedAsc" />
+          <s:enumeration value="CreatedDesc" />
+          <s:enumeration value="TakenAsc" />
+          <s:enumeration value="TakenDesc" />
+          <s:enumeration value="TitleAsc" />
+          <s:enumeration value="TitleDesc" />
+          <s:enumeration value="SizeAsc" />
+          <s:enumeration value="SizeDesc" />
+          <s:enumeration value="FileNameAsc" />
+          <s:enumeration value="FileNameDesc" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="ReorderPhotoSetResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="MovePhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="srcSetId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="photoId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="destSetId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="index" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MovePhotoResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="RotatePhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="rotation" type="tns:PhotoRotation" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RotatePhotoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RotatePhotoResult" type="tns:Photo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetGroupTitlePhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="groupId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="photoId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetGroupTitlePhotoResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SetPhotoSetTitlePhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoSetId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="photoId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetPhotoSetTitlePhotoResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SetPhotoSetFeaturedIndex">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoSetId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="index" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetPhotoSetFeaturedIndexResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="MovePhotoSet">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="photoSetId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="destGroupId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="index" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MovePhotoSetResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="ReorderGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="groupId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="shiftOrder" type="tns:GroupShiftOrder" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="GroupShiftOrder">
+        <s:restriction base="s:string">
+          <s:enumeration value="CreatedAsc" />
+          <s:enumeration value="CreatedDesc" />
+          <s:enumeration value="ModifiedAsc" />
+          <s:enumeration value="ModifiedDesc" />
+          <s:enumeration value="TitleAsc" />
+          <s:enumeration value="TitleDesc" />
+          <s:enumeration value="GroupsTop" />
+          <s:enumeration value="GroupsBottom" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="ReorderGroupResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="ReplacePhoto">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="originalId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="replacedId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReplacePhotoResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="MoveGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="groupId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="destGroupId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="index" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MoveGroupResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="AuthChallenge" nillable="true" type="tns:AuthChallenge" />
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="User" nillable="true" type="tns:User" />
+      <s:element name="Group" nillable="true" type="tns:Group" />
+      <s:element name="PhotoSet" nillable="true" type="tns:PhotoSet" />
+      <s:element name="Photo" nillable="true" type="tns:Photo" />
+      <s:element name="ArrayOfCategory" nillable="true" type="tns:ArrayOfCategory" />
+      <s:element name="PhotoSetResult" nillable="true" type="tns:PhotoSetResult" />
+      <s:element name="ArrayOfPhotoSet1" nillable="true" type="tns:ArrayOfPhotoSet1" />
+      <s:element name="PhotoResult" nillable="true" type="tns:PhotoResult" />
+      <s:element name="ArrayOfPhoto1" nillable="true" type="tns:ArrayOfPhoto1" />
+    </s:schema>
+    <s:schema targetNamespace="http://www.zenfolio.com/api/AbstractTypes">
+      <s:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <s:complexType name="StringArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="String" type="s:string" />
+            </s:sequence>
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetChallengeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetChallenge" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetChallengeResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticatePlainSoapIn">
+    <wsdl:part name="parameters" element="tns:AuthenticatePlain" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticatePlainSoapOut">
+    <wsdl:part name="parameters" element="tns:AuthenticatePlainResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateSoapIn">
+    <wsdl:part name="parameters" element="tns:Authenticate" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateSoapOut">
+    <wsdl:part name="parameters" element="tns:AuthenticateResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoadPrivateProfileSoapIn">
+    <wsdl:part name="parameters" element="tns:LoadPrivateProfile" />
+  </wsdl:message>
+  <wsdl:message name="LoadPrivateProfileSoapOut">
+    <wsdl:part name="parameters" element="tns:LoadPrivateProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoadPublicProfileSoapIn">
+    <wsdl:part name="parameters" element="tns:LoadPublicProfile" />
+  </wsdl:message>
+  <wsdl:message name="LoadPublicProfileSoapOut">
+    <wsdl:part name="parameters" element="tns:LoadPublicProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupHierarchySoapIn">
+    <wsdl:part name="parameters" element="tns:LoadGroupHierarchy" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupHierarchySoapOut">
+    <wsdl:part name="parameters" element="tns:LoadGroupHierarchyResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:LoadGroup" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:LoadGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoSetSoapIn">
+    <wsdl:part name="parameters" element="tns:LoadPhotoSet" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoSetSoapOut">
+    <wsdl:part name="parameters" element="tns:LoadPhotoSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:LoadPhoto" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:LoadPhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="KeyringAddKeyPlainSoapIn">
+    <wsdl:part name="parameters" element="tns:KeyringAddKeyPlain" />
+  </wsdl:message>
+  <wsdl:message name="KeyringAddKeyPlainSoapOut">
+    <wsdl:part name="parameters" element="tns:KeyringAddKeyPlainResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCategoriesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCategories" />
+  </wsdl:message>
+  <wsdl:message name="GetCategoriesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCategoriesResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByCategorySoapIn">
+    <wsdl:part name="parameters" element="tns:SearchSetByCategory" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByCategorySoapOut">
+    <wsdl:part name="parameters" element="tns:SearchSetByCategoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByTextSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchSetByText" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByTextSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchSetByTextResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularSetsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPopularSets" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularSetsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPopularSetsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentSetsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRecentSets" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentSetsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRecentSetsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByCategorySoapIn">
+    <wsdl:part name="parameters" element="tns:SearchPhotoByCategory" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByCategorySoapOut">
+    <wsdl:part name="parameters" element="tns:SearchPhotoByCategoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByTextSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchPhotoByText" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByTextSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchPhotoByTextResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularPhotosSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPopularPhotos" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularPhotosSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPopularPhotosResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentPhotosSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRecentPhotos" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentPhotosSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRecentPhotosResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateGroup" />
+  </wsdl:message>
+  <wsdl:message name="CreateGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteGroup" />
+  </wsdl:message>
+  <wsdl:message name="DeleteGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateGroup" />
+  </wsdl:message>
+  <wsdl:message name="UpdateGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreatePhotoSetSoapIn">
+    <wsdl:part name="parameters" element="tns:CreatePhotoSet" />
+  </wsdl:message>
+  <wsdl:message name="CreatePhotoSetSoapOut">
+    <wsdl:part name="parameters" element="tns:CreatePhotoSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeletePhotoSetSoapIn">
+    <wsdl:part name="parameters" element="tns:DeletePhotoSet" />
+  </wsdl:message>
+  <wsdl:message name="DeletePhotoSetSoapOut">
+    <wsdl:part name="parameters" element="tns:DeletePhotoSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePhotoSetSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdatePhotoSet" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePhotoSetSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdatePhotoSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeletePhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:DeletePhoto" />
+  </wsdl:message>
+  <wsdl:message name="DeletePhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:DeletePhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdatePhoto" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdatePhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="CollectionAddPhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:CollectionAddPhoto" />
+  </wsdl:message>
+  <wsdl:message name="CollectionAddPhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:CollectionAddPhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="CollectionRemovePhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:CollectionRemovePhoto" />
+  </wsdl:message>
+  <wsdl:message name="CollectionRemovePhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:CollectionRemovePhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePhotoAccessSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdatePhotoAccess" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePhotoAccessSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdatePhotoAccessResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePhotoSetAccessSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdatePhotoSetAccess" />
+  </wsdl:message>
+  <wsdl:message name="UpdatePhotoSetAccessSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdatePhotoSetAccessResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateGroupAccessSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateGroupAccess" />
+  </wsdl:message>
+  <wsdl:message name="UpdateGroupAccessSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateGroupAccessResponse" />
+  </wsdl:message>
+  <wsdl:message name="ReorderPhotoSetSoapIn">
+    <wsdl:part name="parameters" element="tns:ReorderPhotoSet" />
+  </wsdl:message>
+  <wsdl:message name="ReorderPhotoSetSoapOut">
+    <wsdl:part name="parameters" element="tns:ReorderPhotoSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="MovePhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:MovePhoto" />
+  </wsdl:message>
+  <wsdl:message name="MovePhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:MovePhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="RotatePhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:RotatePhoto" />
+  </wsdl:message>
+  <wsdl:message name="RotatePhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:RotatePhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetGroupTitlePhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:SetGroupTitlePhoto" />
+  </wsdl:message>
+  <wsdl:message name="SetGroupTitlePhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:SetGroupTitlePhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetPhotoSetTitlePhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:SetPhotoSetTitlePhoto" />
+  </wsdl:message>
+  <wsdl:message name="SetPhotoSetTitlePhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:SetPhotoSetTitlePhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetPhotoSetFeaturedIndexSoapIn">
+    <wsdl:part name="parameters" element="tns:SetPhotoSetFeaturedIndex" />
+  </wsdl:message>
+  <wsdl:message name="SetPhotoSetFeaturedIndexSoapOut">
+    <wsdl:part name="parameters" element="tns:SetPhotoSetFeaturedIndexResponse" />
+  </wsdl:message>
+  <wsdl:message name="MovePhotoSetSoapIn">
+    <wsdl:part name="parameters" element="tns:MovePhotoSet" />
+  </wsdl:message>
+  <wsdl:message name="MovePhotoSetSoapOut">
+    <wsdl:part name="parameters" element="tns:MovePhotoSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="ReorderGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:ReorderGroup" />
+  </wsdl:message>
+  <wsdl:message name="ReorderGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:ReorderGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="ReplacePhotoSoapIn">
+    <wsdl:part name="parameters" element="tns:ReplacePhoto" />
+  </wsdl:message>
+  <wsdl:message name="ReplacePhotoSoapOut">
+    <wsdl:part name="parameters" element="tns:ReplacePhotoResponse" />
+  </wsdl:message>
+  <wsdl:message name="MoveGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:MoveGroup" />
+  </wsdl:message>
+  <wsdl:message name="MoveGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:MoveGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeHttpGetIn">
+    <wsdl:part name="loginName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeHttpGetOut">
+    <wsdl:part name="Body" element="tns:AuthChallenge" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticatePlainHttpGetIn">
+    <wsdl:part name="loginName" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticatePlainHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateHttpGetIn">
+    <wsdl:part name="challenge" type="s1:StringArray" />
+    <wsdl:part name="proof" type="s1:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadPrivateProfileHttpGetIn" />
+  <wsdl:message name="LoadPrivateProfileHttpGetOut">
+    <wsdl:part name="Body" element="tns:User" />
+  </wsdl:message>
+  <wsdl:message name="LoadPublicProfileHttpGetIn">
+    <wsdl:part name="loginName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadPublicProfileHttpGetOut">
+    <wsdl:part name="Body" element="tns:User" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupHierarchyHttpGetIn">
+    <wsdl:part name="loginName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupHierarchyHttpGetOut">
+    <wsdl:part name="Body" element="tns:Group" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupHttpGetIn">
+    <wsdl:part name="groupId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupHttpGetOut">
+    <wsdl:part name="Body" element="tns:Group" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoSetHttpGetIn">
+    <wsdl:part name="photosetId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoSetHttpGetOut">
+    <wsdl:part name="Body" element="tns:PhotoSet" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoHttpGetIn">
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoHttpGetOut">
+    <wsdl:part name="Body" element="tns:Photo" />
+  </wsdl:message>
+  <wsdl:message name="KeyringAddKeyPlainHttpGetIn">
+    <wsdl:part name="keyring" type="s:string" />
+    <wsdl:part name="realmId" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="KeyringAddKeyPlainHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCategoriesHttpGetIn" />
+  <wsdl:message name="GetCategoriesHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfCategory" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByCategoryHttpGetIn">
+    <wsdl:part name="searchId" type="s:string" />
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="sortOrder" type="s:string" />
+    <wsdl:part name="categoryCode" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByCategoryHttpGetOut">
+    <wsdl:part name="Body" element="tns:PhotoSetResult" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByTextHttpGetIn">
+    <wsdl:part name="searchId" type="s:string" />
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="sortOrder" type="s:string" />
+    <wsdl:part name="query" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByTextHttpGetOut">
+    <wsdl:part name="Body" element="tns:PhotoSetResult" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularSetsHttpGetIn">
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularSetsHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPhotoSet1" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentSetsHttpGetIn">
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentSetsHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPhotoSet1" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByCategoryHttpGetIn">
+    <wsdl:part name="searchId" type="s:string" />
+    <wsdl:part name="sortOrder" type="s:string" />
+    <wsdl:part name="categoryCode" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByCategoryHttpGetOut">
+    <wsdl:part name="Body" element="tns:PhotoResult" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByTextHttpGetIn">
+    <wsdl:part name="searchId" type="s:string" />
+    <wsdl:part name="sortOrder" type="s:string" />
+    <wsdl:part name="query" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByTextHttpGetOut">
+    <wsdl:part name="Body" element="tns:PhotoResult" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularPhotosHttpGetIn">
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularPhotosHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPhoto1" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentPhotosHttpGetIn">
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentPhotosHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPhoto1" />
+  </wsdl:message>
+  <wsdl:message name="DeleteGroupHttpGetIn">
+    <wsdl:part name="groupId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteGroupHttpGetOut" />
+  <wsdl:message name="DeletePhotoSetHttpGetIn">
+    <wsdl:part name="photoSetId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeletePhotoSetHttpGetOut" />
+  <wsdl:message name="DeletePhotoHttpGetIn">
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeletePhotoHttpGetOut" />
+  <wsdl:message name="CollectionAddPhotoHttpGetIn">
+    <wsdl:part name="collectionId" type="s:string" />
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CollectionAddPhotoHttpGetOut" />
+  <wsdl:message name="CollectionRemovePhotoHttpGetIn">
+    <wsdl:part name="collectionId" type="s:string" />
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CollectionRemovePhotoHttpGetOut" />
+  <wsdl:message name="ReorderPhotoSetHttpGetIn">
+    <wsdl:part name="photoSetId" type="s:string" />
+    <wsdl:part name="shiftOrder" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReorderPhotoSetHttpGetOut" />
+  <wsdl:message name="MovePhotoHttpGetIn">
+    <wsdl:part name="srcSetId" type="s:string" />
+    <wsdl:part name="photoId" type="s:string" />
+    <wsdl:part name="destSetId" type="s:string" />
+    <wsdl:part name="index" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MovePhotoHttpGetOut" />
+  <wsdl:message name="RotatePhotoHttpGetIn">
+    <wsdl:part name="photoId" type="s:string" />
+    <wsdl:part name="rotation" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RotatePhotoHttpGetOut">
+    <wsdl:part name="Body" element="tns:Photo" />
+  </wsdl:message>
+  <wsdl:message name="SetGroupTitlePhotoHttpGetIn">
+    <wsdl:part name="groupId" type="s:string" />
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SetGroupTitlePhotoHttpGetOut" />
+  <wsdl:message name="SetPhotoSetTitlePhotoHttpGetIn">
+    <wsdl:part name="photoSetId" type="s:string" />
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SetPhotoSetTitlePhotoHttpGetOut" />
+  <wsdl:message name="SetPhotoSetFeaturedIndexHttpGetIn">
+    <wsdl:part name="photoSetId" type="s:string" />
+    <wsdl:part name="index" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SetPhotoSetFeaturedIndexHttpGetOut" />
+  <wsdl:message name="MovePhotoSetHttpGetIn">
+    <wsdl:part name="photoSetId" type="s:string" />
+    <wsdl:part name="destGroupId" type="s:string" />
+    <wsdl:part name="index" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MovePhotoSetHttpGetOut" />
+  <wsdl:message name="ReorderGroupHttpGetIn">
+    <wsdl:part name="groupId" type="s:string" />
+    <wsdl:part name="shiftOrder" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReorderGroupHttpGetOut" />
+  <wsdl:message name="ReplacePhotoHttpGetIn">
+    <wsdl:part name="originalId" type="s:string" />
+    <wsdl:part name="replacedId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReplacePhotoHttpGetOut" />
+  <wsdl:message name="MoveGroupHttpGetIn">
+    <wsdl:part name="groupId" type="s:string" />
+    <wsdl:part name="destGroupId" type="s:string" />
+    <wsdl:part name="index" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MoveGroupHttpGetOut" />
+  <wsdl:message name="GetChallengeHttpPostIn">
+    <wsdl:part name="loginName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetChallengeHttpPostOut">
+    <wsdl:part name="Body" element="tns:AuthChallenge" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticatePlainHttpPostIn">
+    <wsdl:part name="loginName" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticatePlainHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateHttpPostIn">
+    <wsdl:part name="challenge" type="s1:StringArray" />
+    <wsdl:part name="proof" type="s1:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadPrivateProfileHttpPostIn" />
+  <wsdl:message name="LoadPrivateProfileHttpPostOut">
+    <wsdl:part name="Body" element="tns:User" />
+  </wsdl:message>
+  <wsdl:message name="LoadPublicProfileHttpPostIn">
+    <wsdl:part name="loginName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadPublicProfileHttpPostOut">
+    <wsdl:part name="Body" element="tns:User" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupHierarchyHttpPostIn">
+    <wsdl:part name="loginName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupHierarchyHttpPostOut">
+    <wsdl:part name="Body" element="tns:Group" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupHttpPostIn">
+    <wsdl:part name="groupId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadGroupHttpPostOut">
+    <wsdl:part name="Body" element="tns:Group" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoSetHttpPostIn">
+    <wsdl:part name="photosetId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoSetHttpPostOut">
+    <wsdl:part name="Body" element="tns:PhotoSet" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoHttpPostIn">
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoadPhotoHttpPostOut">
+    <wsdl:part name="Body" element="tns:Photo" />
+  </wsdl:message>
+  <wsdl:message name="KeyringAddKeyPlainHttpPostIn">
+    <wsdl:part name="keyring" type="s:string" />
+    <wsdl:part name="realmId" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="KeyringAddKeyPlainHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCategoriesHttpPostIn" />
+  <wsdl:message name="GetCategoriesHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfCategory" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByCategoryHttpPostIn">
+    <wsdl:part name="searchId" type="s:string" />
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="sortOrder" type="s:string" />
+    <wsdl:part name="categoryCode" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByCategoryHttpPostOut">
+    <wsdl:part name="Body" element="tns:PhotoSetResult" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByTextHttpPostIn">
+    <wsdl:part name="searchId" type="s:string" />
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="sortOrder" type="s:string" />
+    <wsdl:part name="query" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchSetByTextHttpPostOut">
+    <wsdl:part name="Body" element="tns:PhotoSetResult" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularSetsHttpPostIn">
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularSetsHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPhotoSet1" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentSetsHttpPostIn">
+    <wsdl:part name="type" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentSetsHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPhotoSet1" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByCategoryHttpPostIn">
+    <wsdl:part name="searchId" type="s:string" />
+    <wsdl:part name="sortOrder" type="s:string" />
+    <wsdl:part name="categoryCode" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByCategoryHttpPostOut">
+    <wsdl:part name="Body" element="tns:PhotoResult" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByTextHttpPostIn">
+    <wsdl:part name="searchId" type="s:string" />
+    <wsdl:part name="sortOrder" type="s:string" />
+    <wsdl:part name="query" type="s:string" />
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchPhotoByTextHttpPostOut">
+    <wsdl:part name="Body" element="tns:PhotoResult" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularPhotosHttpPostIn">
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPopularPhotosHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPhoto1" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentPhotosHttpPostIn">
+    <wsdl:part name="offset" type="s:string" />
+    <wsdl:part name="limit" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentPhotosHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfPhoto1" />
+  </wsdl:message>
+  <wsdl:message name="DeleteGroupHttpPostIn">
+    <wsdl:part name="groupId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteGroupHttpPostOut" />
+  <wsdl:message name="DeletePhotoSetHttpPostIn">
+    <wsdl:part name="photoSetId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeletePhotoSetHttpPostOut" />
+  <wsdl:message name="DeletePhotoHttpPostIn">
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeletePhotoHttpPostOut" />
+  <wsdl:message name="CollectionAddPhotoHttpPostIn">
+    <wsdl:part name="collectionId" type="s:string" />
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CollectionAddPhotoHttpPostOut" />
+  <wsdl:message name="CollectionRemovePhotoHttpPostIn">
+    <wsdl:part name="collectionId" type="s:string" />
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CollectionRemovePhotoHttpPostOut" />
+  <wsdl:message name="ReorderPhotoSetHttpPostIn">
+    <wsdl:part name="photoSetId" type="s:string" />
+    <wsdl:part name="shiftOrder" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReorderPhotoSetHttpPostOut" />
+  <wsdl:message name="MovePhotoHttpPostIn">
+    <wsdl:part name="srcSetId" type="s:string" />
+    <wsdl:part name="photoId" type="s:string" />
+    <wsdl:part name="destSetId" type="s:string" />
+    <wsdl:part name="index" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MovePhotoHttpPostOut" />
+  <wsdl:message name="RotatePhotoHttpPostIn">
+    <wsdl:part name="photoId" type="s:string" />
+    <wsdl:part name="rotation" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RotatePhotoHttpPostOut">
+    <wsdl:part name="Body" element="tns:Photo" />
+  </wsdl:message>
+  <wsdl:message name="SetGroupTitlePhotoHttpPostIn">
+    <wsdl:part name="groupId" type="s:string" />
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SetGroupTitlePhotoHttpPostOut" />
+  <wsdl:message name="SetPhotoSetTitlePhotoHttpPostIn">
+    <wsdl:part name="photoSetId" type="s:string" />
+    <wsdl:part name="photoId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SetPhotoSetTitlePhotoHttpPostOut" />
+  <wsdl:message name="SetPhotoSetFeaturedIndexHttpPostIn">
+    <wsdl:part name="photoSetId" type="s:string" />
+    <wsdl:part name="index" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SetPhotoSetFeaturedIndexHttpPostOut" />
+  <wsdl:message name="MovePhotoSetHttpPostIn">
+    <wsdl:part name="photoSetId" type="s:string" />
+    <wsdl:part name="destGroupId" type="s:string" />
+    <wsdl:part name="index" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MovePhotoSetHttpPostOut" />
+  <wsdl:message name="ReorderGroupHttpPostIn">
+    <wsdl:part name="groupId" type="s:string" />
+    <wsdl:part name="shiftOrder" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReorderGroupHttpPostOut" />
+  <wsdl:message name="ReplacePhotoHttpPostIn">
+    <wsdl:part name="originalId" type="s:string" />
+    <wsdl:part name="replacedId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ReplacePhotoHttpPostOut" />
+  <wsdl:message name="MoveGroupHttpPostIn">
+    <wsdl:part name="groupId" type="s:string" />
+    <wsdl:part name="destGroupId" type="s:string" />
+    <wsdl:part name="index" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MoveGroupHttpPostOut" />
+  <wsdl:portType name="ZfApiSoap">
+    <wsdl:operation name="GetChallenge">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Generates authentication challenge. &lt;A href="/zf/help/?topic=api/ref/methods/getchallenge"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetChallengeSoapIn" />
+      <wsdl:output message="tns:GetChallengeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticatePlain">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Performs plain-text authentication. HTTPS only. &lt;A href="/zf/help/?topic=api/ref/methods/authenticateplain"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:AuthenticatePlainSoapIn" />
+      <wsdl:output message="tns:AuthenticatePlainSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Finalizes login sequence and generates a authentication token. &lt;A href="/zf/help/?topic=api/ref/methods/authenticate"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:AuthenticateSoapIn" />
+      <wsdl:output message="tns:AuthenticateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPrivateProfile">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads private profile of the current user. &lt;A href="/zf/help/?topic=api/ref/methods/loadprivateprofile"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPrivateProfileSoapIn" />
+      <wsdl:output message="tns:LoadPrivateProfileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPublicProfile">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads public profile of specified user. &lt;A href="/zf/help/?topic=api/ref/methods/loadpublicprofile"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPublicProfileSoapIn" />
+      <wsdl:output message="tns:LoadPublicProfileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroupHierarchy">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads Group hierarchy of the specified user. &lt;A href="/zf/help/?topic=api/ref/methods/loadgrouphierarchy"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadGroupHierarchySoapIn" />
+      <wsdl:output message="tns:LoadGroupHierarchySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads specified group. &lt;A href="/zf/help/?topic=api/ref/methods/loadgroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadGroupSoapIn" />
+      <wsdl:output message="tns:LoadGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads specified photoset. &lt;A href="/zf/help/?topic=api/ref/methods/loadphotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPhotoSetSoapIn" />
+      <wsdl:output message="tns:LoadPhotoSetSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads specified photo. &lt;A href="/zf/help/?topic=api/ref/methods/loadphoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPhotoSoapIn" />
+      <wsdl:output message="tns:LoadPhotoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="KeyringAddKeyPlain">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Adds a plaintext password to existing keyring. HTTPS only. &lt;A href="/zf/help/?topic=api/ref/methods/keyringaddkeyplain"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:KeyringAddKeyPlainSoapIn" />
+      <wsdl:output message="tns:KeyringAddKeyPlainSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCategories">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads full list of supported categories. &lt;A href="/zf/help/?topic=api/ref/methods/getcategories"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetCategoriesSoapIn" />
+      <wsdl:output message="tns:GetCategoriesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByCategory">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photo sets by category id. &lt;A href="/zf/help/?topic=api/ref/methods/searchsetbycategory"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchSetByCategorySoapIn" />
+      <wsdl:output message="tns:SearchSetByCategorySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByText">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photo sets using fullt-text search. &lt;A href="/zf/help/?topic=api/ref/methods/searchsetbytext"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchSetByTextSoapIn" />
+      <wsdl:output message="tns:SearchSetByTextSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularSets">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves photo sets in order of popularity (most viewed at the top). &lt;A href="/zf/help/?topic=api/ref/methods/getpopularsets"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetPopularSetsSoapIn" />
+      <wsdl:output message="tns:GetPopularSetsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentSets">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves recently added photo sets (most recent at the top). &lt;A href="/zf/help/?topic=api/ref/methods/getrecentsets"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetRecentSetsSoapIn" />
+      <wsdl:output message="tns:GetRecentSetsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByCategory">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photos by category id. &lt;A href="/zf/help/?topic=api/ref/methods/searchphotobycategory"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchPhotoByCategorySoapIn" />
+      <wsdl:output message="tns:SearchPhotoByCategorySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByText">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photos using fullt-text search. &lt;A href="/zf/help/?topic=api/ref/methods/searchphotobytext"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchPhotoByTextSoapIn" />
+      <wsdl:output message="tns:SearchPhotoByTextSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularPhotos">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves photos in order of popularity (most viewed at the top). &lt;A href="/zf/help/?topic=api/ref/methods/getpopularphotos"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetPopularPhotosSoapIn" />
+      <wsdl:output message="tns:GetPopularPhotosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentPhotos">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves recently added photos (most recent at the top).  &lt;A href="/zf/help/?topic=api/ref/methods/getrecentphotos"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetRecentPhotosSoapIn" />
+      <wsdl:output message="tns:GetRecentPhotosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Creates a Group. &lt;A href="/zf/help/?topic=api/ref/methods/creategroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:CreateGroupSoapIn" />
+      <wsdl:output message="tns:CreateGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Deletes a Group. &lt;A href="/zf/help/?topic=api/ref/methods/deletegroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:DeleteGroupSoapIn" />
+      <wsdl:output message="tns:DeleteGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Updates a Group. &lt;A href="/zf/help/?topic=api/ref/methods/updategroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:UpdateGroupSoapIn" />
+      <wsdl:output message="tns:UpdateGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreatePhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Creates a photoset. &lt;A href="/zf/help/?topic=api/ref/methods/createphotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:CreatePhotoSetSoapIn" />
+      <wsdl:output message="tns:CreatePhotoSetSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Deletes a photoset. &lt;A href="/zf/help/?topic=api/ref/methods/deletephotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:DeletePhotoSetSoapIn" />
+      <wsdl:output message="tns:DeletePhotoSetSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Updates a photoset. &lt;A href="/zf/help/?topic=api/ref/methods/updatephotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:UpdatePhotoSetSoapIn" />
+      <wsdl:output message="tns:UpdatePhotoSetSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Deletes a photo. &lt;A href="/zf/help/?topic=api/ref/methods/deletephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:DeletePhotoSoapIn" />
+      <wsdl:output message="tns:DeletePhotoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Updates a photo. &lt;A href="/zf/help/?topic=api/ref/methods/updatephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:UpdatePhotoSoapIn" />
+      <wsdl:output message="tns:UpdatePhotoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CollectionAddPhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Adds a photo reference to the specified collection. &lt;A href="/zf/help/?topic=api/ref/methods/collectionaddphoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:CollectionAddPhotoSoapIn" />
+      <wsdl:output message="tns:CollectionAddPhotoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CollectionRemovePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Removes a photo reference from the specified collection. &lt;A href="/zf/help/?topic=api/ref/methods/collectionremovephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:CollectionRemovePhotoSoapIn" />
+      <wsdl:output message="tns:CollectionRemovePhotoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePhotoAccess">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Updates photo access descriptor. &lt;A href="/zf/help/?topic=api/ref/methods/updatephotoaccess"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:UpdatePhotoAccessSoapIn" />
+      <wsdl:output message="tns:UpdatePhotoAccessSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePhotoSetAccess">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Updates photoset access descriptor. &lt;A href="/zf/help/?topic=api/ref/methods/updatephotosetaccess"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:UpdatePhotoSetAccessSoapIn" />
+      <wsdl:output message="tns:UpdatePhotoSetAccessSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateGroupAccess">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Updates photoset group access descriptor. &lt;A href="/zf/help/?topic=api/ref/methods/updategroupaccess"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:UpdateGroupAccessSoapIn" />
+      <wsdl:output message="tns:UpdateGroupAccessSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReorderPhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Reorders photoset elements based on the specified sort order. &lt;A href="/zf/help/?topic=api/ref/methods/reorderphotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:ReorderPhotoSetSoapIn" />
+      <wsdl:output message="tns:ReorderPhotoSetSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MovePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Moves a photograph from one photoset to another. Both photosets should have the same type and belong to the caller. Can be used to move a photo within the same photoset. &lt;A href="/zf/help/?topic=api/ref/methods/movephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:MovePhotoSoapIn" />
+      <wsdl:output message="tns:MovePhotoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RotatePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Rotates a photo. &lt;a href="/zf/help/?topic=api/ref/methods/rotatephoto"&gt;More ...&lt;/a&gt;</wsdl:documentation>
+      <wsdl:input message="tns:RotatePhotoSoapIn" />
+      <wsdl:output message="tns:RotatePhotoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetGroupTitlePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Sets a title (cover) photograph for a group. &lt;A href="/zf/help/?topic=api/ref/methods/setgrouptitlephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SetGroupTitlePhotoSoapIn" />
+      <wsdl:output message="tns:SetGroupTitlePhotoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetTitlePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Sets a title (cover) photograph for a photoset (gallery or collection). &lt;A href="/zf/help/?topic=api/ref/methods/setphotosettitlephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SetPhotoSetTitlePhotoSoapIn" />
+      <wsdl:output message="tns:SetPhotoSetTitlePhotoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetFeaturedIndex">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Sets the position of a photoset among featured photosets of the current user. &lt;A href="/zf/help/?topic=api/ref/methods/setphotosetfeaturedindex"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SetPhotoSetFeaturedIndexSoapIn" />
+      <wsdl:output message="tns:SetPhotoSetFeaturedIndexSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MovePhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Moves a photoset from one group to another. Destination group must belong to the caller. &lt;A href="/zf/help/?topic=api/ref/methods/movephotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:MovePhotoSetSoapIn" />
+      <wsdl:output message="tns:MovePhotoSetSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReorderGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Reorders group elements based on the specified sort order. &lt;A href="/zf/help/?topic=api/ref/methods/reordergroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:ReorderGroupSoapIn" />
+      <wsdl:output message="tns:ReorderGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReplacePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Replaces a photo with other existing photo. &lt;A href="/zf/help/?topic=api/ref/methods/replacephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:ReplacePhotoSoapIn" />
+      <wsdl:output message="tns:ReplacePhotoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MoveGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Moves a group from one parent group to another. Destination group must belong to the caller. &lt;A href="/zf/help/?topic=api/ref/methods/movegroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:MoveGroupSoapIn" />
+      <wsdl:output message="tns:MoveGroupSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ZfApiHttpGet">
+    <wsdl:operation name="GetChallenge">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Generates authentication challenge. &lt;A href="/zf/help/?topic=api/ref/methods/getchallenge"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetChallengeHttpGetIn" />
+      <wsdl:output message="tns:GetChallengeHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticatePlain">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Performs plain-text authentication. HTTPS only. &lt;A href="/zf/help/?topic=api/ref/methods/authenticateplain"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:AuthenticatePlainHttpGetIn" />
+      <wsdl:output message="tns:AuthenticatePlainHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Finalizes login sequence and generates a authentication token. &lt;A href="/zf/help/?topic=api/ref/methods/authenticate"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:AuthenticateHttpGetIn" />
+      <wsdl:output message="tns:AuthenticateHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPrivateProfile">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads private profile of the current user. &lt;A href="/zf/help/?topic=api/ref/methods/loadprivateprofile"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPrivateProfileHttpGetIn" />
+      <wsdl:output message="tns:LoadPrivateProfileHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPublicProfile">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads public profile of specified user. &lt;A href="/zf/help/?topic=api/ref/methods/loadpublicprofile"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPublicProfileHttpGetIn" />
+      <wsdl:output message="tns:LoadPublicProfileHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroupHierarchy">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads Group hierarchy of the specified user. &lt;A href="/zf/help/?topic=api/ref/methods/loadgrouphierarchy"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadGroupHierarchyHttpGetIn" />
+      <wsdl:output message="tns:LoadGroupHierarchyHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads specified group. &lt;A href="/zf/help/?topic=api/ref/methods/loadgroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadGroupHttpGetIn" />
+      <wsdl:output message="tns:LoadGroupHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads specified photoset. &lt;A href="/zf/help/?topic=api/ref/methods/loadphotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPhotoSetHttpGetIn" />
+      <wsdl:output message="tns:LoadPhotoSetHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads specified photo. &lt;A href="/zf/help/?topic=api/ref/methods/loadphoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPhotoHttpGetIn" />
+      <wsdl:output message="tns:LoadPhotoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="KeyringAddKeyPlain">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Adds a plaintext password to existing keyring. HTTPS only. &lt;A href="/zf/help/?topic=api/ref/methods/keyringaddkeyplain"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:KeyringAddKeyPlainHttpGetIn" />
+      <wsdl:output message="tns:KeyringAddKeyPlainHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCategories">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads full list of supported categories. &lt;A href="/zf/help/?topic=api/ref/methods/getcategories"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetCategoriesHttpGetIn" />
+      <wsdl:output message="tns:GetCategoriesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByCategory">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photo sets by category id. &lt;A href="/zf/help/?topic=api/ref/methods/searchsetbycategory"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchSetByCategoryHttpGetIn" />
+      <wsdl:output message="tns:SearchSetByCategoryHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByText">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photo sets using fullt-text search. &lt;A href="/zf/help/?topic=api/ref/methods/searchsetbytext"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchSetByTextHttpGetIn" />
+      <wsdl:output message="tns:SearchSetByTextHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularSets">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves photo sets in order of popularity (most viewed at the top). &lt;A href="/zf/help/?topic=api/ref/methods/getpopularsets"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetPopularSetsHttpGetIn" />
+      <wsdl:output message="tns:GetPopularSetsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentSets">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves recently added photo sets (most recent at the top). &lt;A href="/zf/help/?topic=api/ref/methods/getrecentsets"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetRecentSetsHttpGetIn" />
+      <wsdl:output message="tns:GetRecentSetsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByCategory">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photos by category id. &lt;A href="/zf/help/?topic=api/ref/methods/searchphotobycategory"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchPhotoByCategoryHttpGetIn" />
+      <wsdl:output message="tns:SearchPhotoByCategoryHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByText">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photos using fullt-text search. &lt;A href="/zf/help/?topic=api/ref/methods/searchphotobytext"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchPhotoByTextHttpGetIn" />
+      <wsdl:output message="tns:SearchPhotoByTextHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularPhotos">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves photos in order of popularity (most viewed at the top). &lt;A href="/zf/help/?topic=api/ref/methods/getpopularphotos"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetPopularPhotosHttpGetIn" />
+      <wsdl:output message="tns:GetPopularPhotosHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentPhotos">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves recently added photos (most recent at the top).  &lt;A href="/zf/help/?topic=api/ref/methods/getrecentphotos"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetRecentPhotosHttpGetIn" />
+      <wsdl:output message="tns:GetRecentPhotosHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Deletes a Group. &lt;A href="/zf/help/?topic=api/ref/methods/deletegroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:DeleteGroupHttpGetIn" />
+      <wsdl:output message="tns:DeleteGroupHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Deletes a photoset. &lt;A href="/zf/help/?topic=api/ref/methods/deletephotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:DeletePhotoSetHttpGetIn" />
+      <wsdl:output message="tns:DeletePhotoSetHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Deletes a photo. &lt;A href="/zf/help/?topic=api/ref/methods/deletephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:DeletePhotoHttpGetIn" />
+      <wsdl:output message="tns:DeletePhotoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CollectionAddPhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Adds a photo reference to the specified collection. &lt;A href="/zf/help/?topic=api/ref/methods/collectionaddphoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:CollectionAddPhotoHttpGetIn" />
+      <wsdl:output message="tns:CollectionAddPhotoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CollectionRemovePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Removes a photo reference from the specified collection. &lt;A href="/zf/help/?topic=api/ref/methods/collectionremovephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:CollectionRemovePhotoHttpGetIn" />
+      <wsdl:output message="tns:CollectionRemovePhotoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReorderPhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Reorders photoset elements based on the specified sort order. &lt;A href="/zf/help/?topic=api/ref/methods/reorderphotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:ReorderPhotoSetHttpGetIn" />
+      <wsdl:output message="tns:ReorderPhotoSetHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MovePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Moves a photograph from one photoset to another. Both photosets should have the same type and belong to the caller. Can be used to move a photo within the same photoset. &lt;A href="/zf/help/?topic=api/ref/methods/movephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:MovePhotoHttpGetIn" />
+      <wsdl:output message="tns:MovePhotoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RotatePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Rotates a photo. &lt;a href="/zf/help/?topic=api/ref/methods/rotatephoto"&gt;More ...&lt;/a&gt;</wsdl:documentation>
+      <wsdl:input message="tns:RotatePhotoHttpGetIn" />
+      <wsdl:output message="tns:RotatePhotoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetGroupTitlePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Sets a title (cover) photograph for a group. &lt;A href="/zf/help/?topic=api/ref/methods/setgrouptitlephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SetGroupTitlePhotoHttpGetIn" />
+      <wsdl:output message="tns:SetGroupTitlePhotoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetTitlePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Sets a title (cover) photograph for a photoset (gallery or collection). &lt;A href="/zf/help/?topic=api/ref/methods/setphotosettitlephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SetPhotoSetTitlePhotoHttpGetIn" />
+      <wsdl:output message="tns:SetPhotoSetTitlePhotoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetFeaturedIndex">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Sets the position of a photoset among featured photosets of the current user. &lt;A href="/zf/help/?topic=api/ref/methods/setphotosetfeaturedindex"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SetPhotoSetFeaturedIndexHttpGetIn" />
+      <wsdl:output message="tns:SetPhotoSetFeaturedIndexHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MovePhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Moves a photoset from one group to another. Destination group must belong to the caller. &lt;A href="/zf/help/?topic=api/ref/methods/movephotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:MovePhotoSetHttpGetIn" />
+      <wsdl:output message="tns:MovePhotoSetHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReorderGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Reorders group elements based on the specified sort order. &lt;A href="/zf/help/?topic=api/ref/methods/reordergroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:ReorderGroupHttpGetIn" />
+      <wsdl:output message="tns:ReorderGroupHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReplacePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Replaces a photo with other existing photo. &lt;A href="/zf/help/?topic=api/ref/methods/replacephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:ReplacePhotoHttpGetIn" />
+      <wsdl:output message="tns:ReplacePhotoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MoveGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Moves a group from one parent group to another. Destination group must belong to the caller. &lt;A href="/zf/help/?topic=api/ref/methods/movegroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:MoveGroupHttpGetIn" />
+      <wsdl:output message="tns:MoveGroupHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ZfApiHttpPost">
+    <wsdl:operation name="GetChallenge">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Generates authentication challenge. &lt;A href="/zf/help/?topic=api/ref/methods/getchallenge"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetChallengeHttpPostIn" />
+      <wsdl:output message="tns:GetChallengeHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticatePlain">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Performs plain-text authentication. HTTPS only. &lt;A href="/zf/help/?topic=api/ref/methods/authenticateplain"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:AuthenticatePlainHttpPostIn" />
+      <wsdl:output message="tns:AuthenticatePlainHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Finalizes login sequence and generates a authentication token. &lt;A href="/zf/help/?topic=api/ref/methods/authenticate"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:AuthenticateHttpPostIn" />
+      <wsdl:output message="tns:AuthenticateHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPrivateProfile">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads private profile of the current user. &lt;A href="/zf/help/?topic=api/ref/methods/loadprivateprofile"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPrivateProfileHttpPostIn" />
+      <wsdl:output message="tns:LoadPrivateProfileHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPublicProfile">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads public profile of specified user. &lt;A href="/zf/help/?topic=api/ref/methods/loadpublicprofile"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPublicProfileHttpPostIn" />
+      <wsdl:output message="tns:LoadPublicProfileHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroupHierarchy">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads Group hierarchy of the specified user. &lt;A href="/zf/help/?topic=api/ref/methods/loadgrouphierarchy"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadGroupHierarchyHttpPostIn" />
+      <wsdl:output message="tns:LoadGroupHierarchyHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads specified group. &lt;A href="/zf/help/?topic=api/ref/methods/loadgroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadGroupHttpPostIn" />
+      <wsdl:output message="tns:LoadGroupHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads specified photoset. &lt;A href="/zf/help/?topic=api/ref/methods/loadphotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPhotoSetHttpPostIn" />
+      <wsdl:output message="tns:LoadPhotoSetHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads specified photo. &lt;A href="/zf/help/?topic=api/ref/methods/loadphoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:LoadPhotoHttpPostIn" />
+      <wsdl:output message="tns:LoadPhotoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="KeyringAddKeyPlain">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Adds a plaintext password to existing keyring. HTTPS only. &lt;A href="/zf/help/?topic=api/ref/methods/keyringaddkeyplain"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:KeyringAddKeyPlainHttpPostIn" />
+      <wsdl:output message="tns:KeyringAddKeyPlainHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCategories">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Loads full list of supported categories. &lt;A href="/zf/help/?topic=api/ref/methods/getcategories"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetCategoriesHttpPostIn" />
+      <wsdl:output message="tns:GetCategoriesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByCategory">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photo sets by category id. &lt;A href="/zf/help/?topic=api/ref/methods/searchsetbycategory"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchSetByCategoryHttpPostIn" />
+      <wsdl:output message="tns:SearchSetByCategoryHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByText">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photo sets using fullt-text search. &lt;A href="/zf/help/?topic=api/ref/methods/searchsetbytext"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchSetByTextHttpPostIn" />
+      <wsdl:output message="tns:SearchSetByTextHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularSets">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves photo sets in order of popularity (most viewed at the top). &lt;A href="/zf/help/?topic=api/ref/methods/getpopularsets"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetPopularSetsHttpPostIn" />
+      <wsdl:output message="tns:GetPopularSetsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentSets">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves recently added photo sets (most recent at the top). &lt;A href="/zf/help/?topic=api/ref/methods/getrecentsets"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetRecentSetsHttpPostIn" />
+      <wsdl:output message="tns:GetRecentSetsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByCategory">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photos by category id. &lt;A href="/zf/help/?topic=api/ref/methods/searchphotobycategory"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchPhotoByCategoryHttpPostIn" />
+      <wsdl:output message="tns:SearchPhotoByCategoryHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByText">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches photos using fullt-text search. &lt;A href="/zf/help/?topic=api/ref/methods/searchphotobytext"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SearchPhotoByTextHttpPostIn" />
+      <wsdl:output message="tns:SearchPhotoByTextHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularPhotos">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves photos in order of popularity (most viewed at the top). &lt;A href="/zf/help/?topic=api/ref/methods/getpopularphotos"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetPopularPhotosHttpPostIn" />
+      <wsdl:output message="tns:GetPopularPhotosHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentPhotos">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves recently added photos (most recent at the top).  &lt;A href="/zf/help/?topic=api/ref/methods/getrecentphotos"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:GetRecentPhotosHttpPostIn" />
+      <wsdl:output message="tns:GetRecentPhotosHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Deletes a Group. &lt;A href="/zf/help/?topic=api/ref/methods/deletegroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:DeleteGroupHttpPostIn" />
+      <wsdl:output message="tns:DeleteGroupHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Deletes a photoset. &lt;A href="/zf/help/?topic=api/ref/methods/deletephotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:DeletePhotoSetHttpPostIn" />
+      <wsdl:output message="tns:DeletePhotoSetHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Deletes a photo. &lt;A href="/zf/help/?topic=api/ref/methods/deletephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:DeletePhotoHttpPostIn" />
+      <wsdl:output message="tns:DeletePhotoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CollectionAddPhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Adds a photo reference to the specified collection. &lt;A href="/zf/help/?topic=api/ref/methods/collectionaddphoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:CollectionAddPhotoHttpPostIn" />
+      <wsdl:output message="tns:CollectionAddPhotoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CollectionRemovePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Removes a photo reference from the specified collection. &lt;A href="/zf/help/?topic=api/ref/methods/collectionremovephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:CollectionRemovePhotoHttpPostIn" />
+      <wsdl:output message="tns:CollectionRemovePhotoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReorderPhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Reorders photoset elements based on the specified sort order. &lt;A href="/zf/help/?topic=api/ref/methods/reorderphotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:ReorderPhotoSetHttpPostIn" />
+      <wsdl:output message="tns:ReorderPhotoSetHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MovePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Moves a photograph from one photoset to another. Both photosets should have the same type and belong to the caller. Can be used to move a photo within the same photoset. &lt;A href="/zf/help/?topic=api/ref/methods/movephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:MovePhotoHttpPostIn" />
+      <wsdl:output message="tns:MovePhotoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RotatePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Rotates a photo. &lt;a href="/zf/help/?topic=api/ref/methods/rotatephoto"&gt;More ...&lt;/a&gt;</wsdl:documentation>
+      <wsdl:input message="tns:RotatePhotoHttpPostIn" />
+      <wsdl:output message="tns:RotatePhotoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetGroupTitlePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Sets a title (cover) photograph for a group. &lt;A href="/zf/help/?topic=api/ref/methods/setgrouptitlephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SetGroupTitlePhotoHttpPostIn" />
+      <wsdl:output message="tns:SetGroupTitlePhotoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetTitlePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Sets a title (cover) photograph for a photoset (gallery or collection). &lt;A href="/zf/help/?topic=api/ref/methods/setphotosettitlephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SetPhotoSetTitlePhotoHttpPostIn" />
+      <wsdl:output message="tns:SetPhotoSetTitlePhotoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetFeaturedIndex">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Sets the position of a photoset among featured photosets of the current user. &lt;A href="/zf/help/?topic=api/ref/methods/setphotosetfeaturedindex"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:SetPhotoSetFeaturedIndexHttpPostIn" />
+      <wsdl:output message="tns:SetPhotoSetFeaturedIndexHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MovePhotoSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Moves a photoset from one group to another. Destination group must belong to the caller. &lt;A href="/zf/help/?topic=api/ref/methods/movephotoset"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:MovePhotoSetHttpPostIn" />
+      <wsdl:output message="tns:MovePhotoSetHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReorderGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Reorders group elements based on the specified sort order. &lt;A href="/zf/help/?topic=api/ref/methods/reordergroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:ReorderGroupHttpPostIn" />
+      <wsdl:output message="tns:ReorderGroupHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReplacePhoto">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Replaces a photo with other existing photo. &lt;A href="/zf/help/?topic=api/ref/methods/replacephoto"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:ReplacePhotoHttpPostIn" />
+      <wsdl:output message="tns:ReplacePhotoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MoveGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Moves a group from one parent group to another. Destination group must belong to the caller. &lt;A href="/zf/help/?topic=api/ref/methods/movegroup"&gt;More...&lt;/A&gt;</wsdl:documentation>
+      <wsdl:input message="tns:MoveGroupHttpPostIn" />
+      <wsdl:output message="tns:MoveGroupHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ZfApiSoap" type="tns:ZfApiSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetChallenge">
+      <soap:operation soapAction="http://www.zenfolio.com/api/GetChallenge" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticatePlain">
+      <soap:operation soapAction="http://www.zenfolio.com/api/AuthenticatePlain" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <soap:operation soapAction="http://www.zenfolio.com/api/Authenticate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPrivateProfile">
+      <soap:operation soapAction="http://www.zenfolio.com/api/LoadPrivateProfile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPublicProfile">
+      <soap:operation soapAction="http://www.zenfolio.com/api/LoadPublicProfile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroupHierarchy">
+      <soap:operation soapAction="http://www.zenfolio.com/api/LoadGroupHierarchy" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroup">
+      <soap:operation soapAction="http://www.zenfolio.com/api/LoadGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhotoSet">
+      <soap:operation soapAction="http://www.zenfolio.com/api/LoadPhotoSet" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhoto">
+      <soap:operation soapAction="http://www.zenfolio.com/api/LoadPhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="KeyringAddKeyPlain">
+      <soap:operation soapAction="http://www.zenfolio.com/api/KeyringAddKeyPlain" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCategories">
+      <soap:operation soapAction="http://www.zenfolio.com/api/GetCategories" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByCategory">
+      <soap:operation soapAction="http://www.zenfolio.com/api/SearchSetByCategory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByText">
+      <soap:operation soapAction="http://www.zenfolio.com/api/SearchSetByText" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularSets">
+      <soap:operation soapAction="http://www.zenfolio.com/api/GetPopularSets" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentSets">
+      <soap:operation soapAction="http://www.zenfolio.com/api/GetRecentSets" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByCategory">
+      <soap:operation soapAction="http://www.zenfolio.com/api/SearchPhotoByCategory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByText">
+      <soap:operation soapAction="http://www.zenfolio.com/api/SearchPhotoByText" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularPhotos">
+      <soap:operation soapAction="http://www.zenfolio.com/api/GetPopularPhotos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentPhotos">
+      <soap:operation soapAction="http://www.zenfolio.com/api/GetRecentPhotos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateGroup">
+      <soap:operation soapAction="http://www.zenfolio.com/api/CreateGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <soap:operation soapAction="http://www.zenfolio.com/api/DeleteGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateGroup">
+      <soap:operation soapAction="http://www.zenfolio.com/api/UpdateGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreatePhotoSet">
+      <soap:operation soapAction="http://www.zenfolio.com/api/CreatePhotoSet" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhotoSet">
+      <soap:operation soapAction="http://www.zenfolio.com/api/DeletePhotoSet" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePhotoSet">
+      <soap:operation soapAction="http://www.zenfolio.com/api/UpdatePhotoSet" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhoto">
+      <soap:operation soapAction="http://www.zenfolio.com/api/DeletePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePhoto">
+      <soap:operation soapAction="http://www.zenfolio.com/api/UpdatePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CollectionAddPhoto">
+      <soap:operation soapAction="http://www.zenfolio.com/api/CollectionAddPhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CollectionRemovePhoto">
+      <soap:operation soapAction="http://www.zenfolio.com/api/CollectionRemovePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePhotoAccess">
+      <soap:operation soapAction="http://www.zenfolio.com/api/UpdatePhotoAccess" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePhotoSetAccess">
+      <soap:operation soapAction="http://www.zenfolio.com/api/UpdatePhotoSetAccess" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateGroupAccess">
+      <soap:operation soapAction="http://www.zenfolio.com/api/UpdateGroupAccess" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReorderPhotoSet">
+      <soap:operation soapAction="http://www.zenfolio.com/api/ReorderPhotoSet" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MovePhoto">
+      <soap:operation soapAction="http://www.zenfolio.com/api/MovePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RotatePhoto">
+      <soap:operation soapAction="http://www.zenfolio.com/api/RotatePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetGroupTitlePhoto">
+      <soap:operation soapAction="http://www.zenfolio.com/api/SetGroupTitlePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetTitlePhoto">
+      <soap:operation soapAction="http://www.zenfolio.com/api/SetPhotoSetTitlePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetFeaturedIndex">
+      <soap:operation soapAction="http://www.zenfolio.com/api/SetPhotoSetFeaturedIndex" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MovePhotoSet">
+      <soap:operation soapAction="http://www.zenfolio.com/api/MovePhotoSet" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReorderGroup">
+      <soap:operation soapAction="http://www.zenfolio.com/api/ReorderGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReplacePhoto">
+      <soap:operation soapAction="http://www.zenfolio.com/api/ReplacePhoto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MoveGroup">
+      <soap:operation soapAction="http://www.zenfolio.com/api/MoveGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ZfApiHttpGet" type="tns:ZfApiHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetChallenge">
+      <http:operation location="/GetChallenge" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticatePlain">
+      <http:operation location="/AuthenticatePlain" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <http:operation location="/Authenticate" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPrivateProfile">
+      <http:operation location="/LoadPrivateProfile" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPublicProfile">
+      <http:operation location="/LoadPublicProfile" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroupHierarchy">
+      <http:operation location="/LoadGroupHierarchy" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroup">
+      <http:operation location="/LoadGroup" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhotoSet">
+      <http:operation location="/LoadPhotoSet" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhoto">
+      <http:operation location="/LoadPhoto" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="KeyringAddKeyPlain">
+      <http:operation location="/KeyringAddKeyPlain" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCategories">
+      <http:operation location="/GetCategories" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByCategory">
+      <http:operation location="/SearchSetByCategory" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByText">
+      <http:operation location="/SearchSetByText" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularSets">
+      <http:operation location="/GetPopularSets" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentSets">
+      <http:operation location="/GetRecentSets" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByCategory">
+      <http:operation location="/SearchPhotoByCategory" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByText">
+      <http:operation location="/SearchPhotoByText" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularPhotos">
+      <http:operation location="/GetPopularPhotos" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentPhotos">
+      <http:operation location="/GetRecentPhotos" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <http:operation location="/DeleteGroup" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhotoSet">
+      <http:operation location="/DeletePhotoSet" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhoto">
+      <http:operation location="/DeletePhoto" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="CollectionAddPhoto">
+      <http:operation location="/CollectionAddPhoto" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="CollectionRemovePhoto">
+      <http:operation location="/CollectionRemovePhoto" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="ReorderPhotoSet">
+      <http:operation location="/ReorderPhotoSet" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="MovePhoto">
+      <http:operation location="/MovePhoto" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="RotatePhoto">
+      <http:operation location="/RotatePhoto" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetGroupTitlePhoto">
+      <http:operation location="/SetGroupTitlePhoto" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetTitlePhoto">
+      <http:operation location="/SetPhotoSetTitlePhoto" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetFeaturedIndex">
+      <http:operation location="/SetPhotoSetFeaturedIndex" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="MovePhotoSet">
+      <http:operation location="/MovePhotoSet" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="ReorderGroup">
+      <http:operation location="/ReorderGroup" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="ReplacePhoto">
+      <http:operation location="/ReplacePhoto" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="MoveGroup">
+      <http:operation location="/MoveGroup" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ZfApiHttpPost" type="tns:ZfApiHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetChallenge">
+      <http:operation location="/GetChallenge" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticatePlain">
+      <http:operation location="/AuthenticatePlain" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Authenticate">
+      <http:operation location="/Authenticate" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPrivateProfile">
+      <http:operation location="/LoadPrivateProfile" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPublicProfile">
+      <http:operation location="/LoadPublicProfile" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroupHierarchy">
+      <http:operation location="/LoadGroupHierarchy" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadGroup">
+      <http:operation location="/LoadGroup" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhotoSet">
+      <http:operation location="/LoadPhotoSet" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoadPhoto">
+      <http:operation location="/LoadPhoto" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="KeyringAddKeyPlain">
+      <http:operation location="/KeyringAddKeyPlain" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCategories">
+      <http:operation location="/GetCategories" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByCategory">
+      <http:operation location="/SearchSetByCategory" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchSetByText">
+      <http:operation location="/SearchSetByText" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularSets">
+      <http:operation location="/GetPopularSets" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentSets">
+      <http:operation location="/GetRecentSets" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByCategory">
+      <http:operation location="/SearchPhotoByCategory" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchPhotoByText">
+      <http:operation location="/SearchPhotoByText" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPopularPhotos">
+      <http:operation location="/GetPopularPhotos" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentPhotos">
+      <http:operation location="/GetRecentPhotos" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <http:operation location="/DeleteGroup" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhotoSet">
+      <http:operation location="/DeletePhotoSet" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePhoto">
+      <http:operation location="/DeletePhoto" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="CollectionAddPhoto">
+      <http:operation location="/CollectionAddPhoto" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="CollectionRemovePhoto">
+      <http:operation location="/CollectionRemovePhoto" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="ReorderPhotoSet">
+      <http:operation location="/ReorderPhotoSet" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="MovePhoto">
+      <http:operation location="/MovePhoto" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="RotatePhoto">
+      <http:operation location="/RotatePhoto" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetGroupTitlePhoto">
+      <http:operation location="/SetGroupTitlePhoto" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetTitlePhoto">
+      <http:operation location="/SetPhotoSetTitlePhoto" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="SetPhotoSetFeaturedIndex">
+      <http:operation location="/SetPhotoSetFeaturedIndex" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="MovePhotoSet">
+      <http:operation location="/MovePhotoSet" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="ReorderGroup">
+      <http:operation location="/ReorderGroup" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="ReplacePhoto">
+      <http:operation location="/ReplacePhoto" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+    <wsdl:operation name="MoveGroup">
+      <http:operation location="/MoveGroup" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ZfApi">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This is Zenfolio Web API. See &lt;A href="/zf/help/?topic=api/introduction"&gt;help&lt;/A&gt; for details.</wsdl:documentation>
+    <wsdl:port name="ZfApiSoap" binding="tns:ZfApiSoap">
+      <soap:address location="http://www.zenfolio.com/api/1.0/zfapi.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ZfApiHttpGet" binding="tns:ZfApiHttpGet">
+      <http:address location="http://www.zenfolio.com/api/1.0/zfapi.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ZfApiHttpPost" binding="tns:ZfApiHttpPost">
+      <http:address location="http://www.zenfolio.com/api/1.0/zfapi.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

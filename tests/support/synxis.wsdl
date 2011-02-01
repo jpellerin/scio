@@ -1,0 +1,2087 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s0="http://www.opentravel.org/OTA/2003/05" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://synxis.com/OTA2004AService/" xmlns:s1="http://htng.org/1.1/Header/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://synxis.com/OTA2004AService/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.opentravel.org/OTA/2003/05">
+      <s:element name="OTA_HotelAvailRQ" type="s0:OTA_HotelAvailRQ" />
+      <s:complexType name="OTA_HotelAvailRQ">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaRequestMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="POS" type="s0:POS" />
+              <s:element minOccurs="0" maxOccurs="1" name="AvailRequestSegments" type="s0:ArrayOfAvailRequestSegment" />
+              <s:element minOccurs="0" maxOccurs="1" name="HotelReservationIDs" type="s0:ArrayOfHotelReservationID" />
+            </s:sequence>
+            <s:attribute name="MaxResponses" type="s:int" use="required" />
+            <s:attribute name="ExactMatchOnly" type="s:boolean" use="required" />
+            <s:attribute name="BestOnly" type="s:boolean" use="required" />
+            <s:attribute name="SummaryOnly" type="s:boolean" use="required" />
+            <s:attribute name="HotelStayOnly" type="s:boolean" use="required" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="OtaRequestMessage" abstract="true">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaMessage" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="OtaMessage" abstract="true">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OTA_PayloadStdAttributes">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="TPA_Extensions" type="s0:TPA_Extensions" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="OTA_PayloadStdAttributes">
+        <s:attribute name="EchoToken" type="s:string" />
+        <s:attribute name="PrimaryLangID" type="s:string" />
+        <s:attribute name="AltLangID" type="s:string" />
+        <s:attribute name="TimeStamp" type="s:string" />
+        <s:attribute name="Target" type="s:string" />
+        <s:attribute name="Version" type="s:string" />
+      </s:complexType>
+      <s:complexType name="TPA_Extensions">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Security" type="s0:SecurityType" />
+          <s:element minOccurs="0" maxOccurs="1" name="GuaranteeDetails" type="s0:GuaranteeDetails" />
+          <s:element minOccurs="0" maxOccurs="1" name="SourceOfBusiness" type="s0:SourceOfBusiness" />
+          <s:element minOccurs="0" maxOccurs="1" name="MarketSegment" type="s0:MarketSegment" />
+          <s:element minOccurs="0" maxOccurs="1" name="BasicPropertyInfo" type="s0:BasicPropertyInfoType" />
+          <s:element minOccurs="0" maxOccurs="1" name="Warnings" type="s0:ArrayOfWarning" />
+          <s:element minOccurs="0" maxOccurs="1" name="Success" type="s0:Success" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WrittenConfInst" type="s0:WrittenConfInst" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="NightlyRate" type="s0:NightlyRate" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DiscountedNightlyRate" type="s0:DiscountedNightlyRate" />
+          <s:element minOccurs="0" maxOccurs="1" name="TotalType" type="s0:TotalType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SecurityType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="LoginInfo" type="s0:LoginInfoType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LoginInfoType">
+        <s:attribute name="Username" type="s:string" />
+        <s:attribute name="Password" type="s:string" />
+        <s:attribute name="SystemType" type="s:string" />
+      </s:complexType>
+      <s:complexType name="GuaranteeDetails">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PaymentCardDetails" type="s0:PaymentCardDetails" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PaymentCardDetails">
+        <s:attribute name="PmsCreditCardCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="SourceOfBusiness">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="PrimaryCode" type="s:string" />
+            <s:attribute name="PrimaryID" type="s:string" />
+            <s:attribute name="SecondaryID" type="s:string" />
+            <s:attribute name="SecondaryCode" type="s:string" />
+            <s:attribute name="SubSourceID" type="s:string" />
+            <s:attribute name="SubSourceCode" type="s:string" />
+            <s:attribute name="MarketSourceCode" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="MarketSegment">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="MarketSegmentCode" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="BasicPropertyInfoType">
+        <s:attribute name="ChainCode" type="s:string" />
+        <s:attribute name="HotelCode" type="s:string" />
+        <s:attribute name="BrandCode" type="s:string" />
+        <s:attribute name="HotelCityCode" type="s:string" />
+        <s:attribute name="HotelName" type="s:string" />
+        <s:attribute name="ChainName" type="s:string" />
+        <s:attribute name="BrandName" type="s:string" />
+        <s:attribute name="AreaId" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfWarning">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Warning" nillable="true" type="s0:Warning" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Warning">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="Type" type="s:string" />
+            <s:attribute name="Code" type="s:string" />
+            <s:attribute name="Status" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="Success" />
+      <s:complexType name="WrittenConfInst">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="SupplementalData" type="s0:SupplementalData" />
+        </s:sequence>
+        <s:attribute name="LanguageID" type="s:string" />
+        <s:attribute name="AddresseeName" type="s:string" />
+        <s:attribute name="Address" type="s:string" />
+        <s:attribute name="Telephone" type="s:string" />
+      </s:complexType>
+      <s:complexType name="SupplementalData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Text" type="s0:Text" />
+        </s:sequence>
+        <s:attribute name="Name" type="s:string" />
+        <s:attribute name="ParagraphNumber" type="s:string" />
+        <s:attribute name="CreateDateTime" type="s:string" />
+        <s:attribute name="CreatorID" type="s:string" />
+        <s:attribute name="LastModifyDateTime" type="s:string" />
+        <s:attribute name="LastModifierID" type="s:string" />
+        <s:attribute name="Language" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Text">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="Formatted" type="s:string" />
+            <s:attribute name="Language" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="NightlyRate">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:AvailabilityDayItem" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="AvailabilityDayItem">
+        <s:attribute name="Date" type="s:string" />
+        <s:attribute name="Price" type="s:string" />
+        <s:attribute name="Tax" type="s:string" />
+        <s:attribute name="Fee" type="s:string" />
+        <s:attribute name="PriceWithTaxAndFee" type="s:string" />
+      </s:complexType>
+      <s:complexType name="DiscountedNightlyRate">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:NightlyRate" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="TotalType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Taxes" type="s0:TaxesType" />
+          <s:element minOccurs="0" maxOccurs="1" name="DiscountReason" type="s0:DiscountReason" />
+        </s:sequence>
+        <s:attribute name="AmountBeforeTax" type="s:string" />
+        <s:attribute name="AmountAfterTax" type="s:string" />
+        <s:attribute name="CurrencyCode" type="s:string" />
+        <s:attribute name="DecimalPlaces" type="s:int" />
+      </s:complexType>
+      <s:complexType name="TaxesType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Tax" type="s0:TaxType" />
+        </s:sequence>
+        <s:attribute name="Amount" type="s:string" />
+        <s:attribute name="CurrencyCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="TaxType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TaxDescription" type="s0:ParagraphType" />
+        </s:sequence>
+        <s:attribute name="Amount" type="s:string" />
+        <s:attribute name="Percent" type="s:string" />
+        <s:attribute name="CurrencyCode" type="s:string" />
+        <s:attribute name="Type" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ParagraphType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Text" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Image" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="URL" type="s:string" />
+        </s:sequence>
+        <s:attribute name="Name" type="s:string" />
+      </s:complexType>
+      <s:complexType name="RatePlanDescription">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:ParagraphType" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="RoomDescription">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:ParagraphType" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="DiscountReason">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Text" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Image" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Discount">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:TotalType" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Base">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:TotalType" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Total">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:TotalType" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="AvailabilityTpaExtensions">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:TPA_Extensions">
+            <s:attribute name="MinMaxOnly" type="s:boolean" use="required" />
+            <s:attribute name="AvailCalendarOnly" type="s:boolean" use="required" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="OtaResponseMessage" abstract="true">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Success" type="s0:Success" />
+              <s:element minOccurs="0" maxOccurs="1" name="Warnings" type="s0:ArrayOfWarning" />
+              <s:element minOccurs="0" maxOccurs="1" name="Errors" type="s0:ArrayOfErrorType" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfErrorType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Error" nillable="true" type="s0:ErrorType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ErrorType">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="Type" type="s:string" />
+            <s:attribute name="Language" type="s:string" />
+            <s:attribute name="ShortText" type="s:string" />
+            <s:attribute name="Code" type="s:string" />
+            <s:attribute name="DocURL" type="s:string" />
+            <s:attribute name="Status" type="s:string" />
+            <s:attribute name="Tag" type="s:string" />
+            <s:attribute name="RecordID" type="s:string" />
+            <s:attribute name="NodeList" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="OTA_HotelAvailRS">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaResponseMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Services" type="s0:ArrayOfService" />
+              <s:element minOccurs="0" maxOccurs="1" name="Profiles" type="s0:ArrayOfProfile" />
+              <s:element minOccurs="0" maxOccurs="1" name="RoomStays" type="s0:ArrayOfRoomStay" />
+              <s:element minOccurs="0" maxOccurs="1" name="HotelStays" type="s0:ArrayOfHotelStay" />
+              <s:element minOccurs="0" maxOccurs="1" name="Criteria" type="s0:ArrayOfHotelSearchCriterion" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfService">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Service" nillable="true" type="s0:Service" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Service">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceDetails" type="s0:ResCommonDetailType" />
+          <s:element minOccurs="0" maxOccurs="1" name="Price" type="s0:AmountType" />
+        </s:sequence>
+        <s:attribute name="RatePlanCode" type="s:string" />
+        <s:attribute name="Quantity" type="s:int" use="required" />
+        <s:attribute name="Inclusive" type="s:boolean" use="required" />
+        <s:attribute name="ServicePricingType" type="s:string" />
+        <s:attribute name="ServiceInventoryCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ResCommonDetailType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="GuestCounts" type="s0:GuestCounts" />
+          <s:element minOccurs="0" maxOccurs="1" name="Comments" type="s0:CommentType" />
+          <s:element minOccurs="0" maxOccurs="1" name="TimeSpan" type="s0:DateTimeSpanType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="GuestCounts">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GuestCount" type="s0:GuestCount" />
+        </s:sequence>
+        <s:attribute name="IsPerRoom" type="s:boolean" />
+      </s:complexType>
+      <s:complexType name="GuestCount">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GuestCountGroup" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GuestCountGroup">
+        <s:attribute name="AgeQualifyingCode" type="s:string" />
+        <s:attribute name="Count" type="s:string" />
+      </s:complexType>
+      <s:complexType name="CommentType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Comment" type="s0:ParagraphType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DateTimeSpanType">
+        <s:attribute name="Start" type="s:string" />
+        <s:attribute name="End" type="s:string" />
+        <s:attribute name="Duration" type="s:string" />
+        <s:attribute name="Increment" type="s:string" />
+      </s:complexType>
+      <s:complexType name="AmountType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Base" type="s0:TotalType" />
+          <s:element minOccurs="0" maxOccurs="1" name="AdditionalGuestAmounts" type="s0:ArrayOfAdditionalGuestAmount" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfAdditionalGuestAmount">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AdditionalGuestAmount" nillable="true" type="s0:AdditionalGuestAmount" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AdditionalGuestAmount">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:AgeQualifyingGroup">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s0:TotalType" />
+              <s:element minOccurs="0" maxOccurs="1" name="Taxes" type="s0:TaxesType" />
+            </s:sequence>
+            <s:attribute name="Amount" type="s:decimal" />
+            <s:attribute name="AmountBeforeTax" type="s:decimal" use="required" />
+            <s:attribute name="TaxInclusive" type="s:boolean" use="required" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="AgeQualifyingGroup">
+        <s:attribute name="AgeQualifyingCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="BaseByGuestAmt">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:AgeQualifyingGroup">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Taxes" type="s0:TaxesType" />
+            </s:sequence>
+            <s:attribute name="AmountBeforeTax" type="s:decimal" />
+            <s:attribute name="AmountAfterTax" type="s:decimal" />
+            <s:attribute name="NumberOfGuests" type="s:int" />
+            <s:attribute name="CurrencyCode" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfProfile">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Profile" nillable="true" type="s0:Profile" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Profile">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Comments" type="s0:Comments" />
+          <s:element minOccurs="0" maxOccurs="1" name="Accesses" type="s0:ArrayOfAccess" />
+          <s:element minOccurs="0" maxOccurs="1" name="Customer" type="s0:Customer" />
+          <s:element minOccurs="0" maxOccurs="1" name="Affiliations" type="s0:Affiliations" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyInfo" type="s0:CompanyInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="PrefCollections" type="s0:ArrayOfPrefCollection" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s0:UserID" />
+        </s:sequence>
+        <s:attribute name="ProfileType" type="s:string" />
+        <s:attribute name="CreateDateTime" type="s:string" />
+        <s:attribute name="LastModifyDateTime" type="s:string" />
+        <s:attribute name="CreatorID" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Comments">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Comment" type="s0:Comment" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Comment">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Text" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfAccess">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Access" nillable="true" type="s0:Access" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Access">
+        <s:attribute name="ActionType" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Customer">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PersonName" type="s0:PersonName" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Telephone" type="s0:TelephoneInfo" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Address" type="s0:AddressInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="PaymentForm" type="s0:PaymentForm" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CustLoyalty" type="s0:CustLoyalty" />
+          <s:element minOccurs="0" maxOccurs="1" name="TPA_Extensions" type="s0:TPA_Extensions" />
+          <s:element minOccurs="0" maxOccurs="1" name="RelatedTraveler" type="s0:ArrayOfRelatedTraveler" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContactPerson" type="s0:ContactPerson" />
+        </s:sequence>
+        <s:attribute name="BirthDate" type="s:date" use="required" />
+      </s:complexType>
+      <s:complexType name="PersonName">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="NamePrefix" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="NameTitle" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GivenName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="MiddleName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Surname" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="NameSuffix" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TelephoneInfo">
+        <s:attribute name="FormattedInd" type="s:boolean" />
+        <s:attribute name="PhoneTechType" type="s:string" />
+        <s:attribute name="PhoneNumber" type="s:string" />
+        <s:attribute name="PhoneUseType" type="s:string" />
+      </s:complexType>
+      <s:complexType name="AddressInfo">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:Address" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Address">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AddressLine" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CityName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StateProv" type="s0:StateProv" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryName" type="s0:CountryName" />
+        </s:sequence>
+        <s:attribute name="Type" type="s:string" />
+        <s:attribute name="CompanyName" type="s:string" />
+        <s:attribute name="FormattedInd" type="s:boolean" use="required" />
+        <s:attribute name="DefaultInd" type="s:boolean" use="required" />
+      </s:complexType>
+      <s:complexType name="StateProv">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="StateCode" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="CountryName">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="Code" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="PaymentForm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PaymentCard" type="s0:PaymentCard" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PaymentCard">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CardHolderName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardIssuerName" type="s0:CardIssuerName" />
+        </s:sequence>
+        <s:attribute name="CardType" type="s:string" />
+        <s:attribute name="CardCode" type="s:string" />
+        <s:attribute name="CardNumber" type="s:string" />
+        <s:attribute name="SeriesCode" type="s:string" />
+        <s:attribute name="ExpireDate" type="s:string" />
+      </s:complexType>
+      <s:complexType name="CardIssuerName">
+        <s:attribute name="BankID" type="s:string" />
+      </s:complexType>
+      <s:complexType name="CustLoyalty">
+        <s:attribute name="MembershipID" type="s:string" />
+        <s:attribute name="ProgramID" type="s:string" />
+        <s:attribute name="VendorCode" type="s:string" />
+        <s:attribute name="LoyalLevel" type="s:string" />
+        <s:attribute name="TravelSector" type="s:string" />
+        <s:attribute name="SignupDate" type="s:string" />
+        <s:attribute name="EffectiveDate" type="s:string" />
+        <s:attribute name="ExpireDate" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfRelatedTraveler">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RelatedTraveler" nillable="true" type="s0:RelatedTraveler" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RelatedTraveler">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UniqueID" type="s0:UniqueID" />
+          <s:element minOccurs="0" maxOccurs="1" name="PersonName" type="s0:PersonName" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UniqueID">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s0:CompanyName" />
+        </s:sequence>
+        <s:attribute name="Type" type="s:string" />
+        <s:attribute name="ID" type="s:string" />
+        <s:attribute name="ID_Context" type="s:string" />
+        <s:attribute name="Instance" type="s:string" />
+      </s:complexType>
+      <s:complexType name="CompanyName">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="CodeContext" type="s:string" />
+            <s:attribute name="CompanyShortName" type="s:string" />
+            <s:attribute name="TravelSector" type="s:string" />
+            <s:attribute name="Code" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="RequestorID">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:UniqueID" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ContactPerson">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PersonName" type="s0:PersonName" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Telephone" type="s0:TelephoneInfo" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Address" type="s0:AddressInfo" />
+        </s:sequence>
+        <s:attribute name="ContactType" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Affiliations">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TravelArranger" type="s0:TravelArranger" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TravelArranger">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PersonName" type="s0:PersonName" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Telephone" type="s0:TelephoneInfo" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Address" type="s0:AddressInfo" />
+        </s:sequence>
+        <s:attribute name="TravelSector" type="s:string" />
+        <s:attribute name="CompanyShortName" type="s:string" />
+        <s:attribute name="Code" type="s:string" />
+        <s:attribute name="CodeContext" type="s:string" />
+      </s:complexType>
+      <s:complexType name="CompanyInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CompanyName" type="s0:CompanyName" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TelephoneInfo" type="s0:TelephoneInfo" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="URL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="BusinessLocale" type="s0:Address" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ContactPerson" type="s0:ContactPerson" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfPrefCollection">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PrefCollection" nillable="true" type="s0:PrefCollection" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PrefCollection">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="HotelPref" type="s0:HotelPref" />
+          <s:element minOccurs="0" maxOccurs="1" name="TPA_Extensions" type="s0:TPA_Extensions" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="HotelPref">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RoomAmenityPref" type="s0:RoomAmenityPref" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="PropertyAmenityPref" type="s0:PropertyAmenityPref" />
+          <s:element minOccurs="0" maxOccurs="1" name="TPA_Extensions" type="s0:TPA_Extensions" />
+        </s:sequence>
+        <s:attribute name="SmokingAllowed" type="s:boolean" use="required" />
+      </s:complexType>
+      <s:complexType name="RoomAmenityPref">
+        <s:attribute name="RoomAmenity" type="s:string" />
+        <s:attribute name="QualityLevel" type="s:string" />
+      </s:complexType>
+      <s:complexType name="PropertyAmenityPref">
+        <s:attribute name="PropertyAmenityType" type="s:string" />
+      </s:complexType>
+      <s:complexType name="UserID">
+        <s:attribute name="Type" type="s:string" />
+        <s:attribute name="URL" type="s:string" />
+        <s:attribute name="Instance" type="s:string" />
+        <s:attribute name="PinNumber" type="s:string" />
+        <s:attribute name="ID" type="s:string" />
+        <s:attribute name="ID_Context" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfRoomStay">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RoomStay" nillable="true" type="s0:RoomStay" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RoomStay">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Total" type="s0:Total" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoomTypes" type="s0:ArrayOfRoomType" />
+          <s:element minOccurs="0" maxOccurs="1" name="RatePlans" type="s0:ArrayOfRatePlan" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoomRates" type="s0:ArrayOfRoomRate" />
+          <s:element minOccurs="0" maxOccurs="1" name="GuestCounts" type="s0:GuestCounts" />
+          <s:element minOccurs="0" maxOccurs="1" name="TimeSpan" type="s0:DateTimeSpanType" />
+          <s:element minOccurs="0" maxOccurs="1" name="SpecialRequests" type="s0:ArrayOfSpecialRequest" />
+          <s:element minOccurs="0" maxOccurs="1" name="BasicPropertyInfo" type="s0:HotelReferenceGroup" />
+          <s:element minOccurs="0" maxOccurs="1" name="Guarantee" type="s0:Guarantee" />
+          <s:element minOccurs="0" maxOccurs="1" name="Comments" type="s0:ArrayOfComment" />
+          <s:element minOccurs="0" maxOccurs="1" name="DepositPayments" type="s0:ArrayOfRequiredPayment" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResGuestRPHs" type="s0:ArrayOfResGuestRPH" />
+        </s:sequence>
+        <s:attribute name="MarketCode" type="s:string" />
+        <s:attribute name="SourceOfBusiness" type="s:string" />
+        <s:attribute name="IndexNumber" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfRoomType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RoomType" nillable="true" type="s0:RoomType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RoomType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="RoomDescription" type="s0:RoomDescription" />
+        </s:sequence>
+        <s:attribute name="IsRoom" type="s:boolean" />
+        <s:attribute name="RoomTypeCode" type="s:string" />
+        <s:attribute name="InvBlockCode" type="s:string" />
+        <s:attribute name="NumberOfUnits" type="s:int" />
+      </s:complexType>
+      <s:complexType name="ArrayOfRatePlan">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RatePlan" nillable="true" type="s0:RatePlan" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RatePlan">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="RatePlanDescription" type="s0:RatePlanDescription" />
+          <s:element minOccurs="0" maxOccurs="1" name="Guarantee" type="s0:Guarantee" />
+          <s:element minOccurs="0" maxOccurs="1" name="Rates" type="s0:Rates" />
+          <s:element minOccurs="0" maxOccurs="1" name="CancelPenalties" type="s0:ArrayOfCancelPenalty" />
+          <s:element minOccurs="0" maxOccurs="1" name="Commission" type="s0:CommissionType" />
+          <s:element minOccurs="0" maxOccurs="1" name="AdditionalDetails" type="s0:ArrayOfAdditionalDetailType" />
+        </s:sequence>
+        <s:attribute name="RatePlanCode" type="s:string" />
+        <s:attribute name="RatePlanName" type="s:string" />
+        <s:attribute name="BookingCode" type="s:string" />
+        <s:attribute name="RatePlanType" type="s:string" />
+        <s:attribute name="RatePlanID" type="s:string" />
+        <s:attribute name="EffectiveDate" type="s:string" />
+        <s:attribute name="ExpireDate" type="s:string" />
+        <s:attribute name="CurrencyCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Guarantee">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="GuaranteesAccepted" type="s0:ArrayOfGuaranteeAccepted" />
+          <s:element minOccurs="0" maxOccurs="1" name="GuaranteeDescription" type="s0:ParagraphType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfGuaranteeAccepted">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GuaranteeAccepted" nillable="true" type="s0:GuaranteeAccepted" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="GuaranteeAccepted">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PaymentCard" type="s0:PaymentCard" />
+        </s:sequence>
+        <s:attribute name="PaymentTransactionTypeCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Rates">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Rate" type="s0:RatePlanRate" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RatePlanRate">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:RateUpload">
+            <s:attribute name="InvTypeCode" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="RateUpload">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:DOW_PatternGroup">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="BaseByGuestAmts" type="s0:ArrayOfBaseByGuestAmt" />
+              <s:element minOccurs="0" maxOccurs="1" name="AdditionalGuestAmounts" type="s0:ArrayOfAdditionalGuestAmount" />
+              <s:element minOccurs="0" maxOccurs="1" name="Fees" type="s0:ArrayOfFee" />
+            </s:sequence>
+            <s:attribute name="Start" type="s:string" />
+            <s:attribute name="NumberOfUnits" type="s:string" />
+            <s:attribute name="End" type="s:string" />
+            <s:attribute name="RateTimeUnit" type="s:string" />
+            <s:attribute name="UnitMultiplier" type="s:string" />
+            <s:attribute name="MinLOS" type="s:string" />
+            <s:attribute name="MaxLOS" type="s:string" />
+            <s:attribute name="CurrencyCode" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="DOW_PatternGroup">
+        <s:attribute name="Mon" type="s:boolean" use="required" />
+        <s:attribute name="Tue" type="s:boolean" use="required" />
+        <s:attribute name="Weds" type="s:boolean" use="required" />
+        <s:attribute name="Thur" type="s:boolean" use="required" />
+        <s:attribute name="Fri" type="s:boolean" use="required" />
+        <s:attribute name="Sat" type="s:boolean" use="required" />
+        <s:attribute name="Sun" type="s:boolean" use="required" />
+      </s:complexType>
+      <s:complexType name="ArrayOfBaseByGuestAmt">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="BaseByGuestAmt" nillable="true" type="s0:BaseByGuestAmt" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfFee">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Fee" nillable="true" type="s0:Fee" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Fee">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s0:ParagraphType" />
+        </s:sequence>
+        <s:attribute name="TaxInclusive" type="s:boolean" />
+        <s:attribute name="Amount" type="s:decimal" />
+        <s:attribute name="Code" type="s:string" />
+        <s:attribute name="CurrencyCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfCancelPenalty">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CancelPenalty" nillable="true" type="s0:CancelPenalty" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CancelPenalty">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PenaltyDescription" type="s0:ParagraphType" />
+          <s:element minOccurs="0" maxOccurs="1" name="AmountPercent" type="s0:AmountPercent" />
+          <s:element minOccurs="0" maxOccurs="1" name="Deadline" type="s0:Deadline" />
+        </s:sequence>
+        <s:attribute name="PolicyCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="AmountPercent" />
+      <s:complexType name="Deadline">
+        <s:attribute name="AbsoluteDeadline" type="s:string" />
+        <s:attribute name="OffsetTimeUnit" type="s0:OffsetTimeUnit" />
+        <s:attribute name="OffsetUnitMultiplier" type="s:string" />
+        <s:attribute name="OffsetDropTime" type="s0:OffsetDropTime" use="required" />
+      </s:complexType>
+      <s:simpleType name="OffsetTimeUnit">
+        <s:restriction base="s:string">
+          <s:enumeration value="Year" />
+          <s:enumeration value="Month" />
+          <s:enumeration value="Week" />
+          <s:enumeration value="Day" />
+          <s:enumeration value="Hour" />
+          <s:enumeration value="Second" />
+          <s:enumeration value="FullDuration" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="OffsetDropTime">
+        <s:restriction base="s:string">
+          <s:enumeration value="BeforeArrival" />
+          <s:enumeration value="AfterBooking" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="CommissionType">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Percent" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfAdditionalDetailType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AdditionalDetailType" nillable="true" type="s0:AdditionalDetailType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AdditionalDetailType">
+        <s:attribute name="Type" type="s:string" />
+        <s:attribute name="Code" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfRoomRate">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RoomRate" nillable="true" type="s0:RoomRate" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RoomRate">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Rates" type="s0:ArrayOfRateType" />
+        </s:sequence>
+        <s:attribute name="EffectiveDate" type="s:string" />
+        <s:attribute name="ExpireDate" type="s:string" />
+        <s:attribute name="RoomTypeCode" type="s:string" />
+        <s:attribute name="RatePlanCode" type="s:string" />
+        <s:attribute name="NumberOfUnits" type="s:int" />
+        <s:attribute name="InvBlockCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfRateType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Rate" nillable="true" type="s0:RateType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RateType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Base" type="s0:Base" />
+          <s:element minOccurs="0" maxOccurs="1" name="Discount" type="s0:Discount" />
+          <s:element minOccurs="0" maxOccurs="1" name="AdditionalGuestAmounts" type="s0:ArrayOfAdditionalGuestAmount" />
+          <s:element minOccurs="0" maxOccurs="1" name="Fees" type="s0:ArrayOfFee" />
+          <s:element minOccurs="0" maxOccurs="1" name="Total" type="s0:Total" />
+          <s:element minOccurs="0" maxOccurs="1" name="Taxes" type="s0:ArrayOfTaxType" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tpa_Extensions" type="s0:TPA_Extensions" />
+        </s:sequence>
+        <s:attribute name="RateTypeCode" type="s:string" />
+        <s:attribute name="RateTimeUnit" type="s:string" />
+        <s:attribute name="UnitMultiplier" type="s:int" />
+        <s:attribute name="EffectiveDate" type="s:string" />
+        <s:attribute name="ExpireDate" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfTaxType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Tax" nillable="true" type="s0:TaxType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfSpecialRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SpecialRequest" nillable="true" type="s0:SpecialRequest" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SpecialRequest">
+        <s:attribute name="Name" type="s:string" />
+        <s:attribute name="RequestCode" type="s:string" />
+        <s:attribute name="Description" type="s:string" />
+      </s:complexType>
+      <s:complexType name="HotelReferenceGroup">
+        <s:attribute name="HotelCode" type="s:string" />
+        <s:attribute name="HotelName" type="s:string" />
+        <s:attribute name="AreaId" type="s:string" />
+        <s:attribute name="HotelCodeContext" type="s:string" />
+        <s:attribute name="ChainCode" type="s:string" />
+        <s:attribute name="ChainName" type="s:string" />
+        <s:attribute name="BrandCode" type="s:string" />
+        <s:attribute name="BrandName" type="s:string" />
+        <s:attribute name="HotelCityCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfComment">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Comment" nillable="true" type="s0:Comment" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRequiredPayment">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RequiredPayment" nillable="true" type="s0:RequiredPayment" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RequiredPayment">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AmountPercent" type="s0:AmountPercent" />
+          <s:element minOccurs="0" maxOccurs="1" name="Deadline" type="s0:Deadline" />
+          <s:element minOccurs="0" maxOccurs="1" name="PaymentDescription" type="s0:ParagraphType" />
+          <s:element minOccurs="0" maxOccurs="1" name="AcceptedPayments" type="s0:ArrayOfPaymentForm" />
+        </s:sequence>
+        <s:attribute name="RetributionType" type="s:string" />
+        <s:attribute name="PaymentCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfPaymentForm">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AcceptedPayment" nillable="true" type="s0:PaymentForm" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfResGuestRPH">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ResGuestRPH" nillable="true" type="s0:ResGuestRPH" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ResGuestRPH">
+        <s:attribute name="RPH" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfHotelStay">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="HotelStay" nillable="true" type="s0:HotelStay" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="HotelStay">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Availability" type="s0:Availability" />
+          <s:element minOccurs="0" maxOccurs="1" name="BasicPropertyInfo" type="s0:HotelReferenceGroup" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Availability">
+        <s:attribute name="Status" type="s:string" />
+        <s:attribute name="Quantity" type="s:string" />
+        <s:attribute name="Start" type="s:string" />
+        <s:attribute name="End" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfHotelSearchCriterion">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Criterion" nillable="true" type="s0:HotelSearchCriterion" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="HotelSearchCriterion">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Position" type="s0:Position" />
+          <s:element minOccurs="0" maxOccurs="1" name="HotelRef" type="s0:HotelReferenceGroup" />
+          <s:element minOccurs="0" maxOccurs="1" name="Radius" type="s0:Radius" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Position">
+        <s:attribute name="Latitude" type="s:string" />
+        <s:attribute name="Longitude" type="s:string" />
+        <s:attribute name="Altitude" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Radius">
+        <s:attribute name="Distance" type="s:string" />
+        <s:attribute name="DistanceMeasure" type="s:string" />
+        <s:attribute name="Direction" type="s:string" />
+      </s:complexType>
+      <s:complexType name="POS">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Source" type="s0:Source" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Source">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="BookingChannel" type="s0:BookingChannel" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequestorId" type="s0:RequestorID" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequestorID" type="s0:RequestorID" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="BookingChannel">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s0:CompanyName" />
+        </s:sequence>
+        <s:attribute name="Primary" type="s:string" />
+        <s:attribute name="Type" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfAvailRequestSegment">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="AvailRequestSegment" nillable="true" type="s0:AvailRequestSegment" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AvailRequestSegment">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="StayDateRange" type="s0:StayDateRangeType" />
+          <s:element minOccurs="0" maxOccurs="1" name="RateRange" type="s0:RateRange" />
+          <s:element minOccurs="0" maxOccurs="1" name="RatePlanCandidates" type="s0:ArrayOfRatePlanCandidate" />
+          <s:element minOccurs="0" maxOccurs="1" name="Profiles" type="s0:ArrayOfProfile" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoomStayCandidates" type="s0:ArrayOfRoomStayCandidate" />
+          <s:element minOccurs="0" maxOccurs="1" name="HotelSearchCriteria" type="s0:ArrayOfHotelSearchCriterion" />
+          <s:element minOccurs="0" maxOccurs="1" name="TPA_Extensions" type="s0:AvailabilityTpaExtensions" />
+        </s:sequence>
+        <s:attribute name="ResponseType" type="s:string" />
+        <s:attribute name="AvailReqType" type="s:string" />
+        <s:attribute name="MoreDataEchoToken" type="s:string" />
+      </s:complexType>
+      <s:complexType name="StayDateRangeType">
+        <s:attribute name="Start" type="s:string" />
+        <s:attribute name="End" type="s:string" />
+        <s:attribute name="Duration" type="s:string" />
+      </s:complexType>
+      <s:complexType name="RateRange">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="MinRate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MaxRate" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRatePlanCandidate">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RatePlanCandidate" nillable="true" type="s0:RatePlanCandidate" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RatePlanCandidate">
+        <s:attribute name="PromotionCode" type="s:string" />
+        <s:attribute name="RatePlanCode" type="s:string" />
+        <s:attribute name="RatePlanType" type="s:string" />
+        <s:attribute name="RatePlanId" type="s:string" />
+        <s:attribute name="RatePlanQualifier" type="s:string" />
+        <s:attribute name="RatePlanCategory" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfRoomStayCandidate">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RoomStayCandidate" nillable="true" type="s0:RoomStayCandidate" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RoomStayCandidate">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="GuestCounts" type="s0:ArrayOfGuestCount" />
+        </s:sequence>
+        <s:attribute name="Quantity" type="s:string" />
+        <s:attribute name="RoomType" type="s:string" />
+        <s:attribute name="RoomTypeCode" type="s:string" />
+        <s:attribute name="RoomCategory" type="s:string" />
+        <s:attribute name="PromotionCode" type="s:string" />
+        <s:attribute name="NonSmoking" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfGuestCount">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GuestCount" nillable="true" type="s0:GuestCount" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfHotelReservationID">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="HotelReservationID" nillable="true" type="s0:HotelReservationID" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="HotelReservationID">
+        <s:attribute name="ResID_Type" type="s:string" />
+        <s:attribute name="ResID_Value" type="s:string" />
+        <s:attribute name="ResID_Source" type="s:string" />
+        <s:attribute name="ResID_SourceContext" type="s:string" />
+        <s:attribute name="ResID_Date" type="s:string" />
+      </s:complexType>
+      <s:element name="OTA_HotelAvailRS" type="s0:OTA_HotelAvailRS" />
+      <s:element name="OTA_ReadRQ" type="s0:OTA_ReadRQ" />
+      <s:complexType name="OTA_ReadRQ">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaRequestMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="ReadRequests" type="s0:ReadRequests" />
+              <s:element minOccurs="0" maxOccurs="1" name="UniqueID" type="s0:UniqueID" />
+              <s:element minOccurs="0" maxOccurs="1" name="POS" type="s0:POS" />
+            </s:sequence>
+            <s:attribute name="ReturnListIndicator" type="s:string" />
+            <s:attribute name="PrimaryLangId" type="s:string" />
+            <s:attribute name="MaxResponses" type="s:int" use="required" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ReadRequests">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ReadRequest" type="s0:ReadRequest" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="HotelReadRequest" type="s0:HotelReadRequest" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GlobalReservationReadRequest" type="s0:GlobalReservationReadRequest" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ReadRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UniqueID" type="s0:UniqueID" />
+          <s:element minOccurs="0" maxOccurs="1" name="Verification" type="s0:Verification" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Verification">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PersonName" type="s0:PersonName" />
+          <s:element minOccurs="0" maxOccurs="1" name="PaymentCard" type="s0:PaymentCard" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReservationTimeSpan" type="s0:DateTimeSpanType" />
+          <s:element minOccurs="0" maxOccurs="1" name="TelephoneInfo" type="s0:TelephoneInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressInfo" type="s0:AddressInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Email" type="s0:Email" />
+          <s:element minOccurs="0" maxOccurs="1" name="TPA_Extensions" type="s0:TPA_Extensions" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Email">
+        <s:simpleContent>
+          <s:extension base="s:string" />
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="HotelReadRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s0:UserID" />
+          <s:element minOccurs="0" maxOccurs="1" name="CityName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Verification" type="s0:Verification" />
+        </s:sequence>
+        <s:attribute name="HotelName" type="s:string" />
+        <s:attribute name="HotelCode" type="s:string" />
+        <s:attribute name="ChainCode" type="s:string" />
+        <s:attribute name="BrandName" type="s:string" />
+        <s:attribute name="ChainName" type="s:string" />
+        <s:attribute name="BrandCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="GlobalReservationReadRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TravelerName" type="s0:PersonName" />
+        </s:sequence>
+        <s:attribute name="Start" type="s:string" />
+        <s:attribute name="End" type="s:string" />
+        <s:attribute name="Duration" type="s:string" />
+      </s:complexType>
+      <s:element name="OTA_HotelResRS" type="s0:OTA_HotelResRS" />
+      <s:complexType name="OTA_HotelResRS">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaResponseMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="HotelReservation" type="s0:HotelReservation" />
+              <s:element minOccurs="0" maxOccurs="1" name="HotelReservations" type="s0:ArrayOfHotelReservation" />
+              <s:element minOccurs="0" maxOccurs="1" name="WrittenConf" type="s0:WrittenConfInst" />
+            </s:sequence>
+            <s:attribute name="ResResponseType" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="HotelReservation">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UniqueID" type="s0:UniqueID" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoomStays" type="s0:ArrayOfRoomStay" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResGuests" type="s0:ArrayOfResGuest" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResGlobalInfo" type="s0:ResGlobalInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="TPA_Extensions" type="s0:TPA_Extensions" />
+          <s:element minOccurs="0" maxOccurs="1" name="WrittenConfInst" type="s0:WrittenConfInst" />
+          <s:element minOccurs="0" maxOccurs="1" name="Services" type="s0:ArrayOfService" />
+        </s:sequence>
+        <s:attribute name="CreateDateTime" type="s:string" />
+        <s:attribute name="RoomStayReservation" type="s:boolean" />
+        <s:attribute name="CreatorID" type="s:string" />
+        <s:attribute name="LastModifyDateTime" type="s:string" />
+        <s:attribute name="LastModifierID" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfResGuest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ResGuest" nillable="true" type="s0:ResGuest" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ResGuest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="InHouseTimeSpan" type="s0:DateTimeSpanType" />
+          <s:element minOccurs="0" maxOccurs="1" name="Profiles" type="s0:ArrayOfProfileInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="ArrivalTransport" type="s0:TransportInfoType" />
+          <s:element minOccurs="0" maxOccurs="1" name="DepartureTransport" type="s0:TransportInfoType" />
+        </s:sequence>
+        <s:attribute name="ResGuestRPH" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfProfileInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProfileInfo" nillable="true" type="s0:ProfileInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProfileInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UniqueID" type="s0:UniqueID" />
+          <s:element minOccurs="0" maxOccurs="1" name="Profile" type="s0:Profile" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyInfo" type="s0:CompanyInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TransportInfoType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TransportInfo" type="s0:TransportInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TransportInfo">
+        <s:attribute name="Type" type="s:string" />
+        <s:attribute name="ID" type="s:string" />
+        <s:attribute name="LocationCode" type="s:string" />
+        <s:attribute name="Time" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ResGlobalInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Comments" type="s0:ArrayOfComment" />
+          <s:element minOccurs="0" maxOccurs="1" name="Guarantee" type="s0:Guarantee" />
+          <s:element minOccurs="0" maxOccurs="1" name="Total" type="s0:Total" />
+          <s:element minOccurs="0" maxOccurs="1" name="HotelReservationIDs" type="s0:ArrayOfHotelReservationID" />
+          <s:element minOccurs="0" maxOccurs="1" name="Profiles" type="s0:ArrayOfProfileInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfHotelReservation">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="HotelReservation" nillable="true" type="s0:HotelReservation" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="OTA_HotelResRQ" type="s0:OTA_HotelResRQ" />
+      <s:complexType name="OTA_HotelResRQ">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaRequestMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="POS" type="s0:POS" />
+              <s:element minOccurs="0" maxOccurs="1" name="HotelReservations" type="s0:ArrayOfHotelReservation" />
+            </s:sequence>
+            <s:attribute name="ResStatus" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="OTA_HotelResModifyRQ" type="s0:OTA_HotelResModifyRQ" />
+      <s:complexType name="OTA_HotelResModifyRQ">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaRequestMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="POS" type="s0:POS" />
+              <s:element minOccurs="0" maxOccurs="1" name="HotelResModifies" type="s0:ArrayOfHotelResModify" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfHotelResModify">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="HotelResModify" nillable="true" type="s0:HotelResModify" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="HotelResModify">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:HotelReservation">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Verification" type="s0:Verification" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="OTA_HotelResModifyRS" type="s0:OTA_HotelResModifyRS" />
+      <s:complexType name="OTA_HotelResModifyRS">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaResponseMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="HotelResModifies" type="s0:ArrayOfHotelResModify" />
+            </s:sequence>
+            <s:attribute name="ResResponseType" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="OTA_HotelResNotifRQ" type="s0:OTA_HotelResNotifRQ" />
+      <s:complexType name="OTA_HotelResNotifRQ">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaRequestMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="HotelReservations" type="s0:ArrayOfHotelReservation" />
+              <s:element minOccurs="0" maxOccurs="1" name="POS" type="s0:POS" />
+            </s:sequence>
+            <s:attribute name="ResStatus" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="OTA_HotelResNotifRS" type="s0:OTA_HotelResNotifRS" />
+      <s:complexType name="OTA_HotelResNotifRS">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaResponseMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="HotelReservations" type="s0:ArrayOfHotelReservation" />
+              <s:element minOccurs="0" maxOccurs="unbounded" name="UniqueID" type="s0:UniqueID" />
+            </s:sequence>
+            <s:attribute name="ResResponseType" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="OTA_HotelResModifyNotifRQ" type="s0:OTA_HotelResModifyNotifRQ" />
+      <s:complexType name="OTA_HotelResModifyNotifRQ">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaRequestMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="HotelResModifies" type="s0:ArrayOfHotelResModify" />
+              <s:element minOccurs="0" maxOccurs="1" name="POS" type="s0:POS" />
+            </s:sequence>
+            <s:attribute name="ResStatus" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="OTA_HotelResModifyNotifRS" type="s0:OTA_HotelResModifyNotifRS" />
+      <s:complexType name="OTA_HotelResModifyNotifRS">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaResponseMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="UniqueID" type="s0:UniqueID" />
+              <s:element minOccurs="0" maxOccurs="1" name="HotelResModifies" type="s0:ArrayOfHotelResModify" />
+            </s:sequence>
+            <s:attribute name="ResResponseType" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="OTA_CancelRQ" type="s0:OTA_CancelRQ" />
+      <s:complexType name="OTA_CancelRQ">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaRequestMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="UniqueID" type="s0:UniqueID" />
+              <s:element minOccurs="0" maxOccurs="1" name="Verification" type="s0:Verification" />
+              <s:element minOccurs="0" maxOccurs="1" name="POS" type="s0:POS" />
+            </s:sequence>
+            <s:attribute name="CancelType" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="OTA_CancelRS" type="s0:OTA_CancelRS" />
+      <s:complexType name="OTA_CancelRS">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaResponseMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="UniqueID" type="s0:UniqueID" />
+              <s:element minOccurs="0" maxOccurs="1" name="CancelInfoRS" type="s0:CancelInfoRS" />
+            </s:sequence>
+            <s:attribute name="ResResponseType" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="CancelInfoRS">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UniqueID" type="s0:UniqueID" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="OTA_HotelDescriptiveInfoRQ" type="s0:OTA_HotelDescriptiveInfoRQ" />
+      <s:complexType name="OTA_HotelDescriptiveInfoRQ">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaRequestMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="HotelDescriptiveInfos" type="s0:ArrayOfHotelDescriptiveInfo" />
+              <s:element minOccurs="0" maxOccurs="1" name="POS" type="s0:POS" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfHotelDescriptiveInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="HotelDescriptiveInfo" nillable="true" type="s0:HotelDescriptiveInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="HotelDescriptiveInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="HotelInfo" type="s0:HotelInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="FacilityInfo" type="s0:FacilityInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Policies" type="s0:Policies" />
+          <s:element minOccurs="0" maxOccurs="1" name="AreaInfo" type="s0:AreaInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="AffiliationInfo" type="s0:AffiliationInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContactInfo" type="s0:ContactInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="MultimediaObjects" type="s0:MultimediaObjects" />
+        </s:sequence>
+        <s:attribute name="ChainCode" type="s:string" />
+        <s:attribute name="BrandCode" type="s:string" />
+        <s:attribute name="HotelCode" type="s:string" />
+        <s:attribute name="HotelCityCode" type="s:string" />
+        <s:attribute name="HotelName" type="s:string" />
+        <s:attribute name="HotelCodeContext" type="s:string" />
+      </s:complexType>
+      <s:complexType name="HotelInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="HotelName" type="s0:HotelName" />
+          <s:element minOccurs="0" maxOccurs="1" name="ClosedSeasons" type="s0:ArrayOfClosedSeason" />
+          <s:element minOccurs="0" maxOccurs="1" name="Descriptions" type="s0:ArrayOfDescription" />
+          <s:element minOccurs="0" maxOccurs="1" name="Position" type="s0:Position" />
+          <s:element minOccurs="0" maxOccurs="1" name="Services" type="s0:ArrayOfService" />
+        </s:sequence>
+        <s:attribute name="SendData" type="s:string" />
+        <s:attribute name="WhenBuilt" type="s:string" />
+        <s:attribute name="HotelStatus" type="s:string" />
+        <s:attribute name="HotelStatusCode" type="s:string" />
+      </s:complexType>
+      <s:complexType name="HotelName">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="HotelShortName" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfClosedSeason">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ClosedSeason" nillable="true" type="s0:ClosedSeason" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ClosedSeason">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:DateTimeSpanType" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfDescription">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Description" nillable="true" type="s0:Description" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Description">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:ParagraphType" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="FacilityInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="GuestRooms" type="s0:ArrayOfGuestRoom" />
+          <s:element minOccurs="0" maxOccurs="1" name="MeetingRooms" type="s0:MeetingRooms" />
+        </s:sequence>
+        <s:attribute name="SendMeetingRooms" type="s:string" />
+        <s:attribute name="SendGuestRooms" type="s:string" />
+        <s:attribute name="SendRestaurants" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfGuestRoom">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GuestRoom" nillable="true" type="s0:GuestRoom" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="GuestRoom">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TypeRoom" type="s0:TypeRoom" />
+          <s:element minOccurs="0" maxOccurs="1" name="MultimediaDescriptions" type="s0:ArrayOfMultimediaDescription" />
+        </s:sequence>
+        <s:attribute name="Code" type="s:string" />
+        <s:attribute name="CodeContext" type="s:string" />
+        <s:attribute name="Quantity" type="s:string" />
+        <s:attribute name="RoomTypeName" type="s:string" />
+        <s:attribute name="MaxOccupancy" type="s:string" />
+      </s:complexType>
+      <s:complexType name="TypeRoom">
+        <s:attribute name="StandardNumBeds" type="s:string" />
+        <s:attribute name="StandardOccupancy" type="s:string" />
+        <s:attribute name="MaxRollaways" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfMultimediaDescription">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="MultimediaDescription" nillable="true" type="s0:MultimediaDescription" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MultimediaDescription">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TextItems" type="s0:ArrayOfTextItem" />
+          <s:element minOccurs="0" maxOccurs="1" name="ImageItems" type="s0:ArrayOfImageItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfTextItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TextItem" nillable="true" type="s0:TextItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TextItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s0:DescriptionHDI" />
+        </s:sequence>
+        <s:attribute name="Title" type="s:string" />
+      </s:complexType>
+      <s:complexType name="DescriptionHDI">
+        <s:simpleContent>
+          <s:extension base="s:string">
+            <s:attribute name="Language" type="s:string" />
+          </s:extension>
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfImageItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ImageItem" nillable="true" type="s0:ImageItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ImageItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ImageFormat" type="s0:ImageFormat" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ImageFormat">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="URL" type="s0:URL" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="URL">
+        <s:simpleContent>
+          <s:extension base="s:string" />
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="MeetingRooms">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="MeetingRoom" type="s0:MeetingRoom" />
+        </s:sequence>
+        <s:attribute name="MeetingRoomCount" type="s:int" />
+        <s:attribute name="LargestRoomSpace" type="s:int" />
+        <s:attribute name="UnitOfMeasure" type="s:string" />
+        <s:attribute name="SmallestRoomSpace" type="s:int" />
+        <s:attribute name="TotalRoomSpace" type="s:int" />
+        <s:attribute name="LargestSeatingCapacity" type="s:int" />
+        <s:attribute name="SecondLargestSeatingCapacity" type="s:int" />
+        <s:attribute name="SmallestSeatingCapacity" type="s:int" />
+      </s:complexType>
+      <s:complexType name="MeetingRoom">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Codes" type="s0:ArrayOfMeetingRoomCode" />
+          <s:element minOccurs="0" maxOccurs="1" name="Dimension" type="s0:Dimension" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfMeetingRoomCode">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Code" nillable="true" type="s0:MeetingRoomCode" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MeetingRoomCode">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Charge" type="s0:Fee" />
+        </s:sequence>
+        <s:attribute name="Code" type="s:int" use="required" />
+        <s:attribute name="Quantity" type="s:int" use="required" />
+      </s:complexType>
+      <s:complexType name="Dimension">
+        <s:attribute name="Area" type="s:string" />
+        <s:attribute name="Height" type="s:string" />
+        <s:attribute name="Length" type="s:string" />
+        <s:attribute name="Width" type="s:string" />
+        <s:attribute name="Units" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Policies">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Policy" type="s0:Policy" />
+        </s:sequence>
+        <s:attribute name="SendPolicies" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Policy">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:DateTimeSpanGroup">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="CancelPolicy" type="s0:CancelPolicy" />
+              <s:element minOccurs="0" maxOccurs="1" name="PaymentPolicy" type="s0:PaymentPolicy" />
+              <s:element minOccurs="0" maxOccurs="1" name="PolicyInfo" type="s0:PolicyInfo" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="DateTimeSpanGroup">
+        <s:attribute name="Start" type="s:string" />
+        <s:attribute name="End" type="s:string" />
+        <s:attribute name="Duration" type="s:string" />
+      </s:complexType>
+      <s:complexType name="Attraction">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:DateTimeSpanGroup">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="AttractionName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="unbounded" name="Description" type="s0:Description" />
+              <s:element minOccurs="0" maxOccurs="unbounded" name="RefPoints" type="s0:RefPoint" />
+            </s:sequence>
+            <s:attribute name="AttractionCategoryCode" type="s:string" />
+            <s:attribute name="CodeDetail" type="s:string" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="RefPoint">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Direction" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Distance" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DistanceUnitName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Latitude" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Longitude" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Altitude" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CancelPolicy">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CancelPenalty" type="s0:CancelPenalty" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PaymentPolicy">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="RequiredPayment" type="s0:RequiredPayment" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PolicyInfo">
+        <s:attribute name="CheckInTime" type="s:string" />
+        <s:attribute name="CheckOutTime" type="s:string" />
+      </s:complexType>
+      <s:complexType name="AreaInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Attractions" type="s0:ArrayOfAttraction" />
+        </s:sequence>
+        <s:attribute name="SendRefPoints" type="s:string" />
+        <s:attribute name="SendAttractions" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfAttraction">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Attraction" nillable="true" type="s0:Attraction" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AffiliationInfo">
+        <s:attribute name="SendDistribSystems" type="s:boolean" use="required" />
+        <s:attribute name="SendBrands" type="s:boolean" use="required" />
+        <s:attribute name="SendLoyalPrograms" type="s:boolean" use="required" />
+        <s:attribute name="SendAwards" type="s:boolean" use="required" />
+      </s:complexType>
+      <s:complexType name="ContactInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Names" type="s0:ArrayOfName" />
+          <s:element minOccurs="0" maxOccurs="1" name="Addresses" type="s0:ArrayOfAddress" />
+          <s:element minOccurs="0" maxOccurs="1" name="Phones" type="s0:ArrayOfPhone" />
+          <s:element minOccurs="0" maxOccurs="1" name="Emails" type="s0:ArrayOfEmail" />
+          <s:element minOccurs="0" maxOccurs="1" name="URLs" type="s0:ArrayOfURL" />
+        </s:sequence>
+        <s:attribute name="SendData" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfName">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Name" nillable="true" type="s0:Name" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Name">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:PersonName" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfAddress">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Address" nillable="true" type="s0:Address" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfPhone">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Phone" nillable="true" type="s0:Phone" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Phone">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:TelephoneInfo" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfEmail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Email" nillable="true" type="s0:Email" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfURL">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="URL" nillable="true" type="s0:URL" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MultimediaObjects">
+        <s:attribute name="SendData" type="s:boolean" use="required" />
+      </s:complexType>
+      <s:element name="OTA_HotelDescriptiveInfoRS" type="s0:OTA_HotelDescriptiveInfoRS" />
+      <s:complexType name="OTA_HotelDescriptiveInfoRS">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaResponseMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="HotelDescriptiveContents" type="s0:ArrayOfHotelDescriptiveContent" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfHotelDescriptiveContent">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="HotelDescriptiveContent" nillable="true" type="s0:HotelDescriptiveContent" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="HotelDescriptiveContent">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:HotelReferenceGroup">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="DestinationSystemsCode" type="s0:ArrayOfDestinationSystemCode" />
+              <s:element minOccurs="0" maxOccurs="1" name="HotelInfo" type="s0:HotelInfo" />
+              <s:element minOccurs="0" maxOccurs="1" name="FacilityInfo" type="s0:FacilityInfo" />
+              <s:element minOccurs="0" maxOccurs="1" name="Policies" type="s0:Policies" />
+              <s:element minOccurs="0" maxOccurs="1" name="AreaInfo" type="s0:AreaInfo" />
+              <s:element minOccurs="0" maxOccurs="1" name="AffiliationInfo" type="s0:AffiliationInfo" />
+              <s:element minOccurs="0" maxOccurs="1" name="MultimediaObjects" type="s0:MultimediaObjects" />
+              <s:element minOccurs="0" maxOccurs="1" name="ContactInfos" type="s0:ArrayOfContactInfo" />
+            </s:sequence>
+            <s:attribute name="CurrencyCode" type="s:string" />
+            <s:attribute name="DecimalPlaces" type="s:string" />
+            <s:attribute name="LanguageCode" type="s:string" />
+            <s:attribute name="Overwrite" type="s:boolean" use="required" />
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfDestinationSystemCode">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DestinationSystemCode" nillable="true" type="s0:DestinationSystemCode" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DestinationSystemCode">
+        <s:simpleContent>
+          <s:extension base="s:string" />
+        </s:simpleContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfContactInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ContactInfo" nillable="true" type="s0:ContactInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="OTA_PingRQ" type="s0:OTA_PingRQ" />
+      <s:complexType name="OTA_PingRQ">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaRequestMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="EchoData" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="OTA_PingRS" type="s0:OTA_PingRS" />
+      <s:complexType name="OTA_PingRS">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:OtaResponseMessage">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="EchoData" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://htng.org/1.1/Header/">
+      <s:element name="HTNGHeader" type="s1:HTNGHeader" />
+      <s:complexType name="HTNGHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="From" type="s1:From" />
+          <s:element minOccurs="0" maxOccurs="1" name="To" type="s1:To" />
+          <s:element minOccurs="0" maxOccurs="1" name="timeStamp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="echoToken" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="transactionId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="action" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:complexType name="From">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="systemId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Credential" type="s1:Credential" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Credential">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="To">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="systemId" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CheckAvailabilitySoapIn">
+    <wsdl:part name="availReq" element="s0:OTA_HotelAvailRQ" />
+  </wsdl:message>
+  <wsdl:message name="CheckAvailabilitySoapOut">
+    <wsdl:part name="CheckAvailabilityResult" element="s0:OTA_HotelAvailRS" />
+  </wsdl:message>
+  <wsdl:message name="CheckAvailabilityHTNGHeader">
+    <wsdl:part name="HTNGHeader" element="s1:HTNGHeader" />
+  </wsdl:message>
+  <wsdl:message name="ReadReservationsSoapIn">
+    <wsdl:part name="readReq" element="s0:OTA_ReadRQ" />
+  </wsdl:message>
+  <wsdl:message name="ReadReservationsSoapOut">
+    <wsdl:part name="ReadReservationsResult" element="s0:OTA_HotelResRS" />
+  </wsdl:message>
+  <wsdl:message name="ReadReservationsHTNGHeader">
+    <wsdl:part name="HTNGHeader" element="s1:HTNGHeader" />
+  </wsdl:message>
+  <wsdl:message name="CreateReservationsSoapIn">
+    <wsdl:part name="rezReq" element="s0:OTA_HotelResRQ" />
+  </wsdl:message>
+  <wsdl:message name="CreateReservationsSoapOut">
+    <wsdl:part name="CreateReservationsResult" element="s0:OTA_HotelResRS" />
+  </wsdl:message>
+  <wsdl:message name="CreateReservationsHTNGHeader">
+    <wsdl:part name="HTNGHeader" element="s1:HTNGHeader" />
+  </wsdl:message>
+  <wsdl:message name="ModifyReservationsSoapIn">
+    <wsdl:part name="rezModifyReq" element="s0:OTA_HotelResModifyRQ" />
+  </wsdl:message>
+  <wsdl:message name="ModifyReservationsSoapOut">
+    <wsdl:part name="ModifyReservationsResult" element="s0:OTA_HotelResModifyRS" />
+  </wsdl:message>
+  <wsdl:message name="ModifyReservationsHTNGHeader">
+    <wsdl:part name="HTNGHeader" element="s1:HTNGHeader" />
+  </wsdl:message>
+  <wsdl:message name="CreateReservationsNotificationSoapIn">
+    <wsdl:part name="rezNotif" element="s0:OTA_HotelResNotifRQ" />
+  </wsdl:message>
+  <wsdl:message name="CreateReservationsNotificationSoapOut">
+    <wsdl:part name="CreateReservationsNotificationResult" element="s0:OTA_HotelResNotifRS" />
+  </wsdl:message>
+  <wsdl:message name="CreateReservationsNotificationHTNGHeader">
+    <wsdl:part name="HTNGHeader" element="s1:HTNGHeader" />
+  </wsdl:message>
+  <wsdl:message name="ModifyReservationsNotificationSoapIn">
+    <wsdl:part name="rezModifyNotif" element="s0:OTA_HotelResModifyNotifRQ" />
+  </wsdl:message>
+  <wsdl:message name="ModifyReservationsNotificationSoapOut">
+    <wsdl:part name="ModifyReservationsNotificationResult" element="s0:OTA_HotelResModifyNotifRS" />
+  </wsdl:message>
+  <wsdl:message name="ModifyReservationsNotificationHTNGHeader">
+    <wsdl:part name="HTNGHeader" element="s1:HTNGHeader" />
+  </wsdl:message>
+  <wsdl:message name="CancelReservationsNotificationSoapIn">
+    <wsdl:part name="rezCancelReq" element="s0:OTA_CancelRQ" />
+  </wsdl:message>
+  <wsdl:message name="CancelReservationsNotificationSoapOut">
+    <wsdl:part name="CancelReservationsNotificationResult" element="s0:OTA_CancelRS" />
+  </wsdl:message>
+  <wsdl:message name="CancelReservationsNotificationHTNGHeader">
+    <wsdl:part name="HTNGHeader" element="s1:HTNGHeader" />
+  </wsdl:message>
+  <wsdl:message name="CancelReservationsSoapIn">
+    <wsdl:part name="rezCancelReq" element="s0:OTA_CancelRQ" />
+  </wsdl:message>
+  <wsdl:message name="CancelReservationsSoapOut">
+    <wsdl:part name="CancelReservationsResult" element="s0:OTA_CancelRS" />
+  </wsdl:message>
+  <wsdl:message name="CancelReservationsHTNGHeader">
+    <wsdl:part name="HTNGHeader" element="s1:HTNGHeader" />
+  </wsdl:message>
+  <wsdl:message name="GetHotelDetailsSoapIn">
+    <wsdl:part name="hotelDescReq" element="s0:OTA_HotelDescriptiveInfoRQ" />
+  </wsdl:message>
+  <wsdl:message name="GetHotelDetailsSoapOut">
+    <wsdl:part name="GetHotelDetailsResult" element="s0:OTA_HotelDescriptiveInfoRS" />
+  </wsdl:message>
+  <wsdl:message name="GetHotelDetailsHTNGHeader">
+    <wsdl:part name="HTNGHeader" element="s1:HTNGHeader" />
+  </wsdl:message>
+  <wsdl:message name="PingSoapIn">
+    <wsdl:part name="pingReq" element="s0:OTA_PingRQ" />
+  </wsdl:message>
+  <wsdl:message name="PingSoapOut">
+    <wsdl:part name="PingResult" element="s0:OTA_PingRS" />
+  </wsdl:message>
+  <wsdl:message name="PingHTNGHeader">
+    <wsdl:part name="HTNGHeader" element="s1:HTNGHeader" />
+  </wsdl:message>
+  <wsdl:portType name="ChannelConnectServiceSoap">
+    <wsdl:operation name="CheckAvailability">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Checks Hotel availability</wsdl:documentation>
+      <wsdl:input message="tns:CheckAvailabilitySoapIn" />
+      <wsdl:output message="tns:CheckAvailabilitySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReadReservations">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns Reservations</wsdl:documentation>
+      <wsdl:input message="tns:ReadReservationsSoapIn" />
+      <wsdl:output message="tns:ReadReservationsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateReservations">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Creates New Reservations</wsdl:documentation>
+      <wsdl:input message="tns:CreateReservationsSoapIn" />
+      <wsdl:output message="tns:CreateReservationsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ModifyReservations">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Modifies Reservations</wsdl:documentation>
+      <wsdl:input message="tns:ModifyReservationsSoapIn" />
+      <wsdl:output message="tns:ModifyReservationsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateReservationsNotification">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Receives Notification of Reservations</wsdl:documentation>
+      <wsdl:input message="tns:CreateReservationsNotificationSoapIn" />
+      <wsdl:output message="tns:CreateReservationsNotificationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ModifyReservationsNotification">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Receives Notification of Reservation Modifications</wsdl:documentation>
+      <wsdl:input message="tns:ModifyReservationsNotificationSoapIn" />
+      <wsdl:output message="tns:ModifyReservationsNotificationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelReservationsNotification">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Receives Notification of Reservation Cancellations</wsdl:documentation>
+      <wsdl:input message="tns:CancelReservationsNotificationSoapIn" />
+      <wsdl:output message="tns:CancelReservationsNotificationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelReservations">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Cancels Reservations</wsdl:documentation>
+      <wsdl:input message="tns:CancelReservationsSoapIn" />
+      <wsdl:output message="tns:CancelReservationsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetHotelDetails">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Gets Details for Hotels</wsdl:documentation>
+      <wsdl:input message="tns:GetHotelDetailsSoapIn" />
+      <wsdl:output message="tns:GetHotelDetailsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Used for testing application connectivity.</wsdl:documentation>
+      <wsdl:input message="tns:PingSoapIn" />
+      <wsdl:output message="tns:PingSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ChannelConnectServiceHttpGet" />
+  <wsdl:portType name="ChannelConnectServiceHttpPost" />
+  <wsdl:binding name="ChannelConnectServiceSoap" type="tns:ChannelConnectServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CheckAvailability">
+      <soap:operation soapAction="http://synxis.com/OTA2004AService/CheckAvailability" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:CheckAvailabilityHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReadReservations">
+      <soap:operation soapAction="http://synxis.com/OTA2004AService/ReadReservations" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ReadReservationsHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReservations">
+      <soap:operation soapAction="http://synxis.com/OTA2004AService/CreateReservations" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:CreateReservationsHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModifyReservations">
+      <soap:operation soapAction="http://synxis.com/OTA2004AService/ModifyReservations" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ModifyReservationsHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReservationsNotification">
+      <soap:operation soapAction="http://synxis.com/OTA2004AService/CreateReservationsNotification" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:CreateReservationsNotificationHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModifyReservationsNotification">
+      <soap:operation soapAction="http://synxis.com/OTA2004AService/ModifyReservationsNotification" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ModifyReservationsNotificationHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelReservationsNotification">
+      <soap:operation soapAction="http://synxis.com/OTA2004AService/CancelReservationsNotification" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:CancelReservationsNotificationHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelReservations">
+      <soap:operation soapAction="http://synxis.com/OTA2004AService/CancelReservations" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:CancelReservationsHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHotelDetails">
+      <soap:operation soapAction="http://synxis.com/OTA2004AService/GetHotelDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetHotelDetailsHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <soap:operation soapAction="http://synxis.com/OTA2004AService/Ping" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:PingHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ChannelConnectServiceSoap1" type="tns:ChannelConnectServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CheckAvailability">
+      <soap12:operation soapAction="http://synxis.com/OTA2004AService/CheckAvailability" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:CheckAvailabilityHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReadReservations">
+      <soap12:operation soapAction="http://synxis.com/OTA2004AService/ReadReservations" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ReadReservationsHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReservations">
+      <soap12:operation soapAction="http://synxis.com/OTA2004AService/CreateReservations" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:CreateReservationsHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModifyReservations">
+      <soap12:operation soapAction="http://synxis.com/OTA2004AService/ModifyReservations" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ModifyReservationsHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateReservationsNotification">
+      <soap12:operation soapAction="http://synxis.com/OTA2004AService/CreateReservationsNotification" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:CreateReservationsNotificationHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModifyReservationsNotification">
+      <soap12:operation soapAction="http://synxis.com/OTA2004AService/ModifyReservationsNotification" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ModifyReservationsNotificationHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelReservationsNotification">
+      <soap12:operation soapAction="http://synxis.com/OTA2004AService/CancelReservationsNotification" style="document" soapActionRequired="true" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:CancelReservationsNotificationHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelReservations">
+      <soap12:operation soapAction="http://synxis.com/OTA2004AService/CancelReservations" style="document" soapActionRequired="true" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:CancelReservationsHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHotelDetails">
+      <soap12:operation soapAction="http://synxis.com/OTA2004AService/GetHotelDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetHotelDetailsHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <soap12:operation soapAction="http://synxis.com/OTA2004AService/Ping" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:PingHTNGHeader" part="HTNGHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ChannelConnectServiceHttpGet" type="tns:ChannelConnectServiceHttpGet">
+    <http:binding verb="GET" />
+  </wsdl:binding>
+  <wsdl:binding name="ChannelConnectServiceHttpPost" type="tns:ChannelConnectServiceHttpPost">
+    <http:binding verb="POST" />
+  </wsdl:binding>
+  <wsdl:service name="ChannelConnectService">
+    <wsdl:port name="ChannelConnectServiceSoap" binding="tns:ChannelConnectServiceSoap">
+      <soap:address location="http://cert.synxis.com/interface/ChannelConnect.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ChannelConnectServiceSoap1" binding="tns:ChannelConnectServiceSoap1">
+      <soap12:address location="http://cert.synxis.com/interface/ChannelConnect.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ChannelConnectServiceHttpGet" binding="tns:ChannelConnectServiceHttpGet">
+      <http:address location="http://cert.synxis.com/interface/ChannelConnect.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ChannelConnectServiceHttpPost" binding="tns:ChannelConnectServiceHttpPost">
+      <http:address location="http://cert.synxis.com/interface/ChannelConnect.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

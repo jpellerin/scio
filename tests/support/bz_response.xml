@@ -1,0 +1,10 @@
+<getQuoteReturn xmlns:ns2="http://xml.apache.org/xml-soap" xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance" xmlns:ns1="http://comp" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/1999/XMLSchema" xsi:type="ns2:Map">
+    <item xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+     <key xsi:type="soapenc:string">AUTHOR</key>
+     <value xsi:type="soapenc:string">Unknown</value>
+    </item>
+    <item>
+     <key xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="soapenc:string">QUOTE</key>
+     <value xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="soapenc:string">Is my friend in the bunker or is the bastard on the green? </value>
+    </item>
+   </getQuoteReturn>

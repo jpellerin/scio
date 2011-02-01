@@ -1,0 +1,8 @@
+docs/build
+dist/
+build/
+.coverage
+\.pyc$
+~$
+\.egg-info$
+.tox
