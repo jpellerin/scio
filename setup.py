@@ -17,6 +17,7 @@ setup(
     version='0.9',
     author_email='oss@leapfrogdevelopment.com',
     url='http://bitbucket.org/leapfrogdevelopment/scio/overview',
+    description='Scio is a humane SOAP client',
     install_requires=['lxml>=2.2', 'python-dateutil'],
     tests_require=['nose>=1.0', 'Sphinx>=1.0'],
     packages=find_packages(),
