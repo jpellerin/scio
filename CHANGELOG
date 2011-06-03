@@ -1,3 +1,8 @@
+0.9.1
+
+- Fixed pickling of Fault exceptions
+- Pinned dateutil version to < 1.5
+
 0.9
 
 - Initial public (BSD licensed) release.
