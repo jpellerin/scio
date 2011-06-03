@@ -69,7 +69,6 @@ def test_handle_error_with_blank_body():
 
 
 def test_fault_includes_detail_if_set():
-    # See DEV-15
     try:
         lw = scio.Client(helpers.support('lyrics.wsdl', 'r'))
         fr = """<env:Envelope xmlns:env='http://schemas.xmlsoap.org/soap/envelope/'><env:Header></env:Header><env:Body><env:Fault xmlns:env='http://schemas.xmlsoap.org/soap/envelope/'><faultcode>env:Server</faultcode><faultstring>java.lang.NullPointerException</faultstring><detail>Got bitten by monkey</detail></env:Fault></env:Body></env:Envelope>"""
@@ -123,7 +122,6 @@ def test_iter_empty():
 
 
 def test_fault_is_unpickleable():
-    # See DEV-15
     try:
         lw = scio.Client(helpers.support('lyrics.wsdl', 'r'))
         fr = """<env:Envelope xmlns:env='http://schemas.xmlsoap.org/soap/envelope/'><env:Header></env:Header><env:Body><env:Fault xmlns:env='http://schemas.xmlsoap.org/soap/envelope/'><faultcode>env:Server</faultcode><faultstring>java.lang.NullPointerException</faultstring><detail>Got bitten by monkey</detail></env:Fault></env:Body></env:Envelope>"""
