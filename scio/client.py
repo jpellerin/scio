@@ -1,4 +1,4 @@
-# scio/client.py -- soap classes for input and output
+# client.py -- soap classes for input and output
 #
 # Copyright (c) 2011, Leapfrog Online, LLC
 # All rights reserved.
@@ -201,7 +201,7 @@ class Client(object):
             detail = fault.find('detail')
             if detail is not None:
                 detail = detail.text
-            raise Fault(method, code, string, detail)
+            raise Fault(method.location, method.name, code, string, detail)
 
 
 class Fault(Exception):
@@ -209,15 +209,19 @@ class Fault(Exception):
     SOAP Fault exception. The method that raised the fault, the faultcode,
     and faultstring are available as attributes of the exception.
     """
-    def __init__(self, method, faultcode, faultstring, detail):
-        self.method = method
+    def __init__(self, method_location, method_name, faultcode, faultstring, detail):
+        self.method_location = method_location
+        self.method_name = method_name
         self.faultcode = faultcode
         self.faultstring = faultstring
         self.detail = detail
+        # for < 2.5 compatibility, can't call super()
+        Exception.__init__(
+            self, method_location, method_name, faultcode, faultstring, detail)
 
     def __str__(self):
         return "SOAP Fault %s:%s <%s> %s%s" % (
-            self.method.location, self.method.name, self.faultcode,
+            self.method_location, self.method_name, self.faultcode,
             self.faultstring, self.detail and ": %s" % self.detail or '')
 
     def __unicode__(self):
