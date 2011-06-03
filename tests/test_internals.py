@@ -1,11 +1,14 @@
+from decimal import Decimal
+from StringIO import StringIO
+import pickle
+from urllib2 import HTTPError
+
+from lxml import etree
+from nose.tools import raises, eq_
+
 import scio
 import scio.client
 import helpers
-from urllib2 import HTTPError
-from StringIO import StringIO
-from lxml import etree
-from nose.tools import raises, eq_
-from decimal import Decimal
 
 
 def test_type_mappings():
@@ -117,3 +120,16 @@ def test_iter_empty():
     for p in song:
         c += 1
     assert c == 0, "Empty type iter yielded items"
+
+
+def test_fault_is_unpickleable():
+    # See DEV-15
+    try:
+        lw = scio.Client(helpers.support('lyrics.wsdl', 'r'))
+        fr = """<env:Envelope xmlns:env='http://schemas.xmlsoap.org/soap/envelope/'><env:Header></env:Header><env:Body><env:Fault xmlns:env='http://schemas.xmlsoap.org/soap/envelope/'><faultcode>env:Server</faultcode><faultstring>java.lang.NullPointerException</faultstring><detail>Got bitten by monkey</detail></env:Fault></env:Body></env:Envelope>"""
+        e = HTTPError("http://foo", 500, "Server Error", {}, StringIO(fr))
+        lw.handle_error(lw.service.getArtist.method, e)
+    except scio.Fault, f:
+        pf = pickle.dumps(f)
+        upf = pickle.loads(pf)
+        assert unicode(upf) == unicode(f)
