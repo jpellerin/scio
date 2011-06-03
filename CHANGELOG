@@ -1,7 +1,7 @@
 0.9.1
 
 - Fixed pickling of Fault exceptions
-- Pinned dateutil version to < 1.5
+- Pinned dateutil version to < 1.5 for python 2.4 and 2.5, < 2.0 for 2.6/2.7
 
 0.9
 
