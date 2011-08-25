@@ -1,3 +1,5 @@
+from lxml import etree
+
 import scio
 import helpers
 
@@ -63,3 +65,28 @@ def test_header_unmarshalling():
     assert headers['responseTime'] == 10636
     assert headers['units'] == 1
     assert 'eb21e6667abb131c117b58086f75abbd' in headers['requestId']
+
+
+class TestAdwordsv201101(object):
+
+    cm_tns = "https://adwords.google.com/api/adwords/cm/v201101"
+    mcm_tns = "https://adwords.google.com/api/adwords/mcm/v201101"
+    account = 'some.sandbox@example.com'
+    auth_token = 'XXX'
+    headers = dict(authToken=auth_token,
+                   developerToken='%s++USD' % account)
+
+    def test_serviced_accounts_service(self):
+        # checking that elements in request are produced with
+        # the correct namespaces attached.
+        client = StubClient(
+            helpers.support('ServicedAccountService.wsdl', 'r'))
+        asel = client.type.ServicedAccountSelector(
+            enablePaging=False)
+        client.service.get(selector=asel, **self.headers)
+        request = StubClient.sent[0][1].data
+        print request
+        parsed = etree.fromstring(request)
+        assert parsed.find('.//{%s}authToken' % self.cm_tns) is not None
+        assert parsed.find('.//{%s}authToken' % self.cm_tns).text == self.auth_token
+        assert parsed.find('.//{%s}RequestHeader' % self.mcm_tns) is not None

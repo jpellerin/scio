@@ -1,4 +1,3 @@
-from decimal import Decimal
 from StringIO import StringIO
 import pickle
 from urllib2 import HTTPError

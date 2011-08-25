@@ -28,11 +28,16 @@
 # TODO
 # - schema types can extend enums. How the heck can that work?
 
+# FIXME namespace handling is just horrible throughout.
+# - namespace/nsmap can attach to attribute descriptor
+#   might be cleaner to do this everywhere rather than
+#   class sometimes, other times not
+
 from decimal import Decimal
+import itertools
 from lxml import etree
 from urllib2 import urlopen, Request, HTTPError
 from threading import RLock
-from time import strptime
 from datetime import date, datetime, time
 from dateutil.parser import parse as parse_date
 import logging
@@ -45,8 +50,8 @@ NS_SOAP_ENV = "http://schemas.xmlsoap.org/soap/envelope/"
 NS_SOAP_ENC = "http://schemas.xmlsoap.org/soap/encoding/"
 NS_SOAP = 'http://schemas.xmlsoap.org/wsdl/soap/'
 NS_SOAP12 = 'http://schemas.xmlsoap.org/wsdl/soap12/'
-NS_XSI = "http://www.w3.org/1999/XMLSchema-instance"
-NS_XSD = "http://www.w3.org/1999/XMLSchema"
+NS_XSI = "http://www.w3.org/2001/XMLSchema-instance"
+NS_XSD = "http://www.w3.org/2001/XMLSchema"
 NS_WSDL = 'http://schemas.xmlsoap.org/wsdl/'
 SOAP_BODY = '{%s}Body' % NS_SOAP_ENV
 SOAP_FAULT = '{%s}Fault' % NS_SOAP_ENV
@@ -873,11 +878,17 @@ class ComplexType(Element, Pickleable):
             if ch_val is not None:
                 if isinstance(ch_val, list):
                     for ch in ch_val:
-                        ch_el = ch.toxml(child.name, namespace, nsmap, empty)
+                        ch_el = ch.toxml(
+                            child.name, empty=empty,
+                            namespace=child.namespace,
+                            nsmap={None: child.namespace})
                         if ch_el is not None:
                             e.append(ch_el)
                 else:
-                    ch_el = ch_val.toxml(child.name, namespace, nsmap, empty)
+                    ch_el = ch_val.toxml(
+                        child.name, empty=empty,
+                        namespace=child.namespace,
+                        nsmap={None: child.namespace})
                     if ch_el is not None:
                         e.append(ch_el)
         if not empty and e.text is None and not e.attrib and not len(e):
@@ -896,7 +907,7 @@ class AttributeDescriptor(object):
     min = max = None
 
     def __init__(self, name, type_=None, required=False, min=None, max=None,
-                 doc=None, **kw):
+                 doc=None, namespace=None, nsmap=None, **kw):
         self.name = name
         if type_ is None:
             type_ = StringType
@@ -904,6 +915,8 @@ class AttributeDescriptor(object):
         self.required = required
         self.min = min
         self.max = max
+        self.namespace = namespace
+        self.nsmap = nsmap
         if doc is not None:
             self.__doc__ = doc
 
@@ -993,9 +1006,21 @@ class InputMessage(object):
         nsmap = self.nsmap
         header_fmt = []
         for name, cls in self.headers:
+            # simple headers
             val = kw.pop(name, None)
             if val is not None:
                 header_fmt.append((name, cls(val)))
+            # complex headers
+            hkids = getattr(cls, '_children', ())
+            hkids = hkids + getattr(cls, '_attributes', ())
+            hkw = {}
+            for kcls in hkids:
+                val = kw.pop(kcls.name, None)
+                if val is not None:
+                    hkw[kcls.name] = kcls.type(val)
+            if hkw:
+                header_fmt.append((name, cls(**hkw)))
+
         if len(self.parts) == 1:
             return self.formatter(
                 tag, namespace, nsmap, [
@@ -1203,27 +1228,30 @@ class Factory(object):
         'duration': StringType
         })
 
-    _simple_tag = '{http://www.w3.org/2001/XMLSchema}simpleType'
-    _enum_tag =  '{http://www.w3.org/2001/XMLSchema}enumeration'
-    _attr_tag = '{http://www.w3.org/2001/XMLSchema}attribute'
-    _seq_tag = '{http://www.w3.org/2001/XMLSchema}sequence'
-    _all_tag = '{http://www.w3.org/2001/XMLSchema}all'
-    _cplx_tag = '{http://www.w3.org/2001/XMLSchema}complexContent'
-    _ext_tag = '{http://www.w3.org/2001/XMLSchema}extension'
-    _spl_tag = '{http://www.w3.org/2001/XMLSchema}simpleContent'
-    _element_tag = '{http://www.w3.org/2001/XMLSchema}element'
-    _choice_tag = '{http://www.w3.org/2001/XMLSchema}choice'
-    _restr_tag = '{http://www.w3.org/2001/XMLSchema}restriction'
-    _any_attr_tag = '{http://www.w3.org/2001/XMLSchema}anyAttribute'
-    _list_tag = '{http://www.w3.org/2001/XMLSchema}list'
+    _simple_tag = '{%s}simpleType' % NS_XSD
+    _enum_tag =  '{%s}enumeration' % NS_XSD
+    _attr_tag = '{%s}attribute' % NS_XSD
+    _seq_tag = '{%s}sequence' % NS_XSD
+    _all_tag = '{%s}all' % NS_XSD
+    _cplx_tag = '{%s}complexContent' % NS_XSD
+    _ext_tag = '{%s}extension' % NS_XSD
+    _spl_tag = '{%s}simpleContent' % NS_XSD
+    _element_tag = '{%s}element' % NS_XSD
+    _choice_tag = '{%s}choice' % NS_XSD
+    _restr_tag = '{%s}restriction' % NS_XSD
+    _any_attr_tag = '{%s}anyAttribute' % NS_XSD
+    _list_tag = '{%s}list' % NS_XSD
+    _types_tag = '{%s}types' % NS_WSDL
+    _schema_tag = '{%s}schema' % NS_XSD
+    _cplx_type_tag = '{%s}complexType' % NS_XSD
 
     def __init__(self, wsdl_file):
         self.wsdl = etree.parse(wsdl_file).getroot()
+        self.nsmap = NSStack(self.wsdl)
         self._lock = RLock()
         self._lock.acquire()
         try:
             self._typemap = self._typemap.copy()
-            self._process_namespaces()
         finally:
             self._lock.release()
 
@@ -1252,41 +1280,60 @@ class Factory(object):
                 return TypeRef(name, self)
             raise
 
-    def _process_namespaces(self):
-        self.nsmap = SOAPNS.copy()
-        self.nsmap.update(self.wsdl.nsmap)
-        if None in self.nsmap:
-            # FIXME obviously don't just use "t"
-            self.nsmap['t'] = self.nsmap.pop(None)
-        tns = self.wsdl.get('targetNamespace', None)
-        backmap = dict(zip(self.nsmap.values(), self.nsmap.keys()))
-        self._tns = backmap[tns]
-        self._xsd = backmap['http://www.w3.org/2001/XMLSchema']
-        self._soap_ns = backmap['http://schemas.xmlsoap.org/wsdl/soap/']
-        self._soap12_ns = backmap['http://schemas.xmlsoap.org/wsdl/soap12/']
-        self._wsdl_ns = backmap['http://schemas.xmlsoap.org/wsdl/']
+#    def _init_namespaces(self):
+#        self.ns = NSStack()
+#
+# SOAPNS.copy()
+#         self.nsmap.update(self.wsdl.nsmap)
+#         if None in self.nsmap:
+#             # FIXME obviously don't just use "t"
+#             self.nsmap['t'] = self.nsmap.pop(None)
+#         backmap = dict(zip(self.nsmap.values(), self.nsmap.keys()))
+#         tns = self.wsdl.get('targetNamespace', None)
+#         self._tns = backmap[tns]
+#         self._xsd = backmap['http://www.w3.org/2001/XMLSchema']
+#         self._soap_ns = backmap['http://schemas.xmlsoap.org/wsdl/soap/']
+#         self._soap12_ns = backmap['http://schemas.xmlsoap.org/wsdl/soap12/']
+#         self._wsdl_ns = backmap['http://schemas.xmlsoap.org/wsdl/']
 
     def _process_types(self, client):
         self._refs = []
-        types = self.wsdl.xpath('//%s:complexType|//%s:simpleType' %
-                                (self._xsd, self._xsd),
-                                namespaces=self.nsmap)
-        for t in types:
-            name = t.get('name', None)
-            force_name = False
-            if name is None:
-                # find name in parent 'element'
-                p = t.getparent()
-                if p.tag == self._element_tag:
-                    name = p.get('name', None)
-                    force_name = True
-            if name is None:
-                continue
-            self._make_class(client, t, name=name, force_name=force_name)
+        types = self.wsdl.find(self._types_tag)
+        for child in types.getchildren():
+            if self._is_schema(child):
+                self._process_schema(client, child)
+            elif self._is_type(child):
+                self._process_type(client, child)
+            else:
+                raise Exception("Unknown type tag %s" % child)
         self._resolve_refs()
 
+    def _process_schema(self, client, schema):
+        self.nsmap.push_schema(schema)
+        for child in schema.getchildren():
+            if self._is_type(child):
+                self._process_type(client, child)
+        self.nsmap.pop_schema()
+
+    def _process_type(self, client, child):
+        if self._is_element(child):
+            name = child.get('name')
+            typel = child.find(self._cplx_type_tag)
+            if typel is None:
+                typel = child.find(self._simple_tag)
+            if typel is None:
+                typel = child.get('type', None)
+            if typel is None:
+                raise ValueError("Could not find type for element %s" % child)
+            self._make_class(client, typel, name=name, force_name=True)
+        else:
+            name = child.get('name', None)
+            if name is None:
+                return
+            self._make_class(client, child, name=name, force_name=False)
+
     def _resolve_refs(self):
-        # print "refs to resolve", self._refs
+        print "refs to resolve", self._refs
         for client_type, name in self._refs:
             ref = getattr(client_type, name)
             if isinstance(ref, TypeRef):
@@ -1294,17 +1341,15 @@ class Factory(object):
         self._refs = []
 
     def _process_methods(self, client):
-        services = self.wsdl.xpath('//%s:service' % self._wsdl_ns,
-                                   namespaces=self.nsmap)
+        services = self.wsdl.findall('.//{%s}service' % NS_WSDL)
         for service in services:
-            for port in service.xpath('//%s:port' % self._wsdl_ns,
-                                      namespaces=self.nsmap):
+            for port in service.findall('.//{%s}port' % NS_WSDL):
                 if not self._is_soap_port(port):
                     continue
                 self._process_port(client, port)
 
     def _is_soap_port(self, port):
-        soap_ns = (self.nsmap[self._soap_ns], self.nsmap[self._soap12_ns])
+        soap_ns = (NS_SOAP, NS_SOAP12)
         for el in port:
             if el.nsmap[el.prefix] in soap_ns:
                 return True
@@ -1314,39 +1359,37 @@ class Factory(object):
         service = client.service
         location = port[0].get('location')
         binding_name = local_attr(port.get('binding'))
-        binding = self.wsdl.xpath("//%s:binding[@name='%s']" %
-                                  (self._wsdl_ns, binding_name),
-                                   namespaces=self.nsmap)[0]
+        binding = self.wsdl.find(".//{%s}binding[@name='%s']" %
+                                  (NS_WSDL, binding_name))
         style = self._binding_style(binding)
         ptype_name = local_attr(binding.get('type'))
-        ptype = self.wsdl.xpath("//%s:portType[@name='%s']" %
-                                (self._wsdl_ns, ptype_name),
-                                   namespaces=self.nsmap)[0]
-        for op in binding.xpath('%s:operation' % self._wsdl_ns,
-                                namespaces=self.nsmap):
+        ptype = self.wsdl.find(".//{%s}portType[@name='%s']" %
+                                (NS_WSDL, ptype_name))
+        for op in binding.findall('{%s}operation' % NS_WSDL):
             name = local_attr(op.attrib['name'])
             params = op.attrib.get('parameterOrder', '').split(' ')
-            (action, op_style, literal,
-             in_headers, out_headers) = self._op_info(op)
+            try:
+                (action, op_style, literal,
+                 in_headers, out_headers) = self._op_info(op)
+            except SyntaxError:
+                # FIXME not a soap op after all??
+                continue
             if not op_style:
+                if not style:
+                    raise SyntaxError("Neither binding nor operation style found")
                 op_style = style
-            port_op = ptype.xpath("%s:operation[@name='%s']" %
-                                  (self._wsdl_ns, name),
-                                   namespaces=self.nsmap)[0]
-            in_msg_name = local_attr(port_op.xpath(
-                '%s:input/@message' % self._wsdl_ns,
-                namespaces=self.nsmap)[0])
-            out_msg_name = local_attr(port_op.xpath(
-                '%s:output/@message' % self._wsdl_ns,
-                namespaces=self.nsmap)[0])
-            in_types = self.wsdl.xpath(
-                '//%s:message[@name="%s"]/%s:part' %
-                (self._wsdl_ns, in_msg_name, self._wsdl_ns),
-                namespaces=self.nsmap)
-            out_types = self.wsdl.xpath(
-                '//%s:message[@name="%s"]/%s:part' %
-                (self._wsdl_ns, out_msg_name, self._wsdl_ns),
-                namespaces=self.nsmap)
+            port_op = ptype.find("{%s}operation[@name='%s']" %
+                                 (NS_WSDL, name))
+            in_msg_name = local_attr(port_op.find(
+                '{%s}input' % NS_WSDL).attrib['message'])
+            out_msg_name = local_attr(port_op.find(
+                '{%s}output' % NS_WSDL).attrib['message'])
+            in_types = self.wsdl.findall(
+                ".//{%s}message[@name='%s']/{%s}part" %
+                (NS_WSDL, in_msg_name, NS_WSDL))
+            out_types = self.wsdl.findall(
+                './/{%s}message[@name="%s"]/{%s}part' %
+                (NS_WSDL, out_msg_name, NS_WSDL))
             in_msg = self._make_input_msg(client, name, in_types, params,
                                           op_style, literal, in_headers)
             out_msg = self._make_output_msg(client, name, out_types,
@@ -1359,6 +1402,8 @@ class Factory(object):
         # FIXME use params! There's useful information there...
         parts = []
         header_parts = []
+        namespace = self.nsmap.targetNamespace()
+        nsmap = {None: namespace} # FIXME or self.nsmap.top() ?
         for t in types:
             if not 'name' in t.attrib:
                 continue
@@ -1371,14 +1416,14 @@ class Factory(object):
                     (part_name, self._make_class(client, t.attrib['type'])))
         for h_name, h_type in headers:
             header_parts.append((h_name, self._make_class(client, h_type)))
-        namespace = self.nsmap[self._tns]
-        nsmap = {None: namespace}
         return InputMessage(name, namespace, nsmap, parts, op_style, literal,
                             header_parts)
 
     def _make_output_msg(self, client, name, types, op_style, literal, headers):
         parts = []
         header_parts = []
+        namespace = self.nsmap.targetNamespace()
+        nsmap = {None: namespace} # FIXME or self.nsmap.top() ?
         for t in types:
             if not 'name' in t.attrib:
                 continue
@@ -1391,18 +1436,20 @@ class Factory(object):
                     (part_name, self._make_class(client, t.attrib['type'])))
         for h_name, h_type in headers:
             header_parts.append((h_name, self._make_class(client, h_type)))
-        namespace = self.nsmap[self._tns]
-        nsmap = {None: namespace}
         return OutputMessage(name, namespace, nsmap, parts, header_parts)
 
     def _make_class(self, client, type_, name=None, force_name=False):
+        namespace = self.nsmap.targetNamespace()
+        nsmap = self.nsmap.top()
+        prefix = backmap(nsmap).get(namespace, None)
         client_type = client.type
-        prefix = self._tns
 
         if isinstance(type_, basestring):
             # catch known types
             key = local_attr(type_)
             if key in self._typemap:
+                # FIXME this fails for instances of types that
+                # have their own namespaces
                 return self._typemap[key]
             if key == 'anyType':
                 # anyType must be bound to client, since
@@ -1410,6 +1457,10 @@ class Factory(object):
                 return self._anyType(client)
             # ... or find the definition in wsdl
             type_ = self._find_type(type_)
+
+        if prefix:
+            nsmap = type_.nsmap
+            namespace = nsmap.get(prefix)
 
         if name is None:
             name = type_.get('name')
@@ -1429,25 +1480,25 @@ class Factory(object):
 
         # short circuit for enums
         if self._is_enum(type_):
-            cls = self._make_enum(type_, client, self.nsmap[prefix], name)
+            cls = self._make_enum(type_, client, namespace, name)
             self._typemap[name] = cls
             setattr(client_type, name, cls)
             return cls
         # short circuit for arrays
         elif self._is_array(type_):
-            cls = self._make_array(type_, client, self.nsmap[prefix], name)
+            cls = self._make_array(type_, client, namespace, name)
             self._typemap[name] = cls
             setattr(client_type, name, cls)
             return cls
         # short circuit for unions
         elif self._is_union(type_):
-            cls = self._make_union(type_, client, self.nsmap[prefix], name)
+            cls = self._make_union(type_, client, namespace, name)
             self._typemap[name] = cls
             setattr(client_type, name, cls)
             return cls
         # short circuit for simpleTypes
         elif self._is_simple(type_):
-            cls = self._make_simple(type_, client, self.nsmap[prefix], name)
+            cls = self._make_simple(type_, client, namespace, name)
             self._typemap[name] = cls
             setattr(client_type, name, cls)
             return cls
@@ -1457,12 +1508,10 @@ class Factory(object):
         self._typemap[name] = TypeRef(name, self)
 
         # the body dict of the class
-        namespace = self.nsmap[prefix]
         data = {'_attributes': [],
                 '_children': [],
                 '_substitutions': {},
-                '_nsmap': {None: namespace},
-                '_prefix': prefix,
+                '_nsmap': nsmap,
                 '_namespace': namespace,
                 '_client': client,
                 'xsd_type': (namespace, name)}
@@ -1477,22 +1526,22 @@ class Factory(object):
             # FIXME how to handle 'any attribute' ?
             # FIXME how to handle restrictions?
             if e.tag == self._attr_tag:      # attribute
-                self._add_attribute(client, data, e)
+                self._add_attribute(client, data, e, namespace, nsmap)
             elif e.tag in (self._seq_tag,
                            self._all_tag,
                            self._choice_tag): # sequence of elements
-                self._add_children(client, data, e)
+                self._add_children(client, data, e, namespace, nsmap)
             elif e.tag == self._cplx_tag:    # subclass
                 e = e[0]
                 if e.tag == self._ext_tag:
                     bases = (self._make_class(client, e.attrib['base']),)
                 for se in e:
                     if se.tag == self._attr_tag:
-                        self._add_attribute(client, data, se)
+                        self._add_attribute(client, data, se, namespace, nsmap)
                     elif se.tag in (self._seq_tag,
                                     self._all_tag,
                                     self._choice_tag):
-                        self._add_children(client, data, se)
+                        self._add_children(client, data, se, namespace, nsmap)
             elif e.tag == self._spl_tag:      # subclass of builtin
                 e = e[0]
                 if e.tag == self._ext_tag:
@@ -1502,9 +1551,9 @@ class Factory(object):
                         local_attr(e.attrib['base']))
                 for se in e:
                     if se.tag == self._attr_tag:
-                        self._add_attribute(client, data, se)
+                        self._add_attribute(client, data, se, namespace, nsmap)
                     elif se.tag in (self._seq_tag, self._all_tag):
-                        self._add_children(client, data, se)
+                        self._add_children(client, data, se, namespace, nsmap)
             elif e.tag == self._any_attr_tag:
                 data['any_attribute'] = True
         # add attributes/children from parent classes to my lists
@@ -1549,7 +1598,7 @@ class Factory(object):
         setattr(client_type, name, cls)
         return cls
 
-    def _add_attribute(self, client, data, element):
+    def _add_attribute(self, client, data, element, namespace, nsmap):
         try:
             name = element.attrib['name']
         except KeyError:
@@ -1576,9 +1625,11 @@ class Factory(object):
               element[0][0].tag == self._list_tag):
             # not really a simple type -- a list
             type_ = self._make_list(
-                element[0][0], client, self.nsmap[self._tns], name)
+                element[0][0], client, name)
             attr = AttributeDescriptor(
                 name=name,
+                namespace=namespace,
+                nsmap=nsmap,
                 type_=type_)
         else:
             raise NotImplemented("Unable to add attribute for %s" %
@@ -1586,7 +1637,7 @@ class Factory(object):
         data[name] = attr
         data['_attributes'].append(attr)
 
-    def _add_children(self, client, data, element):
+    def _add_children(self, client, data, element, namespace, nsmap):
         for se in self._children(element):
             name = se.attrib.get('name')
             # ref for substitutionGroup
@@ -1610,7 +1661,9 @@ class Factory(object):
                 name=name,
                 type_=type_,
                 min=se.get('minOccurs'),
-                max=se.get('maxOccurs'))
+                max=se.get('maxOccurs'),
+                namespace=namespace,
+                nsmap=nsmap)
             data[name] = el
             data['_children'].append(el)
 
@@ -1646,6 +1699,16 @@ class Factory(object):
 
     def _is_simple(self, element):
         return element.tag == self._simple_tag
+
+    def _is_element(self, element):
+        return element.tag == self._element_tag
+
+    def _is_schema(self, element):
+        return element.tag == self._schema_tag
+
+    def _is_type(self, element):
+        return element.tag in (
+            self._element_tag, self._cplx_type_tag, self._simple_tag)
 
     def _any_abstract(self, bases):
         for cls in bases:
@@ -1731,7 +1794,7 @@ class Factory(object):
                 '_tag': name,
                 '_client': client,
                 '_namespace': namespace,
-                '_nsmap': self.nsmap} # FIXME prefix?
+                '_nsmap': self.nsmap.top()} # FIXME prefix?
         cls = type(name, (base_cls,), data)
         return cls
 
@@ -1742,7 +1805,7 @@ class Factory(object):
                 '_tag': name,
                 '_client': client,
                 '_namespace': namespace,
-                '_nsmap': self.nsmap} # FIXME prefix?
+                '_nsmap': self.nsmap.top()} # FIXME prefix?
         cls = type(name, (Pickleable, base_cls,), data)
         return cls
 
@@ -1764,19 +1827,18 @@ class Factory(object):
     def _find_type(self, name):
         name = local_attr(name)
         # print "Find definition for class %s" % name
-        type_nodes = self.wsdl.xpath(
-            "//%s:complexType[@name='%s']|"
-            "//%s:simpleType[@name='%s']" % (self._xsd, name,
-                                             self._xsd, name),
-            namespaces=self.nsmap)
+        type_nodes = list(itertools.chain(
+                self.wsdl.findall(
+                    ".//{%s}complexType[@name='%s']" % (NS_XSD, name)),
+                self.wsdl.findall(
+                    ".//{%s}simpleType[@name='%s']" % (NS_XSD, name))))
         if type_nodes:
             return type_nodes[0]
         # could also be element -> type reference
-        elem_refs = self.wsdl.xpath(
-            "//%s:element[@name='%s']/@type" % (self._xsd, name),
-            namespaces=self.nsmap)
+        elem_refs = self.wsdl.findall(
+            ".//{%s}element[@name='%s']" % (NS_XSD, name))
         if elem_refs:
-            type_name = elem_refs[0]
+            type_name = elem_refs[0].get('type')
             return self._find_type(type_name)
         raise Exception("Could not find definition of class %s" % name)
 
@@ -1841,11 +1903,11 @@ class Factory(object):
 
     def _find_message_part(self, message, part):
         message = local_attr(message)
-        part = self.wsdl.xpath(
-            '//%s:message[@name="%s"]/%s:part[@name="%s"]' %
-            (self._wsdl_ns, message, self._wsdl_ns, part),
-            namespaces=self.nsmap)[0]
+        part = self.wsdl.find(
+            ".//{%s}message[@name='%s']/{%s}part[@name='%s']" %
+            (NS_WSDL, message, NS_WSDL, part))
         return (part.get('name'), part.get('element') or part.get('type'))
+
 
 class TypeRef(object):
     def __init__(self, name, factory):
@@ -1872,3 +1934,49 @@ def xsi_type(element):
     for key, val in element.attrib.items():
         if local(key) == 'type':
             return local_attr(val)
+
+
+class NSStack(object):
+
+    def __init__(self, schema=None):
+        self._stack = []
+        if schema is not None:
+            self.push_schema(schema)
+
+    def __getitem__(self, key):
+        for schema in self._stack:
+            if key in schema.nsmap:
+                return schema.nsmap[key]
+        raise KeyError(key)
+
+    def targetNamespace(self):
+        for schema in self._stack:
+            try:
+                return schema.attrib['targetNamespace']
+            except KeyError:
+                pass
+
+    def get(self, key, default=None):
+        try:
+            return self[key]
+        except KeyError:
+            return default
+
+    def top(self):
+        return self._stack[0].nsmap
+
+    def get_ns(self, prefix):
+        pass
+
+    def get_prefix(self, ns):
+        pass
+
+    def push_schema(self, schema):
+        self._stack.insert(0, schema)
+
+    def pop_schema(self):
+        self._stack.pop(0)
+
+
+def backmap(dct):
+    return dict(zip(dct.values(), dct.keys()))

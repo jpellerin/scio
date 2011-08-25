@@ -1,5 +1,4 @@
 import scio.client as sc
-from datetime import datetime
 from lxml import etree
 from nose.tools import assert_almost_equal
 
