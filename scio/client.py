@@ -1299,6 +1299,8 @@ class Factory(object):
     def _process_types(self, client):
         self._refs = []
         types = self.wsdl.find(self._types_tag)
+        if types is None:
+            return
         for child in types.getchildren():
             if self._is_schema(child):
                 self._process_schema(client, child)
@@ -1333,7 +1335,6 @@ class Factory(object):
             self._make_class(client, child, name=name, force_name=False)
 
     def _resolve_refs(self):
-        print "refs to resolve", self._refs
         for client_type, name in self._refs:
             ref = getattr(client_type, name)
             if isinstance(ref, TypeRef):
@@ -1621,11 +1622,11 @@ class Factory(object):
                 type_=self._make_class(client, type_ref),
                 required=element.get('use', None) == 'required')
         elif (len(element) and
-              len(element[0]) and 
+              len(element[0]) and
               element[0][0].tag == self._list_tag):
             # not really a simple type -- a list
             type_ = self._make_list(
-                element[0][0], client, name)
+                element[0][0], client, namespace, name)
             attr = AttributeDescriptor(
                 name=name,
                 namespace=namespace,
