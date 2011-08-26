@@ -1280,22 +1280,6 @@ class Factory(object):
                 return TypeRef(name, self)
             raise
 
-#    def _init_namespaces(self):
-#        self.ns = NSStack()
-#
-# SOAPNS.copy()
-#         self.nsmap.update(self.wsdl.nsmap)
-#         if None in self.nsmap:
-#             # FIXME obviously don't just use "t"
-#             self.nsmap['t'] = self.nsmap.pop(None)
-#         backmap = dict(zip(self.nsmap.values(), self.nsmap.keys()))
-#         tns = self.wsdl.get('targetNamespace', None)
-#         self._tns = backmap[tns]
-#         self._xsd = backmap['http://www.w3.org/2001/XMLSchema']
-#         self._soap_ns = backmap['http://schemas.xmlsoap.org/wsdl/soap/']
-#         self._soap12_ns = backmap['http://schemas.xmlsoap.org/wsdl/soap12/']
-#         self._wsdl_ns = backmap['http://schemas.xmlsoap.org/wsdl/']
-
     def _process_types(self, client):
         self._refs = []
         types = self.wsdl.find(self._types_tag)
@@ -1828,13 +1812,13 @@ class Factory(object):
     def _find_type(self, name):
         name = local_attr(name)
         # print "Find definition for class %s" % name
-        type_nodes = list(itertools.chain(
+        type_nodes = itertools.chain(
                 self.wsdl.findall(
                     ".//{%s}complexType[@name='%s']" % (NS_XSD, name)),
                 self.wsdl.findall(
-                    ".//{%s}simpleType[@name='%s']" % (NS_XSD, name))))
-        if type_nodes:
-            return type_nodes[0]
+                    ".//{%s}simpleType[@name='%s']" % (NS_XSD, name)))
+        for node in type_nodes:
+            return node # return first node found, if any
         # could also be element -> type reference
         elem_refs = self.wsdl.findall(
             ".//{%s}element[@name='%s']" % (NS_XSD, name))
