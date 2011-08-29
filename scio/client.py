@@ -1814,14 +1814,14 @@ class Factory(object):
         # print "Find definition for class %s" % name
         type_nodes = itertools.chain(
                 self.wsdl.findall(
-                    ".//{%s}complexType[@name='%s']" % (NS_XSD, name)),
+                    ".//%s[@name='%s']" % (self._cplx_type_tag, name)),
                 self.wsdl.findall(
-                    ".//{%s}simpleType[@name='%s']" % (NS_XSD, name)))
+                    ".//%s[@name='%s']" % (self._simple_tag, name)))
         for node in type_nodes:
             return node # return first node found, if any
         # could also be element -> type reference
         elem_refs = self.wsdl.findall(
-            ".//{%s}element[@name='%s']" % (NS_XSD, name))
+            ".//%s[@name='%s']" % (self._element_tag, name))
         if elem_refs:
             type_name = elem_refs[0].get('type')
             return self._find_type(type_name)
