@@ -94,6 +94,14 @@ def test_instantiate_complex_type_with_string():
     assert price.MarketSegmentCode == 'IRO'
 
 
+def test_instantiate_complex_type_with_dict():
+    lw = scio.Client(helpers.support('lyrics.wsdl'))
+    album = lw.type.AlbumResult({'artist': 'Wilco', 'album': 'Summerteeth', 'year': 1999})
+    assert album.artist == 'Wilco'
+    assert album.album == 'Summerteeth'
+    assert album.year == 1999
+
+
 def test_empty_complextype_not_true():
     lw = scio.Client(helpers.support('lyrics.wsdl'))
     song = lw.type.SongResult()

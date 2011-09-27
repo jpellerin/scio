@@ -736,8 +736,6 @@ class ComplexType(Element, Pickleable):
 
     def __init__(self, element=None, **kw):
         self.qns = '{%s}' % self._namespace
-        # FIXME allow element to be a dict, eg:
-        # Foo.Address = {'Zip': '12345', 'StreetAddress': '101 street lane'}
         # FIXME support positional args, including assignment
         # of scio classes to children via positional args
         if element is not None:
@@ -766,6 +764,9 @@ class ComplexType(Element, Pickleable):
                                 # FIXME Or for unnamed subelements:
                                 # setattr(self, name, real_cls(el))
                         # TODO handle any tag, ref any_attribute above
+            elif isinstance(element, dict):
+                for k, v in element.items():
+                    setattr(self, k, v)
             else:
                 content = element
             if content is not None:
