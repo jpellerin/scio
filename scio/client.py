@@ -723,6 +723,7 @@ class ComplexType(Element, Pickleable):
     _type_value = None
     _child_count = 0
     any_attribute = False
+    xsi_type = None
 
     def __new__(cls, element=None, **kw):
         # Similar to AnyType()(element), but just finds the
@@ -741,6 +742,7 @@ class ComplexType(Element, Pickleable):
         if element is not None:
             content = None
             if isinstance(element, etree._Element):
+                element = self._resolve_multiref(element)
                 attrs = set(attr.name for attr in self._attributes)
                 kids = set(child.name for child in self._children)
                 kids_subs = self._child_substitutions()
@@ -785,6 +787,25 @@ class ComplexType(Element, Pickleable):
                     # builtins and such
                     pass
             setattr(self, k, v)
+
+    def _resolve_multiref(self, element):
+        href = element.get('href', None)
+        if href is None:
+            return element
+        return self._find_multiref(element, href)
+
+    def _find_multiref(self, element, href):
+        if href.startswith('#'):
+            href = href[1:]
+        else:
+            raise ValueError("Only id-based multirefs supported")
+        root = element.getparent()
+        while root is not None:
+            for mr in root.findall('multiRef'):
+                if mr.get('id') == href:
+                    return mr
+            root = root.getparent()
+        raise ValueError("No multiRef found for %s (%s)" % (element, href))
 
     def _child_substitutions(self):
         # FIXME this is a hack, feels like I'm poking through
@@ -1147,8 +1168,8 @@ class RpcEncodedInputFormatter(InputFormatter):
                     if type_.xsi_type:
                         ns, local = type_.xsi_type
                         prefix = backmap[ns]
-                    part_xml.attrib['{%s}type' % NS_XSI] = (
-                        '%s:%s' % (prefix, local))
+                        part_xml.attrib['{%s}type' % NS_XSI] = (
+                            '%s:%s' % (prefix, local))
                     e.append(part_xml)
         yield e
 
