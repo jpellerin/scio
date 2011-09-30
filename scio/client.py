@@ -155,6 +155,7 @@ class Client(object):
         """
         Handle a seemingly successful response.
         """
+        log.debug('Response xml: %s', response)
         body, header = self.parse_response(method, response)
         return method.output(body, header)
 
