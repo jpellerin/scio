@@ -49,7 +49,8 @@ def test_get_all_campaigns():
     request = StubClient.sent[0][1].data
     print request
     assert 'getAllAdWordsCampaigns' in request
-    assert '</dummy>' in request
+    parsed = etree.fromstring(request)
+    assert parsed[1][0][0].tag == '{https://adwords.google.com/api/adwords/v12}dummy'
 
 
 def test_header_unmarshalling():
