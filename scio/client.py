@@ -394,14 +394,18 @@ class Element(object):
             namespace = self._namespace
         if nsmap is None:
             nsmap = self._nsmap
-        if tag is None or namespace is None or nsmap is None:
-            raise ValueError("%s has no associated xml context" % self)
+        if tag is None:
+            raise ValueError("%s has invalid xml context (tag: %s namespace: %s nsmap: %s)" % (self, tag, namespace, nsmap))
         try:
             value = unicode(self)
         except TypeError:
             value = None
-        tag = '{%s}%s' % (namespace, tag)
-        e = etree.Element(tag, nsmap=nsmap)
+        if namespace:
+            tag = '{%s}%s' % (namespace, tag)
+        if nsmap:
+            e = etree.Element(tag, nsmap=nsmap)
+        else:
+            e = etree.Element(tag)
         if value is not None and value != u'':
             e.text = value
         return e
@@ -898,20 +902,24 @@ class ComplexType(Element, Pickleable):
             # those with actual values.
             key = "_%s_" % child.name
             ch_val = getattr(self, key, None)
+            if child.namespace:
+                child_nsmap = {None: child.namespace}
+            else:
+                child_nsmap = None
             if ch_val is not None:
                 if isinstance(ch_val, list):
                     for ch in ch_val:
                         ch_el = ch.toxml(
                             child.name, empty=empty,
                             namespace=child.namespace,
-                            nsmap={None: child.namespace})
+                            nsmap=child_nsmap)
                         if ch_el is not None:
                             e.append(ch_el)
                 else:
                     ch_el = ch_val.toxml(
                         child.name, empty=empty,
                         namespace=child.namespace,
-                        nsmap={None: child.namespace})
+                        nsmap=child_nsmap)
                     if ch_el is not None:
                         e.append(ch_el)
         if not empty and e.text is None and not e.attrib and not len(e):
@@ -1646,6 +1654,10 @@ class Factory(object):
         data['_attributes'].append(attr)
 
     def _add_children(self, client, data, element, namespace, nsmap):
+        qualified = self.nsmap.qualified()
+        if not qualified:
+            namespace = None
+            nsmap = None
         for se in self._children(element):
             name = se.attrib.get('name')
             # ref for substitutionGroup
@@ -1956,6 +1968,13 @@ class NSStack(object):
             if key in schema.nsmap:
                 return schema.nsmap[key]
         raise KeyError(key)
+
+    def qualified(self):
+        for schema in self._stack:
+            element_form_default = schema.get('elementFormDefault', False)
+            if element_form_default:
+                return element_form_default == 'qualified'
+        return None # unknown default to False
 
     def targetNamespace(self):
         for schema in self._stack:
