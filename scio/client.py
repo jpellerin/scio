@@ -958,7 +958,6 @@ class AttributeDescriptor(object):
 
     def __set__(self, obj, value):
         # convert from node or other xml value into simple value
-        # # print self.name, obj, value, self.type
         key = '_%s_' % self.name
 
         if isinstance(value, (list, tuple)):
@@ -1035,7 +1034,7 @@ class InputMessage(object):
             for kcls in hkids:
                 val = kw.pop(kcls.name, None)
                 if val is not None:
-                    hkw[kcls.name] = kcls.type(val)
+                    hkw[kcls.name] = kcls._new(val)
             if hkw:
                 header_fmt.append((name, cls(**hkw)))
 
@@ -1097,7 +1096,6 @@ class InputFormatter(object):
         raise NotImplemented
 
     def headerxml(self):
-        print self.headers
         for name, hdr in self.headers:
             yield hdr.toxml(name)
 
@@ -1134,7 +1132,7 @@ class RpcLiteralInputFormatter(InputFormatter):
     """
     def toxml(self):
         tag = '{%s}%s' % (self.namespace, self.tag)
-        e = etree.Element(tag, nsmap=self.nsmap)
+        e = etree.Element(tag)
         for part_tag, type_ in self.parts:
             if part_tag:
                 # print "appending", part_tag, type_
@@ -1409,7 +1407,6 @@ class Factory(object):
                 continue
             part_name = t.attrib['name']
             if 'element' in t.attrib:
-                # from nose.tools import set_trace; set_trace()
                 parts.append(
                     (part_name, self._make_class(client, t.attrib['element'])))
             elif 'type' in t.attrib:
@@ -1441,9 +1438,8 @@ class Factory(object):
         return OutputMessage(name, namespace, parts, header_parts)
 
     def _make_class(self, client, type_, name=None, force_name=False):
-        schema = self.nsmap.top()
-        namespace = schema.targetNamespace
         client_type = client.type
+        ref = None
 
         if isinstance(type_, basestring):
             # catch known types
@@ -1457,7 +1453,23 @@ class Factory(object):
                 # it requires run-time type lookup
                 return self._anyType(client)
             # ... or find the definition in wsdl
-            type_ = self._find_type(type_)
+            ref, etype = None, self._find_type(type_)
+            if etype is None:
+                ref, etype = self._find_element_ref(type_)
+            type_ = etype
+        # this case handles weirdness like an element with
+        # one namespace having a type attrib that points
+        # to an element with another namespace.
+        if ref is not None:
+            parent = ref.getparent()
+        else:
+            parent = type_.getparent()
+        if self._is_schema(parent):
+            schema = Schema(parent)
+            namespace = schema.targetNamespace
+        else:
+            schema = self.nsmap.top()
+            namespace = schema.targetNamespace
 
         if name is None:
             name = type_.get('name')
@@ -1473,6 +1485,15 @@ class Factory(object):
                 self._refs.append((client_type, name))
             if not hasattr(client_type, name):
                 setattr(client_type, name, cls)
+            if ref is not None:
+                # need to subclass, set ref's name, namespace and schema
+                # because the referring element wraps the type
+                rname = ref.get('name')
+                cls = type(rname, (cls,), {'_tag': ref.get('name'),
+                                           '_namespace': namespace,
+                                           '_schema': schema})
+                self._typemap[rname] = cls
+                setattr(client_type, rname, cls)
             return cls
 
         # short circuit for enums
@@ -1836,12 +1857,17 @@ class Factory(object):
                     ".//%s[@name='%s']" % (self._simple_tag, name)))
         for node in type_nodes:
             return node # return first node found, if any
-        # could also be element -> type reference
+
+    def _find_element_ref(self, name):
+        name = local_attr(name)
         elem_refs = self.wsdl.findall(
             ".//%s[@name='%s']" % (self._element_tag, name))
         if elem_refs:
+            # FIXME elem_refs[0] contains information about
+            # the eventual wanted type -- its name and namespace
+            # will actually wrap the wanted type. Ack.
             type_name = elem_refs[0].get('type')
-            return self._find_type(type_name)
+            return elem_refs[0], self._find_type(type_name)
         raise Exception("Could not find definition of class %s" % name)
 
     def _find_enumerations(self, element):
