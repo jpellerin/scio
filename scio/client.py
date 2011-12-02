@@ -368,8 +368,7 @@ class Element(object):
     Base class for xml elements and attributes
     """
     _tag = None
-    _prefix = None
-    _nsmap = None
+    _schema = None
     _namespace = None
     _typemap = {} # intentional
     _position = 0
@@ -387,23 +386,19 @@ class Element(object):
         """Return an empty instance of this class."""
         return cls()
 
-    def toxml(self, tag=None, namespace=None, nsmap=None, empty=False):
+    def toxml(self, tag=None, empty=False):
         if tag is None:
             tag = self._tag
-        if namespace is None:
-            namespace = self._namespace
-        if nsmap is None:
-            nsmap = self._nsmap
         if tag is None:
-            raise ValueError("%s has invalid xml context (tag: %s namespace: %s nsmap: %s)" % (self, tag, namespace, nsmap))
+            raise ValueError("%s has no tag" % self)
         try:
             value = unicode(self)
         except TypeError:
             value = None
-        if namespace:
-            tag = '{%s}%s' % (namespace, tag)
-        if nsmap:
-            e = etree.Element(tag, nsmap=nsmap)
+        if self._namespace:
+            tag = '{%s}%s' % (self._namespace, tag)
+        if self._schema:
+            e = etree.Element(tag, nsmap=self._schema.nsmap)
         else:
             e = etree.Element(tag)
         if value is not None and value != u'':
@@ -870,21 +865,21 @@ class ComplexType(Element, Pickleable):
             return iter([self])
         return iter([])
 
-    def toxml(self, tag=None, namespace=None, nsmap=None, empty=False):
+    def toxml(self, tag=None, empty=False):
         if tag is None:
             tag = self._tag
-        if namespace is None:
-            namespace = self._namespace
-        if nsmap is None:
-            nsmap = self._nsmap
-        if tag is None or namespace is None or nsmap is None:
-            raise ValueError("%s has no associated xml context" % self)
+        if tag is None:
+            raise ValueError("%s has no tag" % self)
         if self._content is not None:
             value = unicode(self._content)
         else:
             value = None
-        tag = '{%s}%s' % (namespace, tag)
-        e = etree.Element(tag, nsmap=nsmap)
+        if self._namespace:
+            tag = '{%s}%s' % (self._namespace, tag)
+        if self._schema:
+            e = etree.Element(tag, nsmap=self._schema.nsmap)
+        else:
+            e = etree.Element(tag)
         if self._type_attr and self._type_value:
             e.attrib[self._type_attr] = self._type_value
         if isinstance(value, basestring):
@@ -902,24 +897,14 @@ class ComplexType(Element, Pickleable):
             # those with actual values.
             key = "_%s_" % child.name
             ch_val = getattr(self, key, None)
-            if child.namespace:
-                child_nsmap = {None: child.namespace}
-            else:
-                child_nsmap = None
             if ch_val is not None:
                 if isinstance(ch_val, list):
                     for ch in ch_val:
-                        ch_el = ch.toxml(
-                            child.name, empty=empty,
-                            namespace=child.namespace,
-                            nsmap=child_nsmap)
+                        ch_el = ch.toxml(child.name)
                         if ch_el is not None:
                             e.append(ch_el)
                 else:
-                    ch_el = ch_val.toxml(
-                        child.name, empty=empty,
-                        namespace=child.namespace,
-                        nsmap=child_nsmap)
+                    ch_el = ch_val.toxml(child.name)
                     if ch_el is not None:
                         e.append(ch_el)
         if not empty and e.text is None and not e.attrib and not len(e):
@@ -938,7 +923,7 @@ class AttributeDescriptor(object):
     min = max = None
 
     def __init__(self, name, type_=None, required=False, min=None, max=None,
-                 doc=None, namespace=None, nsmap=None, **kw):
+                 doc=None, namespace=None, **kw):
         self.name = name
         if type_ is None:
             type_ = StringType
@@ -947,7 +932,6 @@ class AttributeDescriptor(object):
         self.min = min
         self.max = max
         self.namespace = namespace
-        self.nsmap = nsmap
         if doc is not None:
             self.__doc__ = doc
 
@@ -967,6 +951,8 @@ class AttributeDescriptor(object):
             # accessed for the first time. This enables you to say:
             # Foo.Bar.Baz = 1 even if Foo.Bar has not yet been set.
             val = self.type.empty()
+            val._tag = self.name
+            val._namespace = self.namespace
             setattr(obj, key, val)
         return val
 
@@ -1007,7 +993,10 @@ class AttributeDescriptor(object):
         delattr(obj, '_%s_' % self.name)
 
     def _new(self, value):
-        return self.type(value)
+        val = self.type(value)
+        val._tag = self.name
+        val._namespace = self.namespace
+        return val
 
     def isanytype(self):
         return (isinstance(self.type, AnyType)
@@ -1021,10 +1010,9 @@ class InputMessage(object):
     get back a formatter whose toxml() method will yield xml Elements
     for inclusion in a SOAP message.
     """
-    def __init__(self, tag, namespace, nsmap, parts, style, literal, headers):
+    def __init__(self, tag, namespace, parts, style, literal, headers):
         self.tag = tag
         self.namespace = namespace
-        self.nsmap = nsmap
         self.parts = parts
         self.style = style
         self.literal = literal
@@ -1034,7 +1022,6 @@ class InputMessage(object):
     def __call__(self, *arg, **kw):
         tag = self.tag
         namespace = self.namespace
-        nsmap = self.nsmap
         header_fmt = []
         for name, cls in self.headers:
             # simple headers
@@ -1054,7 +1041,7 @@ class InputMessage(object):
 
         if len(self.parts) == 1:
             return self.formatter(
-                tag, namespace, nsmap, [
+                tag, namespace, [
                     (part_tag, cls(*arg, **kw))
                     for part_tag, cls in self.parts],
                 header_fmt
@@ -1066,7 +1053,7 @@ class InputMessage(object):
             for part_tag, cls in self.parts:
                 fmt = cls(alist.pop(0), **kw)
                 parts_fmt.append((part_tag, fmt))
-            return self.formatter(tag, namespace, nsmap, parts_fmt, header_fmt)
+            return self.formatter(tag, namespace, parts_fmt, header_fmt)
 
     def _pick_formatter(self):
         if self.style == 'document':
@@ -1100,10 +1087,9 @@ class InputFormatter(object):
     """
     Base class for input message formatters
     """
-    def __init__(self, tag, namespace, nsmap, parts, headers):
+    def __init__(self, tag, namespace, parts, headers):
         self.tag = tag
         self.namespace = namespace
-        self.nsmap = nsmap
         self.parts = parts
         self.headers = headers
 
@@ -1111,8 +1097,9 @@ class InputFormatter(object):
         raise NotImplemented
 
     def headerxml(self):
+        print self.headers
         for name, hdr in self.headers:
-            yield hdr.toxml(name, self.namespace, self.nsmap)
+            yield hdr.toxml(name)
 
 
 class DocumentLiteralWrapperInputFormatter(InputFormatter):
@@ -1124,7 +1111,7 @@ class DocumentLiteralWrapperInputFormatter(InputFormatter):
     """
     def toxml(self):
         _, part = self.parts[0]
-        yield part.toxml(part._tag, self.namespace, self.nsmap, empty=True)
+        yield part.toxml(empty=True)
 
 
 class DocumentLiteralInputFormatter(InputFormatter):
@@ -1136,7 +1123,7 @@ class DocumentLiteralInputFormatter(InputFormatter):
     """
     def toxml(self):
         for part_tag, part in self.parts:
-            yield part.toxml(part_tag, self.namespace, self.nsmap, empty=True)
+            yield part.toxml(empty=True)
 
 
 class RpcLiteralInputFormatter(InputFormatter):
@@ -1151,7 +1138,7 @@ class RpcLiteralInputFormatter(InputFormatter):
         for part_tag, type_ in self.parts:
             if part_tag:
                 # print "appending", part_tag, type_
-                part_xml = type_.toxml(part_tag, self.namespace, self.nsmap)
+                part_xml = type_.toxml(part_tag)
                 if part_xml is not None:
                     e.append(part_xml)
         yield e
@@ -1166,13 +1153,14 @@ class RpcEncodedInputFormatter(InputFormatter):
     """
     def toxml(self):
         tag = '{%s}%s' % (self.namespace, self.tag)
-        nsmap = SOAPNS.copy()
-        nsmap.update(self.nsmap)
-        backmap = dict(zip(nsmap.values(), nsmap.keys()))
-        e = etree.Element(tag, nsmap=nsmap)
+        e = etree.Element(tag)
         for part_tag, type_ in self.parts:
             if part_tag:
-                part_xml = type_.toxml(part_tag, self.namespace, self.nsmap)
+                part_xml = type_.toxml(part_tag, self.namespace)
+                nsmap = SOAPNS.copy()
+                if type_._schema:
+                    nsmap.update(type_._schema.nsmap)
+                backmap = dict(zip(nsmap.values(), nsmap.keys()))
                 if part_xml is not None:
                     if type_.xsi_type:
                         ns, local = type_.xsi_type
@@ -1188,19 +1176,16 @@ class OutputMessage(object):
     Unmarshaller for SOAP responses. This class probably needs subclasses
     for all of the different binding styles.
     """
-    def __init__(self, tag, namespace, nsmap, parts, headers):
+    def __init__(self, tag, namespace, parts, headers):
         self.tag = tag
         self.namespace = namespace
-        self.nsmap = nsmap
         self.parts = parts
         self.headers = headers
 
     def __call__(self, body, header=None):
         result = []
         local_tag = local(body.tag)
-        # print [(name, part) for name, part in self.parts]
         for part_tag, part in self.parts:
-            # print name, part.name, tname
             if part_tag is None:
                 part_tag = part._tag
             if part_tag is None:
@@ -1208,9 +1193,7 @@ class OutputMessage(object):
             if local_tag in (part_tag, part._tag):
                 result.append(part(body))
             else:
-                # ns = body.nsmap[body.prefix]
                 part_el = None
-                # print "{%s}%s {%s}%s" % (ns, part.name, ns, name)
                 if part._tag:
                     part_el = body.find(part._tag)
                 if part_el is None:
@@ -1419,12 +1402,14 @@ class Factory(object):
         parts = []
         header_parts = []
         namespace = self.nsmap.targetNamespace()
-        nsmap = {None: namespace} # FIXME or self.nsmap.top() ?
+        # this has to be determined per-part
+        # by looking at the part's schema
         for t in types:
             if not 'name' in t.attrib:
                 continue
             part_name = t.attrib['name']
             if 'element' in t.attrib:
+                # from nose.tools import set_trace; set_trace()
                 parts.append(
                     (part_name, self._make_class(client, t.attrib['element'])))
             elif 'type' in t.attrib:
@@ -1432,14 +1417,15 @@ class Factory(object):
                     (part_name, self._make_class(client, t.attrib['type'])))
         for h_name, h_type in headers:
             header_parts.append((h_name, self._make_class(client, h_type)))
-        return InputMessage(name, namespace, nsmap, parts, op_style, literal,
+        return InputMessage(name, namespace, parts, op_style, literal,
                             header_parts)
 
     def _make_output_msg(self, client, name, types, op_style, literal, headers):
         parts = []
         header_parts = []
-        namespace = self.nsmap.targetNamespace()
-        nsmap = {None: namespace} # FIXME or self.nsmap.top() ?
+
+        schema = self.nsmap.top()
+        namespace = schema.targetNamespace
         for t in types:
             if not 'name' in t.attrib:
                 continue
@@ -1452,12 +1438,11 @@ class Factory(object):
                     (part_name, self._make_class(client, t.attrib['type'])))
         for h_name, h_type in headers:
             header_parts.append((h_name, self._make_class(client, h_type)))
-        return OutputMessage(name, namespace, nsmap, parts, header_parts)
+        return OutputMessage(name, namespace, parts, header_parts)
 
     def _make_class(self, client, type_, name=None, force_name=False):
-        namespace = self.nsmap.targetNamespace()
-        nsmap = self.nsmap.top()
-        prefix = backmap(nsmap).get(namespace, None)
+        schema = self.nsmap.top()
+        namespace = schema.targetNamespace
         client_type = client.type
 
         if isinstance(type_, basestring):
@@ -1473,10 +1458,6 @@ class Factory(object):
                 return self._anyType(client)
             # ... or find the definition in wsdl
             type_ = self._find_type(type_)
-
-        if prefix:
-            nsmap = type_.nsmap
-            namespace = nsmap.get(prefix)
 
         if name is None:
             name = type_.get('name')
@@ -1527,8 +1508,8 @@ class Factory(object):
         data = {'_attributes': [],
                 '_children': [],
                 '_substitutions': {},
-                '_nsmap': nsmap,
                 '_namespace': namespace,
+                '_schema': schema,
                 '_client': client,
                 'xsd_type': (namespace, name)}
         # this handles cases where the xml element name is always
@@ -1537,27 +1518,33 @@ class Factory(object):
             data['_tag'] = name
         bases = (ComplexType,)
 
+        if schema.qualified:
+            child_namespace = namespace
+        else:
+            # child elements are unqualified
+            child_namespace = None
+
         for e in type_:
             # create attribute or element for each one
             # FIXME how to handle 'any attribute' ?
             # FIXME how to handle restrictions?
             if e.tag == self._attr_tag:      # attribute
-                self._add_attribute(client, data, e, namespace, nsmap)
+                self._add_attribute(client, data, e, child_namespace)
             elif e.tag in (self._seq_tag,
                            self._all_tag,
                            self._choice_tag): # sequence of elements
-                self._add_children(client, data, e, namespace, nsmap)
+                self._add_children(client, data, e, child_namespace)
             elif e.tag == self._cplx_tag:    # subclass
                 e = e[0]
                 if e.tag == self._ext_tag:
                     bases = (self._make_class(client, e.attrib['base']),)
                 for se in e:
                     if se.tag == self._attr_tag:
-                        self._add_attribute(client, data, se, namespace, nsmap)
+                        self._add_attribute(client, data, se, child_namespace)
                     elif se.tag in (self._seq_tag,
                                     self._all_tag,
                                     self._choice_tag):
-                        self._add_children(client, data, se, namespace, nsmap)
+                        self._add_children(client, data, se, child_namespace)
             elif e.tag == self._spl_tag:      # subclass of builtin
                 e = e[0]
                 if e.tag == self._ext_tag:
@@ -1567,9 +1554,9 @@ class Factory(object):
                         local_attr(e.attrib['base']))
                 for se in e:
                     if se.tag == self._attr_tag:
-                        self._add_attribute(client, data, se, namespace, nsmap)
+                        self._add_attribute(client, data, se, namespace)
                     elif se.tag in (self._seq_tag, self._all_tag):
-                        self._add_children(client, data, se, namespace, nsmap)
+                        self._add_children(client, data, se, namespace)
             elif e.tag == self._any_attr_tag:
                 data['any_attribute'] = True
         # add attributes/children from parent classes to my lists
@@ -1614,7 +1601,7 @@ class Factory(object):
         setattr(client_type, name, cls)
         return cls
 
-    def _add_attribute(self, client, data, element, namespace, nsmap):
+    def _add_attribute(self, client, data, element, namespace):
         try:
             name = element.attrib['name']
         except KeyError:
@@ -1634,6 +1621,7 @@ class Factory(object):
         if type_ref:
             attr = AttributeDescriptor(
                 name=name,
+                namespace=namespace,
                 type_=self._make_class(client, type_ref),
                 required=element.get('use', None) == 'required')
         elif (len(element) and
@@ -1645,7 +1633,6 @@ class Factory(object):
             attr = AttributeDescriptor(
                 name=name,
                 namespace=namespace,
-                nsmap=nsmap,
                 type_=type_)
         else:
             raise NotImplemented("Unable to add attribute for %s" %
@@ -1653,11 +1640,7 @@ class Factory(object):
         data[name] = attr
         data['_attributes'].append(attr)
 
-    def _add_children(self, client, data, element, namespace, nsmap):
-        qualified = self.nsmap.qualified()
-        if not qualified:
-            namespace = None
-            nsmap = None
+    def _add_children(self, client, data, element, namespace):
         for se in self._children(element):
             name = se.attrib.get('name')
             # ref for substitutionGroup
@@ -1682,8 +1665,7 @@ class Factory(object):
                 type_=type_,
                 min=se.get('minOccurs'),
                 max=se.get('maxOccurs'),
-                namespace=namespace,
-                nsmap=nsmap)
+                namespace=namespace)
             data[name] = el
             data['_children'].append(el)
 
@@ -1825,7 +1807,7 @@ class Factory(object):
                 '_tag': name,
                 '_client': client,
                 '_namespace': namespace,
-                '_nsmap': self.nsmap.top()} # FIXME prefix?
+                '_schema': self.nsmap.top()} # FIXME prefix?
         cls = type(name, (Pickleable, base_cls,), data)
         return cls
 
@@ -1963,23 +1945,10 @@ class NSStack(object):
         if schema is not None:
             self.push_schema(schema)
 
-    def __getitem__(self, key):
-        for schema in self._stack:
-            if key in schema.nsmap:
-                return schema.nsmap[key]
-        raise KeyError(key)
-
-    def qualified(self):
-        for schema in self._stack:
-            element_form_default = schema.get('elementFormDefault', False)
-            if element_form_default:
-                return element_form_default == 'qualified'
-        return None # unknown default to False
-
     def targetNamespace(self):
         for schema in self._stack:
             try:
-                return schema.attrib['targetNamespace']
+                return schema.targetNamespace
             except KeyError:
                 pass
 
@@ -1990,19 +1959,34 @@ class NSStack(object):
             return default
 
     def top(self):
-        return self._stack[0].nsmap
-
-    def get_ns(self, prefix):
-        pass
-
-    def get_prefix(self, ns):
-        pass
+        return self._stack[0]
 
     def push_schema(self, schema):
-        self._stack.insert(0, schema)
+        self._stack.insert(0, Schema(schema))
 
     def pop_schema(self):
         self._stack.pop(0)
+
+
+class Schema(object):
+    def __init__(self, element):
+        self.element = element
+
+    @property
+    def nsmap(self):
+        return self.element.nsmap
+
+    @property
+    def targetNamespace(self):
+        return self.element.attrib['targetNamespace']
+
+    @property
+    def qualified(self):
+        return self.element.get('elementFormDefault', None) == 'qualified'
+
+    @property
+    def attributes_qualified(self):
+        return self.element.get('attributeFormDefault', None) == 'qualified'
 
 
 def backmap(dct):
