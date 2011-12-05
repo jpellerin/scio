@@ -951,8 +951,9 @@ class AttributeDescriptor(object):
             # accessed for the first time. This enables you to say:
             # Foo.Bar.Baz = 1 even if Foo.Bar has not yet been set.
             val = self.type.empty()
-            val._tag = self.name
-            val._namespace = self.namespace
+            if isinstance(val, self.type):
+                val._tag = self.name
+                val._namespace = self.namespace
             setattr(obj, key, val)
         return val
 
@@ -1235,6 +1236,7 @@ class Factory(object):
         'anyURI': StringType,
         'language': StringType,
         'token': StringType,
+        'hexBinary': StringType,
         # FIXME: probably timedelta, but needs parsing.
         # It looks like P29DT23H54M58S
         'duration': StringType
