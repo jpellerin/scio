@@ -398,7 +398,7 @@ class Element(object):
         if self._namespace:
             tag = '{%s}%s' % (self._namespace, tag)
         if self._schema:
-            e = etree.Element(tag, nsmap=self._schema.nsmap)
+            e = etree.Element(tag, nsmap=self._schema.short_nsmap)
         else:
             e = etree.Element(tag)
         if value is not None and value != u'':
@@ -877,7 +877,7 @@ class ComplexType(Element, Pickleable):
         if self._namespace:
             tag = '{%s}%s' % (self._namespace, tag)
         if self._schema:
-            e = etree.Element(tag, nsmap=self._schema.nsmap)
+            e = etree.Element(tag, nsmap=self._schema.short_nsmap)
         else:
             e = etree.Element(tag)
         if self._type_attr and self._type_value:
@@ -1157,7 +1157,7 @@ class RpcEncodedInputFormatter(InputFormatter):
                 part_xml = type_.toxml(part_tag, self.namespace)
                 nsmap = SOAPNS.copy()
                 if type_._schema:
-                    nsmap.update(type_._schema.nsmap)
+                    nsmap.update(type_._schema.short_nsmap)
                 backmap = dict(zip(nsmap.values(), nsmap.keys()))
                 if part_xml is not None:
                     if type_.xsi_type:
@@ -2011,8 +2011,17 @@ class Schema(object):
         return self.element.get('elementFormDefault', None) == 'qualified'
 
     @property
-    def attributes_qualified(self):
-        return self.element.get('attributeFormDefault', None) == 'qualified'
+    def short_nsmap(self):
+        nsmap = {}
+        globalns = set(SOAPNS.values())
+        for k, v in self.element.nsmap.items():
+            if self.qualified and v == self.targetNamespace:
+                nsmap[None] = v
+            elif v in globalns:
+                continue
+            else:
+                nsmap[k] = v
+        return nsmap
 
 
 def backmap(dct):
