@@ -974,7 +974,12 @@ class AttributeDescriptor(object):
 
         if self.isanytype() or not isinstance(value, self.type):
             value = self._new(value)
-
+        # a type may not share the same namespace as its container
+        # so if we were given a full type, ensure it is set up
+        # with the proper tag and namespace for this context
+        if value is not None:
+            value._tag = self.name
+            value._namespace = self.namespace
         # remember the order in which we saw assignments
         value._position = obj._child_count
         obj._child_count += 1
