@@ -1,0 +1,1415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated file, do not edit -->
+<!-- Copyright 2011 Google Inc. All Rights Reserved -->
+<wsdl:definitions
+  targetNamespace="https://adwords.google.com/api/adwords/info/v201101"
+  xmlns:tns="https://adwords.google.com/api/adwords/info/v201101"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <schema elementFormDefault="qualified" jaxb:version="1.0"
+      targetNamespace="https://adwords.google.com/api/adwords/cm/v201101"
+      xmlns="http://www.w3.org/2001/XMLSchema"
+      xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:tns="https://adwords.google.com/api/adwords/cm/v201101">
+      <complexType name="AuthenticationError">
+        <annotation>
+          <documentation>
+            Errors returned when Authentication failed.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:AuthenticationError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="AuthorizationError">
+        <annotation>
+          <documentation>
+            Errors encountered when trying to authorize a user.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:AuthorizationError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="ClientTermsError">
+        <annotation>
+          <documentation>
+            Error due to user not accepting the AdWords terms of service.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:ClientTermsError.Reason"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="DateRange">
+        <annotation>
+          <documentation>
+            Represents a range of dates that has either an upper or a lower bound.
+            The format for the date is YYYYMMDD.
+          </documentation>
+        </annotation>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="min" type="xsd:string">
+            <annotation>
+              <documentation>
+                the lower bound of this date range, inclusive.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="max" type="xsd:string">
+            <annotation>
+              <documentation>
+                the upper bound of this date range, inclusive.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType name="EntityNotFound">
+        <annotation>
+          <documentation>
+            An id did not correspond to an entity, or it referred to an entity which does not belong to the
+            customer.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:EntityNotFound.Reason">
+                <annotation>
+                  <documentation>
+                    Reason for this error.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="InternalApiError">
+        <annotation>
+          <documentation>
+            Indicates that a server-side error has occured. {@code InternalApiError}s
+            are generally not the result of an invalid request or message sent by the
+            client.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:InternalApiError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="NotEmptyError">
+        <annotation>
+          <documentation>
+            Errors corresponding with violation of a NOT EMPTY check.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:NotEmptyError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="NotWhitelistedError">
+        <annotation>
+          <documentation>
+            Indicates that the customer is not whitelisted for accessing the API.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:NotWhitelistedError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="NullError">
+        <annotation>
+          <documentation>
+            Errors associated with violation of a NOT NULL check.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:NullError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="OperatorError">
+        <annotation>
+          <documentation>
+            Errors due to the use of unsupported operations.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:OperatorError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="QuotaCheckError">
+        <annotation>
+          <documentation>
+            Encapsulates the errors thrown during developer quota checks.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:QuotaCheckError.Reason"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="RateExceededError">
+        <annotation>
+          <documentation>
+            Signals that a call failed because a measured rate exceeded.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:RateExceededError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+              <element maxOccurs="1" minOccurs="0" name="rateName" type="xsd:string">
+                <annotation>
+                  <documentation>
+                    Cause of the rate exceeded error.
+                  </documentation>
+                </annotation>
+              </element>
+              <element maxOccurs="1" minOccurs="0" name="rateScope" type="xsd:string">
+                <annotation>
+                  <documentation>
+                    The scope of the rate (ACCOUNT/DEVELOPER).
+                  </documentation>
+                </annotation>
+              </element>
+              <element maxOccurs="1" minOccurs="0"
+                name="retryAfterSeconds" type="xsd:int">
+                <annotation>
+                  <documentation>
+                    The amount of time (in seconds) the client should wait before retrying the request.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="ReadOnlyError">
+        <annotation>
+          <documentation>
+            Errors from attempting to write to read-only fields.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:ReadOnlyError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="RequestError">
+        <annotation>
+          <documentation>
+            Encapsulates the generic errors thrown when there's an error with user
+            request.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:RequestError.Reason"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="RequiredError">
+        <annotation>
+          <documentation>
+            Errors due to missing required field.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:RequiredError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="SizeLimitError">
+        <annotation>
+          <documentation>
+            Indicates that the number of entries in the request or response exceeds the system limit.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:SizeLimitError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="SoapHeader">
+        <annotation>
+          <documentation>
+            Defines the required and optional elements within the header of a SOAP request.
+          </documentation>
+        </annotation>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="authToken" type="xsd:string">
+            <annotation>
+              <documentation>
+                Authentication token from Google ClientLogin API. Developers need to authenticate themselves
+                with that API before they can send a request to AdWords API. This header identifies either the
+                MCC manager acting on behalf of their client, or the advertiser managing their own account.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="clientCustomerId" type="xsd:string">
+            <annotation>
+              <documentation>
+                Optional header: the customer id of the client of the MCC manager. Applicable only
+                if an MCC manager, as identified by authToken, is acting on behalf of their client.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="clientEmail" type="xsd:string">
+            <annotation>
+              <documentation>
+                Optional header: the login email of a client of the MCC manager. Applicable only
+                if an MCC manager, as identified by authToken, is acting on behalf of their client.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="developerToken" type="xsd:string">
+            <annotation>
+              <documentation>
+                Developer token to identify that the person making the call has enough
+                quota.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="userAgent" type="xsd:string">
+            <annotation>
+              <documentation>
+                UserAgent is used to track distribution of API client programs and
+                application usage. The client is responsible for putting in a meaningful
+                value for tracking purposes. To be clear this is not the same as an HTTP
+                user agent.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="validateOnly" type="xsd:boolean">
+            <annotation>
+              <documentation>
+                Used to validate the request without executing it.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="partialFailure" type="xsd:boolean">
+            <annotation>
+              <documentation>
+                If true, API will try to commit as many error free operations as possible and
+                report the other operations' errors.
+                
+                &lt;p&gt;Ignored for non-mutate calls.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType name="SoapResponseHeader">
+        <annotation>
+          <documentation>
+            Defines the elements within the header of a SOAP response.
+          </documentation>
+        </annotation>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="requestId" type="xsd:string">
+            <annotation>
+              <documentation>
+                Unique id that identifies this request. If developers have any support issues, sending us
+                this id will enable us to find their request more easily.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="operations" type="xsd:long">
+            <annotation>
+              <documentation>
+                Number of operations performed for this SOAP request.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="responseTime" type="xsd:long">
+            <annotation>
+              <documentation>
+                Elapsed time in milliseconds between the AdWords API receiving the request and sending the
+                response.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="units" type="xsd:long">
+            <annotation>
+              <documentation>
+                Total number of API units the SOAP request used.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType abstract="true" name="ApiError">
+        <annotation>
+          <documentation>
+            The API error base class that provides details about an error that occurred
+            while processing a service request.
+            
+            &lt;p&gt;The OGNL field path is provided for parsers to identify the request data
+            element that may have caused the error.&lt;/p&gt;
+          </documentation>
+        </annotation>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="fieldPath" type="xsd:string">
+            <annotation>
+              <documentation>
+                The OGNL field path to identify cause of error.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="trigger" type="xsd:string">
+            <annotation>
+              <documentation>
+                The data that caused the error.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="errorString" type="xsd:string">
+            <annotation>
+              <documentation>
+                A simple string representation of the error and reason.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="ApiError.Type" type="xsd:string">
+            <annotation>
+              <documentation>
+                Indicates that this instance is a subtype of ApiError.
+                Although this field is returned in the response, it is ignored on input
+                and cannot be selected. Specify xsi:type instead.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType name="ApiException">
+        <annotation>
+          <documentation>
+            Exception class for holding a list of service errors.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:ApplicationException">
+            <sequence>
+              <element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:ApiError">
+                <annotation>
+                  <documentation>
+                    List of errors.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="ApplicationException">
+        <annotation>
+          <documentation>
+            Base class for exceptions.
+          </documentation>
+        </annotation>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="message" type="xsd:string">
+            <annotation>
+              <documentation>
+                Error message.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0"
+            name="ApplicationException.Type" type="xsd:string">
+            <annotation>
+              <documentation>
+                Indicates that this instance is a subtype of ApplicationException.
+                Although this field is returned in the response, it is ignored on input
+                and cannot be selected. Specify xsi:type instead.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <simpleType name="AuthenticationError.Reason">
+        <annotation>
+          <documentation>
+            The single reason for the authentication failure.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="AUTHENTICATION_FAILED">
+            <annotation>
+              <documentation>
+                Authentication of the request failed.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="CLIENT_CUSTOMER_ID_IS_REQUIRED">
+            <annotation>
+              <documentation>
+                Client Customer Id is required if CustomerIdMode is set to CLIENT_EXTERNAL_CUSTOMER_ID.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="CLIENT_EMAIL_REQUIRED">
+            <annotation>
+              <documentation>
+                Client Email is required if CustomerIdMode is set to CLIENT_EXTERNAL_EMAIL_FIELD.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="CLIENT_CUSTOMER_ID_INVALID">
+            <annotation>
+              <documentation>
+                Client customer Id is not a number.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="CLIENT_EMAIL_INVALID">
+            <annotation>
+              <documentation>
+                Client customer Id is not a number.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="CLIENT_EMAIL_FAILED_TO_AUTHENTICATE">
+            <annotation>
+              <documentation>
+                Client email is not a valid customer email.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="CUSTOMER_NOT_FOUND">
+            <annotation>
+              <documentation>
+                No customer found for the customer id provided in the header.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="GOOGLE_ACCOUNT_DELETED">
+            <annotation>
+              <documentation>
+                Client's Google Account is deleted.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="GOOGLE_ACCOUNT_COOKIE_INVALID">
+            <annotation>
+              <documentation>
+                Google account login token in the cookie is invalid.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="FAILED_TO_AUTHENTICATE_GOOGLE_ACCOUNT">
+            <annotation>
+              <documentation>
+                problem occurred during Google account authentication.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="GOOGLE_ACCOUNT_USER_AND_ADS_USER_MISMATCH">
+            <annotation>
+              <documentation>
+                The user in the google account login token does not match the UserId in the cookie.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="LOGIN_COOKIE_REQUIRED">
+            <annotation>
+              <documentation>
+                Login cookie is required for authentication.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="NOT_ADS_USER">
+            <annotation>
+              <documentation>
+                User in the cookie is not a valid Ads user.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="OAUTH_TOKEN_INVALID">
+            <annotation>
+              <documentation>
+                Oauth token in the header is not valid.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="OAUTH_TOKEN_EXPIRED">
+            <annotation>
+              <documentation>
+                Oauth token in the header has expired.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="OAUTH_TOKEN_DISABLED">
+            <annotation>
+              <documentation>
+                Oauth token in the header has been disabled.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="OAUTH_TOKEN_REVOKED">
+            <annotation>
+              <documentation>
+                Oauth token in the header has been revoked.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="OAUTH_TOKEN_HEADER_INVALID">
+            <annotation>
+              <documentation>
+                Oauth token HTTP header is malformed.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="LOGIN_COOKIE_INVALID">
+            <annotation>
+              <documentation>
+                Login cookie is not valid.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="FAILED_TO_RETRIEVE_LOGIN_COOKIE">
+            <annotation>
+              <documentation>
+                Failed to decrypt the login cookie.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="USER_ID_INVALID">
+            <annotation>
+              <documentation>
+                User Id in the header is not a valid id.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="AuthorizationError.Reason">
+        <annotation>
+          <documentation>
+            The reasons for the database error.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="UNABLE_TO_AUTHORIZE">
+            <annotation>
+              <documentation>
+                Could not complete authorization due to an internal problem.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="NO_ADWORDS_ACCOUNT_FOR_CUSTOMER">
+            <annotation>
+              <documentation>
+                Customer has no AdWords account.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="USER_PERMISSION_DENIED">
+            <annotation>
+              <documentation>
+                User doesn't have permission to access customer.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="EFFECTIVE_USER_PERMISSION_DENIED">
+            <annotation>
+              <documentation>
+                Effective user doesn't have permission to access this customer.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="USER_HAS_READONLY_PERMISSION">
+            <annotation>
+              <documentation>
+                User has read-only permission cannot mutate.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="NO_CUSTOMER_FOUND">
+            <annotation>
+              <documentation>
+                No customer found.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="ClientTermsError.Reason">
+        <annotation>
+          <documentation>
+            Enums for the various reasons an error can be thrown as a result of
+            ClientTerms violation.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="INCOMPLETE_SIGNUP_CURRENT_ADWORDS_TNC_NOT_AGREED">
+            <annotation>
+              <documentation>
+                Customer has not agreed to the latest AdWords Terms &amp; Conditions
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="EntityNotFound.Reason">
+        <restriction base="xsd:string">
+          <enumeration value="INVALID_ID">
+            <annotation>
+              <documentation>
+                The specified id refered to an entity which either doesn't exist or is not accessible to the
+                customer. e.g. campaign belongs to another customer.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="InternalApiError.Reason">
+        <annotation>
+          <documentation>
+            The single reason for the internal API error.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="UNEXPECTED_INTERNAL_API_ERROR">
+            <annotation>
+              <documentation>
+                API encountered an unexpected internal error.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="UNKNOWN">
+            <annotation>
+              <documentation>
+                The cause of the error is not known or only defined in newer versions.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="NotEmptyError.Reason">
+        <annotation>
+          <documentation>
+            The reasons for the validation error.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="EMPTY_LIST"/>
+        </restriction>
+      </simpleType>
+      <simpleType name="NotWhitelistedError.Reason">
+        <annotation>
+          <documentation>
+            The single reason for the whitelist error.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="CUSTOMER_NOT_WHITELISTED_FOR_API">
+            <annotation>
+              <documentation>
+                Customer is not whitelisted for accessing the API.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="NullError.Reason">
+        <annotation>
+          <documentation>
+            The reasons for the validation error.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="NULL_CONTENT">
+            <annotation>
+              <documentation>
+                Specified list/container must not contain any null elements
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="Operator">
+        <annotation>
+          <documentation>
+            This represents an operator that may be presented to an adsapi service.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="ADD">
+            <annotation>
+              <documentation>
+                The ADD operator.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="REMOVE">
+            <annotation>
+              <documentation>
+                The REMOVE operator.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="SET">
+            <annotation>
+              <documentation>
+                The SET operator (used for updates).
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="OperatorError.Reason">
+        <annotation>
+          <documentation>
+            The reasons for the validation error.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="OPERATOR_NOT_SUPPORTED"/>
+        </restriction>
+      </simpleType>
+      <simpleType name="QuotaCheckError.Reason">
+        <annotation>
+          <documentation>
+            Enums for all the reasons an error can be thrown to the user during
+            billing quota checks.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="INVALID_TOKEN_HEADER">
+            <annotation>
+              <documentation>
+                Customer passed in an invalid token in the header.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="ACCOUNT_DELINQUENT">
+            <annotation>
+              <documentation>
+                Customer is marked delinquent.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="ACCOUNT_INACCESSIBLE">
+            <annotation>
+              <documentation>
+                Customer is a fraudulent.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="ACCOUNT_INACTIVE">
+            <annotation>
+              <documentation>
+                Inactive Account.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="INCOMPLETE_SIGNUP">
+            <annotation>
+              <documentation>
+                Signup not complete
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="INCOMPLETE_SIGNUP_LATEST_ADWORDS_API_TNC_NOT_AGREED">
+            <annotation>
+              <documentation>
+                Latest AdWords API T&amp;C not agreed.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="INCOMPLETE_SIGNUP_NO_BILLING_INFO">
+            <annotation>
+              <documentation>
+                No Billing Info.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="INCOMPLETE_SIGNUP_USER_INFO_MISSING">
+            <annotation>
+              <documentation>
+                User Info missing.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="INCOMPLETE_SIGNUP_USER_INFO_PENDING">
+            <annotation>
+              <documentation>
+                User Info pending.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="INCOMPLETE_SIGNUP_USER_INFO_REJECTED">
+            <annotation>
+              <documentation>
+                User Info rejected.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="MONTHLY_BUDGET_REACHED">
+            <annotation>
+              <documentation>
+                Monthly budget quota reached.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="QUOTA_EXCEEDED">
+            <annotation>
+              <documentation>
+                Monthly budget quota exceeded.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="RateExceededError.Reason">
+        <annotation>
+          <documentation>
+            The reason for the rate exceeded error.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="RATE_EXCEEDED">
+            <annotation>
+              <documentation>
+                Rate exceeded.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="ReadOnlyError.Reason">
+        <annotation>
+          <documentation>
+            The reasons for the target error.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="READ_ONLY"/>
+        </restriction>
+      </simpleType>
+      <simpleType name="RequestError.Reason">
+        <restriction base="xsd:string">
+          <enumeration value="UNKNOWN">
+            <annotation>
+              <documentation>
+                Error reason is unknown.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="INVALID_INPUT">
+            <annotation>
+              <documentation>
+                Invalid input.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="RequiredError.Reason">
+        <annotation>
+          <documentation>
+            The reasons for the target error.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="REQUIRED">
+            <annotation>
+              <documentation>
+                Missing required field.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="SizeLimitError.Reason">
+        <annotation>
+          <documentation>
+            The reasons for Ad Scheduling errors.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="REQUEST_SIZE_LIMIT_EXCEEDED">
+            <annotation>
+              <documentation>
+                The number of entries in the request exceeds the system limit.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="RESPONSE_SIZE_LIMIT_EXCEEDED">
+            <annotation>
+              <documentation>
+                The number of entries in the response exceeds the system limit.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="UNKNOWN">
+            <annotation>
+              <documentation>
+                &lt;span class="constraint Rejected"&gt;Used for return value only. An enumeration could not be processed, typically due to incompatibility with your WSDL version.&lt;/span&gt;
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+    </schema>
+    <schema elementFormDefault="qualified" jaxb:version="1.0"
+      targetNamespace="https://adwords.google.com/api/adwords/info/v201101"
+      xmlns="http://www.w3.org/2001/XMLSchema"
+      xmlns:cm="https://adwords.google.com/api/adwords/cm/v201101"
+      xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:tns="https://adwords.google.com/api/adwords/info/v201101">
+      <xsd:import namespace="https://adwords.google.com/api/adwords/cm/v201101"/>
+      <annotation>
+        <appinfo>
+          <jaxb:globalBindings typesafeEnumMaxMembers="999999"/>
+        </appinfo>
+      </annotation>
+      <complexType name="ApiUsageError">
+        <annotation>
+          <documentation>
+            Represents possible error codes in InfoService.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="cm:ApiError">
+            <sequence>
+              <element maxOccurs="1" minOccurs="0" name="reason" type="tns:ApiUsageError.Reason">
+                <annotation>
+                  <documentation>
+                    The error reason represented by an enum.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="ApiUsageRecord">
+        <annotation>
+          <documentation>
+            Data record for per client API units.
+          </documentation>
+        </annotation>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="clientEmail" type="xsd:string">
+            <annotation>
+              <documentation>
+                The email address of the client
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="cost" type="xsd:long">
+            <annotation>
+              <documentation>
+                The cost of the API
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType name="InfoSelector">
+        <annotation>
+          <documentation>
+            Specifies the type of API usage information to be returned. API usage information
+            returned is based on the {@link #apiUsageType API usage type} specified. All returned
+            values are specific to the developer token being used to call &lt;code&gt;InfoService.get&lt;/code&gt;.
+            
+            &lt;p&gt;For each of the &lt;code&gt;apiUsageType&lt;/code&gt; values, other &lt;code&gt;InfoSelector&lt;/code&gt;
+            fields must also be set as described below:&lt;/p&gt;
+            
+            &lt;ul&gt;
+            &lt;li&gt;&lt;code&gt;FREE_USAGE_API_UNITS_PER_MONTH&lt;/code&gt; : Returns the number of allocated
+            &lt;a href="http://www.google.com/support/adwordsapi/bin/answer.py?answer=45891"&gt;
+            free API units&lt;/a&gt; for this entire month. Specify only the apiUsageType parameter.&lt;/li&gt;
+            &lt;li&gt;&lt;code&gt;TOTAL_USAGE_API_UNITS_PER_MONTH&lt;/code&gt; : Returns the total number of allocated API
+            units for this entire month. Includes both free and paid API units. Specify only the
+            apiUsageType parameter.&lt;/li&gt;
+            &lt;li&gt;&lt;code&gt;OPERATION_COUNT&lt;/code&gt; : Returns the number of operations recorded over the given
+            date range. The given dates are inclusive; to get the operation count for a single day,
+            supply it as both the start and end date. Specify the apiUsageType and
+            dateRange parameters. &lt;/li&gt;
+            &lt;li&gt;&lt;code&gt;UNIT_COUNT&lt;/code&gt; : Returns the number of API units recorded.
+            &lt;ul&gt;
+            &lt;li&gt;Specify the apiUsageType and dateRange parameters to retrieve
+            the units recorded over the given date range.&lt;/li&gt;
+            &lt;li&gt;Specify the apiUsageType, serviceName, methodName and dateRange to
+            retrieve the units recorded over the given date range for a specified method.&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;/li&gt;
+            &lt;li&gt;&lt;code&gt;UNIT_COUNT_FOR_CLIENTS&lt;/code&gt; :  Returns the number of API units recorded for a
+            subset of clients over the given date range. The given dates are inclusive; to get
+            the unit count for a single day, supply it as both the start and end date. Specify the
+            apiUsageType, dateRange and clientEmails parameters.&lt;/li&gt;
+            &lt;li&gt;&lt;code&gt;METHOD_COST&lt;/code&gt; : Returns the cost, in API units per operation, of the given
+            method on a specific date. Methods default to a cost of 1. Specify the apiUsageType,
+            dateRange (start date and end date should be the same), serviceName, methodName,
+            operator parameters.&lt;/li&gt;
+            &lt;/ul&gt;
+          </documentation>
+        </annotation>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="serviceName" type="xsd:string">
+            <annotation>
+              <documentation>
+                The name of the service.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="methodName" type="xsd:string">
+            <annotation>
+              <documentation>
+                The method whose cost has been queried.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="operator" type="cm:Operator">
+            <annotation>
+              <documentation>
+                Specifies the operator. This is applicable when the method is a "mutate" method.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="dateRange" type="cm:DateRange">
+            <annotation>
+              <documentation>
+                Date range to get the API usage for. The given dates are inclusive; to get the usage
+                information for a single day, supply it as both the start and end date.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="unbounded" minOccurs="0"
+            name="clientEmails" type="xsd:string">
+            <annotation>
+              <documentation>
+                List of login emails used to identify the clients to retrieve the API usage for.
+                If the list is null or empty, return the API usage for all clients.
+                NOTE: Only one of clientEmails or clientCustomerIds may be specified at once.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="apiUsageType" type="tns:ApiUsageType">
+            <annotation>
+              <documentation>
+                The API usage type information that needs to be fetched.
+                &lt;span class="constraint Required"&gt;This field is required and should not be {@code null}.&lt;/span&gt;
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType name="ApiUsageInfo">
+        <annotation>
+          <documentation>
+            Represents the API usage information.
+          </documentation>
+        </annotation>
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0"
+            name="apiUsageRecords" type="tns:ApiUsageRecord">
+            <annotation>
+              <documentation>
+                The list of API usage for the specific clients.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="cost" type="xsd:long">
+            <annotation>
+              <documentation>
+                The cost is set when the API usage is been fetched for all clients.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <simpleType name="ApiUsageError.Reason">
+        <annotation>
+          <documentation>
+            Enum used to represent the errors
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="INVALID_DATE_RANGE">
+            <annotation>
+              <documentation>
+                Selector validation failed.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="SERVICE_NAME_NOT_SPECIFIED"/>
+          <enumeration value="METHOD_NAME_NOT_SPECIFIED"/>
+          <enumeration value="OPERATOR_NOT_SPECIFIED"/>
+          <enumeration value="INVALID_CLIENT_EMAIL"/>
+          <enumeration value="INVALID_TOKEN_HEADER">
+            <annotation>
+              <documentation>
+                Customer passed in an invalid token in the header.
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <simpleType name="ApiUsageType">
+        <annotation>
+          <documentation>
+            Enum to represent the type of API usage.
+          </documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="FREE_USAGE_API_UNITS_PER_MONTH">
+            <annotation>
+              <documentation>
+                Free API units per month
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="TOTAL_USAGE_API_UNITS_PER_MONTH">
+            <annotation>
+              <documentation>
+                Total API units per month, Free + Paid
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="OPERATION_COUNT">
+            <annotation>
+              <documentation>
+                Number of operations
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="UNIT_COUNT">
+            <annotation>
+              <documentation>
+                Number of API units
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="UNIT_COUNT_FOR_CLIENTS">
+            <annotation>
+              <documentation>
+                Number of API units for specific clients
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="METHOD_COST">
+            <annotation>
+              <documentation>
+                Cost of method in API units
+              </documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <element name="get">
+        <annotation>
+          <documentation>
+            Returns the API usage information based on the selection criteria specified in
+            the selector.
+            
+            @param selector Specifies the type of usage information to return.
+            @return The API usage information.
+            @throws ApiException when there is at least one error with the request.
+          </documentation>
+        </annotation>
+        <complexType>
+          <sequence>
+            <element maxOccurs="1" minOccurs="0" name="selector" type="tns:InfoSelector">
+              <annotation>
+                <documentation>
+                  &lt;span class="constraint Required"&gt;This field is required and should not be {@code null}.&lt;/span&gt;
+                </documentation>
+              </annotation>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="getResponse">
+        <complexType>
+          <sequence>
+            <element maxOccurs="1" minOccurs="0" name="rval" type="tns:ApiUsageInfo"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ApiExceptionFault" type="cm:ApiException">
+        <annotation>
+          <documentation>
+            A fault element of type ApiException.
+          </documentation>
+        </annotation>
+      </element>
+      <element name="RequestHeader" type="cm:SoapHeader"/>
+      <element name="ResponseHeader" type="cm:SoapResponseHeader"/>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="RequestHeader">
+    <wsdl:part element="tns:RequestHeader" name="RequestHeader"/>
+  </wsdl:message>
+  <wsdl:message name="ResponseHeader">
+    <wsdl:part element="tns:ResponseHeader" name="ResponseHeader"/>
+  </wsdl:message>
+  <wsdl:message name="getRequest">
+    <wsdl:part element="tns:get" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getResponse">
+    <wsdl:part element="tns:getResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ApiException">
+    <wsdl:part element="tns:ApiExceptionFault" name="ApiException"/>
+  </wsdl:message>
+  <wsdl:portType name="InfoServiceInterface">
+    <wsdl:documentation>
+      Use this service to retrieve API usage information, such as the API units
+      spent over a given date range. See the {@link InfoSelector} documentation for
+      details.
+    </wsdl:documentation>
+    <wsdl:operation name="get">
+      <wsdl:documentation>
+        Returns the API usage information based on the selection criteria specified in
+        the selector.
+        
+        @param selector Specifies the type of usage information to return.
+        @return The API usage information.
+        @throws ApiException when there is at least one error with the request.
+      </wsdl:documentation>
+      <wsdl:input message="tns:getRequest" name="getRequest"/>
+      <wsdl:output message="tns:getResponse" name="getResponse"/>
+      <wsdl:fault message="tns:ApiException" name="ApiException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="InfoServiceSoapBinding" type="tns:InfoServiceInterface">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="get">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getRequest">
+        <wsdlsoap:header message="tns:RequestHeader"
+          part="RequestHeader" use="literal"/>
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getResponse">
+        <wsdlsoap:header message="tns:ResponseHeader"
+          part="ResponseHeader" use="literal"/>
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ApiException">
+        <wsdlsoap:fault name="ApiException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InfoService">
+    <wsdl:port binding="tns:InfoServiceSoapBinding" name="InfoServiceInterfacePort">
+      <wsdlsoap:address location="https://adwords-sandbox.google.com/api/adwords/info/v201101/InfoService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

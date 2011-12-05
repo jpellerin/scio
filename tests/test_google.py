@@ -1,4 +1,5 @@
 from lxml import etree
+from nose.tools import eq_
 
 import scio
 import helpers
@@ -12,7 +13,7 @@ class StubClient(scio.Client):
 
 
 def test_parse_adwords():
-    client = scio.Client(helpers.support('adwords_campaignservice.wsdl', 'r'))
+    scio.Client(helpers.support('adwords_campaignservice.wsdl', 'r'))
 
 
 def test_method_call_with_headers():
@@ -34,6 +35,24 @@ def test_method_call_with_headers():
     assert '99dt' in request
     assert '12at' in request
     assert 'foo (mozilla)'
+
+
+def test_infoservice_daterange_namespace():
+    StubClient.sent = []
+    client = StubClient(helpers.support('InfoService.wsdl', 'r'))
+    isel = client.type.InfoSelector(
+        dateRange=client.type.DateRange(
+            min='20111101', max='20111130'),
+        apiUsageType='UNIT_COUNT')
+    eq_(client.type.InfoSelector._namespace,
+        "https://adwords.google.com/api/adwords/info/v201101")
+    # container assigned to part in new namespace takes on
+    # namespace from the context it is assigned to
+    eq_(isel.dateRange._namespace,
+        "https://adwords.google.com/api/adwords/info/v201101")
+    # ... items in the type container keep their namespace
+    eq_(isel.dateRange.min._namespace,
+        "https://adwords.google.com/api/adwords/cm/v201101")
 
 
 def test_get_all_campaigns():
