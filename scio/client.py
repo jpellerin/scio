@@ -398,7 +398,7 @@ class Element(object):
         if self._namespace:
             tag = '{%s}%s' % (self._namespace, tag)
         if self._schema:
-            e = etree.Element(tag, nsmap=self._schema.short_nsmap)
+            e = etree.Element(tag, nsmap=self._schema.minimal_nsmap)
         else:
             e = etree.Element(tag)
         if value is not None and value != u'':
@@ -877,7 +877,7 @@ class ComplexType(Element, Pickleable):
         if self._namespace:
             tag = '{%s}%s' % (self._namespace, tag)
         if self._schema:
-            e = etree.Element(tag, nsmap=self._schema.short_nsmap)
+            e = etree.Element(tag, nsmap=self._schema.minimal_nsmap)
         else:
             e = etree.Element(tag)
         if self._type_attr and self._type_value:
@@ -900,11 +900,11 @@ class ComplexType(Element, Pickleable):
             if ch_val is not None:
                 if isinstance(ch_val, list):
                     for ch in ch_val:
-                        ch_el = ch.toxml(child.name)
+                        ch_el = ch.toxml(child.name, empty=empty)
                         if ch_el is not None:
                             e.append(ch_el)
                 else:
-                    ch_el = ch_val.toxml(child.name)
+                    ch_el = ch_val.toxml(child.name, empty=empty)
                     if ch_el is not None:
                         e.append(ch_el)
         if not empty and e.text is None and not e.attrib and not len(e):
@@ -2034,6 +2034,12 @@ class Schema(object):
             else:
                 nsmap[k] = v
         return nsmap
+
+    @property
+    def minimal_nsmap(self):
+        if self.qualified:
+            return {None: self.targetNamespace}
+        return self.short_nsmap
 
 
 def backmap(dct):
