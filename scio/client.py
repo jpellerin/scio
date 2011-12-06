@@ -398,7 +398,7 @@ class Element(object):
         if self._namespace:
             tag = '{%s}%s' % (self._namespace, tag)
         if self._schema:
-            e = etree.Element(tag, nsmap=self._schema.minimal_nsmap)
+            e = etree.Element(tag, nsmap=self._schema.minimal_nsmap(self._namespace))
         else:
             e = etree.Element(tag)
         if value is not None and value != u'':
@@ -877,7 +877,8 @@ class ComplexType(Element, Pickleable):
         if self._namespace:
             tag = '{%s}%s' % (self._namespace, tag)
         if self._schema:
-            e = etree.Element(tag, nsmap=self._schema.minimal_nsmap)
+            e = etree.Element(
+                tag, nsmap=self._schema.minimal_nsmap(self._namespace))
         else:
             e = etree.Element(tag)
         if self._type_attr and self._type_value:
@@ -2035,10 +2036,9 @@ class Schema(object):
                 nsmap[k] = v
         return nsmap
 
-    @property
-    def minimal_nsmap(self):
+    def minimal_nsmap(self, targetNamespace):
         if self.qualified:
-            return {None: self.targetNamespace}
+            return {None: targetNamespace}
         return self.short_nsmap
 
 
