@@ -951,9 +951,7 @@ class AttributeDescriptor(object):
             # accessed for the first time. This enables you to say:
             # Foo.Bar.Baz = 1 even if Foo.Bar has not yet been set.
             val = self.type.empty()
-            if isinstance(val, self.type):
-                val._tag = self.name
-                val._namespace = self.namespace
+            self._set_xml_context(val)
             setattr(obj, key, val)
         return val
 
@@ -972,14 +970,14 @@ class AttributeDescriptor(object):
             setattr(obj, key, new)
             return
 
-        if self.isanytype() or not isinstance(value, self.type):
+        if isinstance(self.type, AnyType) or not isinstance(value, self.type):
             value = self._new(value)
-        # a type may not share the same namespace as its container
-        # so if we were given a full type, ensure it is set up
-        # with the proper tag and namespace for this context
-        if value is not None:
-            value._tag = self.name
-            value._namespace = self.namespace
+        else:
+            # a type may not share the same namespace as its container
+            # so if we were given a full type, ensure it is set up
+            # with the proper tag and namespace for this context
+            self._set_xml_context(value)
+
         # remember the order in which we saw assignments
         value._position = obj._child_count
         obj._child_count += 1
@@ -999,9 +997,16 @@ class AttributeDescriptor(object):
 
     def _new(self, value):
         val = self.type(value)
-        val._tag = self.name
-        val._namespace = self.namespace
+        self._set_xml_context(val)
         return val
+
+    def _set_xml_context(self, value):
+        try:
+            value._tag = self.name
+            value._namespace = self.namespace
+        except AttributeError:
+            # value was None or another unalterable builtin
+            pass
 
     def isanytype(self):
         return (isinstance(self.type, AnyType)
