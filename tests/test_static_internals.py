@@ -26,6 +26,11 @@ def setup():
     exec zfc in zf.__dict__
     M['zf'] = zf
 
+    bz = types.ModuleType('bz')
+    bzc = scio.gen.gen(scio.Client(helpers.support('boyzoid.wsdl', 'r')))
+    exec bzc in bz.__dict__
+    M['bz'] = bz
+
 
 def test_enum_restriction_not_first_element():
     zf = M['zf'].Client()
@@ -143,3 +148,10 @@ def test_fault_is_unpickleable():
         pf = pickle.dumps(f)
         upf = pickle.loads(pf)
         assert unicode(upf) == unicode(f)
+
+
+def test_deserialize_boyzoid_response():
+    response = etree.parse(helpers.support('bz_response.xml', 'r')).getroot()
+    quote = M['bz'].Client().service.getQuote.method.output(response)
+    print quote, quote.item
+    print quote.item[1].value

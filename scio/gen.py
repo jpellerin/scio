@@ -58,6 +58,12 @@ def typeinfo(n, p):
             fields.append((static.safe_id(ch.name), 'client.AttributeDescriptor(name=%r, type_=%s, min=%r, max=%r, namespace=%r)' % (ch.name, ref_class(ch.type), ch.min, ch.max, ch.namespace)))
     fields.append(('_attributes', '[%s]' % ', '.join(attributes)))
 
+    if hasattr(p, '_substitutions'):
+        subs = {}
+        for name, scls in p._substitutions.items():
+            subs[name] = ref_class(scls)
+        fields.append(('_substitutions', subs))
+
     type_fields = ('_content_type', '_arrayType')
     for field in type_fields:
         if hasattr(p, field) and getattr(p, field) is not None:
@@ -94,6 +100,8 @@ def ref_class(cls):
     qn = qualifed_classname(cls)
     if qn.startswith('client.') or qn == 'None':
         return qn
+    elif qn == 'AnyType':
+        return 'R.AnyType'
     return 'R.ref(%r)' % qn
 
 
@@ -111,12 +119,17 @@ def svc_qual_classname(cls):
         return qn
     if qn.startswith('client.'):
         return qn
+    if qn == 'AnyType':
+        return 'R.AnyType'
     return 'client_.type.%s' % qn
 
 
 def qualifed_classname(cls):
     if cls is None:
         return 'None'
+    if isinstance(cls, scio.client.AnyType):
+        # special case, these are instances not subclasses
+        return 'AnyType'
     if cls.__name__ in dir(scio.client):
         return "client.%s" % cls.__name__
     return static.safe_id(cls.__name__)
@@ -168,6 +181,5 @@ if __name__ == '__main__':
     main(sys.argv[1])
 
 
-# PROBLEMS
-# AnyType does dynamic type lookup using client.wsdl
-
+# TODO
+# ugly typeregistry implementation -- can be part of static.Client?
