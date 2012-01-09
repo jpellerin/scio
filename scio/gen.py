@@ -48,20 +48,20 @@ def typeinfo(n, p):
     if hasattr(p, '_children'):
         for ch in p._children:
             children.append(static.safe_id(ch.name))
-            fields.append((static.safe_id(ch.name), 'client.AttributeDescriptor(name=%r, type_=%s, min=%r, max=%r, namespace=%r)' % (ch.name, dep_class(ch.type, info['deps']), ch.min, ch.max, ch.namespace)))
+            fields.append((static.safe_id(ch.name), 'client.AttributeDescriptor(name=%r, type_=%s, min=%r, max=%r, namespace=%r)' % (ch.name, ref_class(ch.type), ch.min, ch.max, ch.namespace)))
     fields.append(('_children', '[%s]' % ', '.join(children)))
 
     attributes = []
     if hasattr(p, '_attributes'):
         for ch in p._attributes:
             attributes.append(static.safe_id(ch.name))
-            fields.append((static.safe_id(ch.name), 'client.AttributeDescriptor(name=%r, type_=%s, min=%r, max=%r, namespace=%r)' % (ch.name, dep_class(ch.type, info['deps']), ch.min, ch.max, ch.namespace)))
+            fields.append((static.safe_id(ch.name), 'client.AttributeDescriptor(name=%r, type_=%s, min=%r, max=%r, namespace=%r)' % (ch.name, ref_class(ch.type), ch.min, ch.max, ch.namespace)))
     fields.append(('_attributes', '[%s]' % ', '.join(attributes)))
 
     type_fields = ('_content_type', '_arrayType')
     for field in type_fields:
         if hasattr(p, field) and getattr(p, field) is not None:
-            info[field] = dep_class(getattr(p, field), info['deps'])
+            info[field] = ref_class(getattr(p, field))
             fields.append((field, info[field]))
     return info
 
@@ -89,9 +89,18 @@ def methodinfo(m):
     return info
 
 
-def dep_class(cls, deplist):
+def ref_class(cls):
+    """Class reference that may be resolved late"""
     qn = qualifed_classname(cls)
-    if not qn.startswith('client.'):
+    if qn.startswith('client.') or qn == 'None':
+        return qn
+    return 'R.ref(%r)' % qn
+
+
+def dep_class(cls, deplist):
+    """Class reference that must be resolved before code output"""
+    qn = qualifed_classname(cls)
+    if not qn.startswith('client.') or qn == 'None':
         deplist.append(qn)
     return qn
 
@@ -160,6 +169,5 @@ if __name__ == '__main__':
 
 
 # PROBLEMS
-# circular dependencies
 # AnyType does dynamic type lookup using client.wsdl
 

@@ -4,6 +4,11 @@
 from scio import client, static
 
 
+R = static.TypeRegistry()
+
+#
+# Client class
+#
 class Client(static.Client):
 
     methodCallClass = client.MethodCall
@@ -12,8 +17,8 @@ class Client(static.Client):
     outputClass = client.OutputMessage
 
     @property
-    def service(self):
-        return self._service(self)
+    def type(self):
+        return R.types(self)
 
     class _service(object):
         def __init__(self, client_):
@@ -48,19 +53,13 @@ class Client(static.Client):
             return client_.methodCallClass(client_, meth)
 {% endfor %}
 
-    @property
-    def type(self):
-        return registry
-
-
-class TypeRegistry(object):
-    pass
-registry = TypeRegistry()
-
-
+#
+# Types
+#
 {% for tp in types %}
+@R.register
 class {{ tp.class_name }}({{ tp.bases|join(', ') }}):
-    __name__ = '{{ tp.name }}'
+    _name = '{{ tp.name }}'
     {%- for name, val in tp.fields %}
     {{ name }} = {{ val }}
     {%- endfor %}
@@ -70,9 +69,6 @@ class {{ tp.class_name }}({{ tp.bases|join(', ') }}):
         '{{ tp.schema.targetNamespace }}',
         {{ tp.schema.qualified }})
     {%- endif %}
-setattr(registry, '{{ tp.class_name }}', {{ tp.class_name }})
 
 {% endfor %}
-
-
-
+R.resolve_refs()
