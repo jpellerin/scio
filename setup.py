@@ -29,4 +29,9 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     classifiers=CLASSIFIERS,
+    entry_points = {
+        'console_scripts': [
+            'scio_generate_client = scio.gen:main',
+            ],
+        }
     )
