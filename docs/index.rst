@@ -29,6 +29,7 @@ Contents:
    pickling.rst
    proxy_example.rst
    auto.rst
+   codegen.rst
 
 Indices and tables
 ==================

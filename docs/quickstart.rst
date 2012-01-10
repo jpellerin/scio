@@ -64,6 +64,27 @@ documentation for a WSDL file. This is a good way to get started when
 working with an unfamiliar SOAP service. See :doc:`auto`.
 
 
+5. Generate client class modules
+================================
+
+.. note ::
+
+   Client class generation is new in Scio 0.11
+
+Scio includes a script that can be used to generate Python code for SOAP
+client classes. In some cases, using statically-generated code is preferable
+to loading and parsing a WSDL file, and in others it is not practical or
+desireable to use dynamic classes.
+
+To generate code, pass the path to a WSDL file to the generator
+script, `scio_generate_client`::
+
+  $ scio_generate_client path/to/service.wsdl > service_client.py
+
+The script prints generated code to stdout. To use the generated client,
+just import it. For more information, see :doc:`codegen`.
+
+
 .. _lxml : http://codespeak.net/lxml/
 .. _SOAP : http://en.wikipedia.org/wiki/SOAP
 .. _WSDL : http://www.w3.org/TR/wsdl
