@@ -3,22 +3,11 @@
 #
 from scio import client, static
 
-
-R = static.TypeRegistry()
-
 #
 # Client class
 #
 class Client(static.Client):
-
-    methodCallClass = client.MethodCall
-    methodClass = client.Method
-    inputClass = client.InputMessage
-    outputClass = client.OutputMessage
-
-    @property
-    def type(self):
-        return R.types(self)
+    _types = static.TypeRegistry()
 
     class _service(object):
         def __init__(self, client_):
@@ -57,7 +46,7 @@ class Client(static.Client):
 # Types
 #
 {% for tp in types %}
-@R.register
+@Client.register
 class {{ tp.class_name }}({{ tp.bases|join(', ') }}):
     _name = '{{ tp.name }}'
     {%- for name, val in tp.fields %}
@@ -71,4 +60,4 @@ class {{ tp.class_name }}({{ tp.bases|join(', ') }}):
     {%- endif %}
 
 {% endfor %}
-R.resolve_refs()
+Client.resolve_refs()
