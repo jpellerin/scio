@@ -74,10 +74,11 @@ notset = object()
 #
 class Client(object):
     """
-    WSDL client container class. Given an open wsdl file-like object,
-    instantiating a Client builds SOAP types and service calls using a
-    Factory, and provides access to them via the instance's ``type``
-    and ``service`` attributes.
+    WSDL client container class.
+
+    Given an open wsdl file-like object, instantiating a Client builds
+    SOAP types and service calls using a Factory, and provides access
+    to them via the instance's ``type`` and ``service`` attributes.
 
     :param wsdl_fp: A file-like object containing the wsdl to use to
                     construct the client types and methods.
@@ -457,8 +458,11 @@ class SimpleType(Element):
     @classmethod
     def _base_type(cls):
         # FIXME this is pretty hacky
-        for t in cls.__mro__:
-            if t.__module__ != cls.__module__:
+        for t in cls.__mro__[1:]:
+            # generated client code compiled into an anonymous
+            # namespace will have its classes in __builtin__
+            if (t.__module__ not in (cls.__module__, 'scio.client') or
+                t.__module__ == '__builtin__'):
                 return t
 
 class IntType(SimpleType, int):
