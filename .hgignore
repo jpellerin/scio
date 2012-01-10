@@ -6,3 +6,8 @@ build/
 ~$
 \.egg-info$
 .tox
+tests/lwclient\.py
+tests/zfclient\.py
+tests/bzclient\.py
+lyrics\.py
+cover/.*
