@@ -1,6 +1,5 @@
 from StringIO import StringIO
 import pickle
-import types
 from urllib2 import HTTPError
 
 from lxml import etree
@@ -15,21 +14,10 @@ import helpers
 M = {}
 
 def setup():
-    lyr = types.ModuleType('lyr')
-    lwc = scio.gen.gen(scio.Client(helpers.support('lyrics.wsdl', 'r')))
-    exec lwc in lyr.__dict__
-    M['lyr'] = lyr
-
-    zf = types.ModuleType('zf')
-    zfc = scio.gen.gen(scio.Client(helpers.support('zfapi.wsdl', 'r')))
-    print zfc
-    exec zfc in zf.__dict__
-    M['zf'] = zf
-
-    bz = types.ModuleType('bz')
-    bzc = scio.gen.gen(scio.Client(helpers.support('boyzoid.wsdl', 'r')))
-    exec bzc in bz.__dict__
-    M['bz'] = bz
+    lwclient, zfclient, bzclient = helpers.generate_static_clients()
+    M['lyr'] = lwclient
+    M['zf'] = zfclient
+    M['bz'] = bzclient
 
 
 def test_enum_restriction_not_first_element():

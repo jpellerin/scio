@@ -1,27 +1,20 @@
+import os
+
 from lxml import etree
 from cPickle import dumps, loads
 from nose.tools import eq_
 
-import scio
 import helpers
 
+HERE = os.path.dirname(__file__)
 
-def lw_reviver(classname, proto=object, args=()):
-    return proto.__new__(getattr(lw.type, classname), *args)
+lw = zf = None
 
-
-lw = scio.Client(helpers.support('lyrics.wsdl', 'r'),
-                 reduce_callback=lw_reviver
-                 )
-
-
-def zf_reviver(classname, proto=object, args=()):
-    return proto.__new__(getattr(zf.type, classname), *args)
-
-
-zf = scio.Client(helpers.support('zfapi.wsdl', 'r'),
-                 reduce_callback=zf_reviver
-                 )
+def setup():
+    global lw, zf
+    lwclient, zfclient, bzclient = helpers.generate_static_clients()
+    lw = lwclient.Client()
+    zf = zfclient.Client()
 
 
 def test_pickle_and_unpickle_single_type():
