@@ -48,7 +48,6 @@ class Client(static.Client):
 {% for tp in types %}
 @Client.register
 class {{ tp.class_name }}({{ tp.bases|join(', ') }}):
-    _name = '{{ tp.name }}'
     {%- for name, val in tp.fields %}
     {{ name }} = {{ val }}
     {%- endfor %}
@@ -58,6 +57,10 @@ class {{ tp.class_name }}({{ tp.bases|join(', ') }}):
         '{{ tp.schema.targetNamespace }}',
         {{ tp.schema.qualified }})
     {%- endif %}
+    _name = '{{ tp.name }}'
 
 {% endfor %}
+{%- if circular_refs %}
+# Client types contain circular references
 Client.resolve_refs()
+{%- endif -%}
