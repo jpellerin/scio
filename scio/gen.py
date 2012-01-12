@@ -68,9 +68,9 @@ def gen(client, template='scio/static_client.tpl'):
                       if (not s.startswith('_') and not
                           s == 'method_class')]
     # this will fail if any base classes are in circular relationships
-    types = list(sort_deps([typeinfo(p, getattr(client.type, p))
-                            for p in dir(client.type)
-                            if not p.startswith('_')]))
+    types = list(sort_deps([typeinfo(getattr(client.type, entry))
+                            for entry in dir(client.type)
+                            if not entry.startswith('_')]))
     # now sort again to catch circular refs in attributes
     types = list(sort_deps(types,
                            key=lambda t: t['deps'] + t['refs'],
@@ -81,26 +81,26 @@ def gen(client, template='scio/static_client.tpl'):
     return template.render(**ctx)
 
 
-def typeinfo(n, p):
+def typeinfo(typecls):
     info = {}
-    info['name'] = p.__name__
+    info['name'] = typecls.__name__
     info['deps'] = []  # classes this class absolutely depends on
-    info['class_name'] = static.safe_id(p.__name__)
-    info['bases'] = [dep_class(x, info['deps']) for x in p.__bases__]
+    info['class_name'] = static.safe_id(typecls.__name__)
+    info['bases'] = [dep_class(x, info['deps']) for x in typecls.__bases__]
     info['refs'] = []  # other type classes I refer to
     info['unresolved'] = set()  # class references not resolved by sorting
     info['fields'] = fields = []
-    if hasattr(p, '_schema'):
-        info['schema'] = p._schema
+    if hasattr(typecls, '_schema'):
+        info['schema'] = typecls._schema
     quoted_fields = ('xsd_type', '_tag', '_namespace', '_values',
                      '_type_attr', '_type_value')
     for field in quoted_fields:
-        if field in p.__dict__:
-            fields.append((field, repr(getattr(p, field))))
+        if field in typecls.__dict__:
+            fields.append((field, repr(getattr(typecls, field))))
 
     children = []
-    if hasattr(p, '_children'):
-        for ch in p._children:
+    if hasattr(typecls, '_children'):
+        for ch in typecls._children:
             children.append(static.safe_id(ch.name))
             fields.append((static.safe_id(ch.name),
                            Attr(ch.name, dep_class(ch.type, info['refs']),
@@ -109,8 +109,8 @@ def typeinfo(n, p):
     fields.append(('_children', '[%s]' % ', '.join(children)))
 
     attributes = []
-    if hasattr(p, '_attributes'):
-        for ch in p._attributes:
+    if hasattr(typecls, '_attributes'):
+        for ch in typecls._attributes:
             attributes.append(static.safe_id(ch.name))
             fields.append((static.safe_id(ch.name),
                            Attr(ch.name, dep_class(ch.type, info['refs']),
@@ -118,16 +118,16 @@ def typeinfo(n, p):
                           )
     fields.append(('_attributes', '[%s]' % ', '.join(attributes)))
 
-    if hasattr(p, '_substitutions'):
+    if hasattr(typecls, '_substitutions'):
         subs = {}
-        for name, scls in p._substitutions.items():
+        for name, scls in typecls._substitutions.items():
             subs[name] = dep_class(scls, info['refs'])
         fields.append(('_substitutions', subs))
 
     type_fields = ('_content_type', '_arrayType')
     for field in type_fields:
-        if hasattr(p, field) and getattr(p, field) is not None:
-            info[field] = dep_class(getattr(p, field), info['refs'])
+        if hasattr(typecls, field) and getattr(typecls, field) is not None:
+            info[field] = dep_class(getattr(typecls, field), info['refs'])
             fields.append((field, info[field]))
     return info
 
