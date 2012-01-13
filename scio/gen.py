@@ -1,4 +1,4 @@
-# client.py -- soap classes for input and output
+# gen.py -- soap classes for input and output
 #
 # Copyright (c) 2011, Leapfrog Online, LLC
 # All rights reserved.
@@ -26,6 +26,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import logging
+import os
 import sys
 
 import jinja2
@@ -34,7 +35,8 @@ import scio.client
 from scio import static
 
 log = logging.getLogger(__name__)
-
+TEMPLATE = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), 'static_client.tpl'))
 
 def main():
     """Generate client classes
@@ -52,7 +54,7 @@ def main():
             print gen(client)
 
 
-def gen(client, template='scio/static_client.tpl'):
+def gen(client, template=TEMPLATE):
     """Generate code for a :class:`scio.client.Client` class.
 
     :param client: A `scio.client.Client` class generated from a
@@ -68,7 +70,7 @@ def gen(client, template='scio/static_client.tpl'):
                       if (not s.startswith('_') and not
                           s == 'method_class')]
     # this will fail if any base classes are in circular relationships
-    types = list(sort_deps([typeinfo(getattr(client.type, entry))
+    types = list(sort_deps([typeinfo(entry, getattr(client.type, entry))
                             for entry in dir(client.type)
                             if not entry.startswith('_')]))
     # now sort again to catch circular refs in attributes
@@ -81,11 +83,15 @@ def gen(client, template='scio/static_client.tpl'):
     return template.render(**ctx)
 
 
-def typeinfo(typecls):
+def typeinfo(name, typecls):
     info = {}
-    info['name'] = typecls.__name__
+    info['name'] = name
     info['deps'] = []  # classes this class absolutely depends on
     info['class_name'] = static.safe_id(typecls.__name__)
+    # is this class just an alias to another class?
+    # eg 'char' being another name for StringType
+    info['is_alias'] = name != typecls.__name__
+    info['qualified_name'] = svc_qual_classname(typecls)
     info['bases'] = [dep_class(x, info['deps']) for x in typecls.__bases__]
     info['refs'] = []  # other type classes I refer to
     info['unresolved'] = set()  # class references not resolved by sorting
@@ -93,7 +99,7 @@ def typeinfo(typecls):
     if hasattr(typecls, '_schema'):
         info['schema'] = typecls._schema
     quoted_fields = ('xsd_type', '_tag', '_namespace', '_values',
-                     '_type_attr', '_type_value')
+                     '_type_attr', '_type_value', '_abstract', 'any_attribute')
     for field in quoted_fields:
         if field in typecls.__dict__:
             fields.append((field, repr(getattr(typecls, field))))
@@ -103,32 +109,41 @@ def typeinfo(typecls):
         for ch in typecls._children:
             children.append(static.safe_id(ch.name))
             fields.append((static.safe_id(ch.name),
-                           Attr(ch.name, dep_class(ch.type, info['refs']),
+                           Attr(ch.name, Ref(dep_class(ch.type, info['refs'])),
                                 ch.min, ch.max, ch.namespace))
                           )
-    fields.append(('_children', '[%s]' % ', '.join(children)))
+    if children:
+        fields.append(('_children', '[%s]' % ', '.join(children)))
 
     attributes = []
     if hasattr(typecls, '_attributes'):
         for ch in typecls._attributes:
             attributes.append(static.safe_id(ch.name))
             fields.append((static.safe_id(ch.name),
-                           Attr(ch.name, dep_class(ch.type, info['refs']),
+                           Attr(ch.name, Ref(dep_class(ch.type, info['refs'])),
                                 ch.min, ch.max, ch.namespace))
                           )
-    fields.append(('_attributes', '[%s]' % ', '.join(attributes)))
+    if attributes:
+        fields.append(('_attributes', '[%s]' % ', '.join(attributes)))
 
     if hasattr(typecls, '_substitutions'):
         subs = {}
         for name, scls in typecls._substitutions.items():
-            subs[name] = dep_class(scls, info['refs'])
-        fields.append(('_substitutions', subs))
+            subs[name] = Ref(dep_class(scls, info['refs']))
+        if subs:
+            fields.append(('_substitutions', subs))
 
     type_fields = ('_content_type', '_arrayType')
     for field in type_fields:
         if hasattr(typecls, field) and getattr(typecls, field) is not None:
-            info[field] = dep_class(getattr(typecls, field), info['refs'])
+            info[field] = Ref(dep_class(getattr(typecls, field), info['refs']))
             fields.append((field, info[field]))
+
+    # enum values
+    if hasattr(typecls, '_values'):
+        for val in typecls._values:
+            fields.append((static.safe_id(val), repr(val)))
+
     return info
 
 
@@ -139,17 +154,32 @@ def mark_resolved_refs(types):
             continue
         for field, val in t['fields']:
             if isinstance(val, Attr):
-                if val.ref_type in t['unresolved']:
-                    val.resolved = False
+                if val.ref_type.ref_type in t['unresolved']:
+                    val.ref_type.resolved = False
                     unresolved = True
             elif isinstance(val, dict):
                 # _substitutions
                 for k, v in val.items():
-                    if isinstance(v, Attr):
+                    if isinstance(v, Ref):
                         if v.ref_type in t['unresolved']:
-                            val.resolved = False
+                            v.resolved = False
                             unresolved = True
     return unresolved
+
+
+class Ref(object):
+    def __init__(self, ref_type):
+        self.ref_type = ref_type
+        self.resolved = True
+
+    def __str__(self):
+        if self.resolved:
+            return self.ref_type
+        else:
+            return 'Client.ref(%r)' % self.ref_type
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class Attr(object):
@@ -159,7 +189,6 @@ class Attr(object):
         self.min = min
         self.max = max
         self.namespace = namespace
-        self.resolved = True
 
     def __str__(self):
         info = {
@@ -169,8 +198,6 @@ class Attr(object):
             'namespace': self.namespace,
             'type': self.ref_type
             }
-        if not self.resolved:
-            info['type'] = 'Client.ref(%r)' % self.ref_type
 
         tpl = 'client.AttributeDescriptor(name=%(name)r, type_=%(type)s'
         if self.min is not None:
@@ -185,7 +212,9 @@ class Attr(object):
 def dep_class(cls, deplist):
     """Class reference that must be resolved before code output"""
     qn = qualifed_classname(cls)
-    if not qn.lower().startswith('client.') or qn == 'None':
+    if (not qn.lower().startswith('client.') and
+        qn != 'None' and
+        qn not in __builtins__):
         deplist.append(qn)
     return qn
 

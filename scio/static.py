@@ -62,8 +62,9 @@ class Client(client.Client):
         return self._types(self)
 
     @classmethod
-    def register(cls, type_):
-        return cls._types.register(type_)
+    def register(cls, name, type_):
+        """Register a type under the given name"""
+        return cls._types.register(name, type_)
 
     @classmethod
     def ref(cls, name):
@@ -109,11 +110,9 @@ class TypeRegistry(object):
     def __call__(self, client):
         return Types(client, self._types)
 
-    def register(self, cls):
-        self._types[cls.__name__] = cls
-        if cls._name != cls.__name__:
-            self._types[cls._name] = cls
-        return cls
+    def register(self, name, cls):
+        self._types[name] = cls
+        cls._resolver = self
 
     def resolve_refs(self):
         for cn, t in self._types.items():
@@ -126,13 +125,13 @@ class TypeRegistry(object):
                     # example: AttributeDescriptor.type
                     if isinstance(item.type, self.ref):
                         item.type = self._find(item.type.name)
-                elif entry == '_substitutions':
+                elif entry == '_substitutions' and item:
                     for k, v in item.items():
                         if isinstance(v, self.ref):
                             item[k] = self._find(v.name)
 
     def _find(self, valtype):
-        return self._types[safe_id(valtype)]
+        return self._types[valtype]
 
     @property
     def AnyType(self):
@@ -165,4 +164,6 @@ class AnyType(client.AnyType):
 
 
 def safe_id(name):
+    if name == 'None':
+        return 'None_'
     return name.replace('.', '_').replace('$', '__S__')
