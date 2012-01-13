@@ -2,12 +2,6 @@
 Scio: client code generator
 ===========================
 
-.. warning ::
-
-   While Scio itself is compatible with Python 2.4 and above, generated
-   code makes use of class decorators, and so requires Python 2.6.
-
-
 Generating client modules from WSDL files
 -----------------------------------------
 
