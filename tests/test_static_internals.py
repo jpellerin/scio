@@ -8,6 +8,7 @@ from nose.tools import raises, eq_
 import scio
 import scio.client
 import scio.gen
+from scio.static import safe_id
 import helpers
 
 
@@ -24,6 +25,8 @@ def test_enum_restriction_not_first_element():
     zf = M['zf'].Client()
     print zf.type.ApiAccessMask._values
     assert zf.type.ApiAccessMask._values
+    for val in zf.type.ApiAccessMask._values:
+        assert getattr(zf.type.ApiAccessMask, safe_id(val)) == val
 
 
 def test_list_unmarshalling():
