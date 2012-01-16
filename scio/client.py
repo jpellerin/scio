@@ -743,7 +743,6 @@ class ComplexType(Element, Pickleable):
         if cls._abstract and cls._resolver and element is not None:
             valtype = xsi_type(element)
             if valtype:
-                # FIXME this doesn't work for generated clients
                 cls = cls._resolver._find(valtype)
         return object.__new__(cls)
 
