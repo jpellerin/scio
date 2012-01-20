@@ -207,7 +207,10 @@ class Client(object):
                 string = string.text
             detail = fault.find('detail')
             if detail is not None:
-                detail = detail.text
+                if detail.text:
+                    detail = detail.text
+                else:
+                    detail = etree.tostring(detail)
             raise Fault(method.location, method.name, code, string, detail)
 
     @property
