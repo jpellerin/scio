@@ -1293,11 +1293,16 @@ class Factory(object):
     _schema_tag = '{%s}schema' % NS_XSD
     _import_tag = '{%s}import' % NS_XSD
     _cplx_type_tag = '{%s}complexType' % NS_XSD
+    _wsdl_import_tag = '{%s}import' % NS_WSDL
 
     def __init__(self, wsdl_file):
         self.wsdl = etree.parse(wsdl_file).getroot()
         self.nsmap = NSStack(self.wsdl)
         self._imports = {}
+        self._opinfo = dict(messages={},
+                            operations={},
+                            bindings={},
+                            port_types={})
         self._lock = RLock()
         self._lock.acquire()
         try:
@@ -1313,8 +1318,9 @@ class Factory(object):
         """
         self._lock.acquire()
         try:
-            self._process_types(client)
-            self._process_methods(client)
+            self._process_wsdl_imports(client)
+            self._process_types(client, self.wsdl)
+            self._process_methods(client, self.wsdl)
             return client
         finally:
             self._lock.release()
@@ -1330,9 +1336,33 @@ class Factory(object):
                 return TypeRef(name, self)
             raise
 
-    def _process_types(self, client):
+    def _process_wsdl_imports(self, client):
+        # handle top-level imports
+        imports = self.wsdl.findall(self._wsdl_import_tag)
+        for child in imports:
+            self._process_wsdl_import(client, child)
+
+    def _process_wsdl_import(self, client, child):
+        # loop protection
+        # process schema for any types
+        # (which may trigger schema imports too)
+        # change process ports to
+        # load all messages and portTypes and add to
+        # lookup hashes for those
+        url = child.get('location')
+        if not url:
+            return
+        if url in self._imports:
+            log.debug('Already imported %s', url)
+            return
+        wsdl = etree.parse(urlopen(url)).getroot()
+        self._imports[url] = wsdl
+        self._process_types(client, wsdl)
+        self._process_methods(client, wsdl)
+
+    def _process_types(self, client, wsdl):
         self._refs = []
-        types = self.wsdl.find(self._types_tag)
+        types = wsdl.find(self._types_tag)
         if types is None:
             return
         for child in types.getchildren():
@@ -1390,8 +1420,19 @@ class Factory(object):
                 setattr(client_type, name, ref())
         self._refs = []
 
-    def _process_methods(self, client):
-        services = self.wsdl.findall('.//{%s}service' % NS_WSDL)
+    def _process_methods(self, client, wsdl):
+        # change: look up all messages, bindings, operations and portTypes
+        # make lookup hashes of each keyed by name
+        bindings = wsdl.findall('.//{%s}binding' % NS_WSDL)
+        for binding in bindings:
+            self._opinfo['bindings'][binding.get('name')] = binding
+        ptypes = wsdl.findall('.//{%s}portType' % NS_WSDL)
+        for ptype in ptypes:
+            self._opinfo['port_types'][ptype.get('name')] = ptype
+        messages = wsdl.findall('.//{%s}message' % NS_WSDL)
+        for message in messages:
+            self._opinfo['messages'][message.get('name')] = message
+        services = wsdl.findall('.//{%s}service' % NS_WSDL)
         for service in services:
             for port in service.findall('.//{%s}port' % NS_WSDL):
                 if not self._is_soap_port(port):
@@ -1406,15 +1447,14 @@ class Factory(object):
         return False
 
     def _process_port(self, client, port):
+        # FIXME look up bindings, portTypes, operations, messages by name
         service = client.service
         location = port[0].get('location')
         binding_name = local_attr(port.get('binding'))
-        binding = self.wsdl.find(".//{%s}binding[@name='%s']" %
-                                  (NS_WSDL, binding_name))
+        binding = self._opinfo['bindings'][binding_name]
         style = self._binding_style(binding)
         ptype_name = local_attr(binding.get('type'))
-        ptype = self.wsdl.find(".//{%s}portType[@name='%s']" %
-                                (NS_WSDL, ptype_name))
+        ptype = self._opinfo['port_types'][ptype_name]
         for op in binding.findall('{%s}operation' % NS_WSDL):
             name = local_attr(op.attrib['name'])
             params = op.attrib.get('parameterOrder', '').split(' ')
@@ -1434,12 +1474,10 @@ class Factory(object):
                 '{%s}input' % NS_WSDL).attrib['message'])
             out_msg_name = local_attr(port_op.find(
                 '{%s}output' % NS_WSDL).attrib['message'])
-            in_types = self.wsdl.findall(
-                ".//{%s}message[@name='%s']/{%s}part" %
-                (NS_WSDL, in_msg_name, NS_WSDL))
-            out_types = self.wsdl.findall(
-                './/{%s}message[@name="%s"]/{%s}part' %
-                (NS_WSDL, out_msg_name, NS_WSDL))
+            in_types = self._opinfo['messages'][in_msg_name].findall(
+                '{%s}part' % NS_WSDL)
+            out_types = self._opinfo['messages'][out_msg_name].findall(
+                '{%s}part' % NS_WSDL)
             in_msg = self._make_input_msg(client, name, in_types, params,
                                           op_style, literal, in_headers)
             out_msg = self._make_output_msg(client, name, out_types,
