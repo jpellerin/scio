@@ -1299,10 +1299,9 @@ class Factory(object):
         self.wsdl = etree.parse(wsdl_file).getroot()
         self.nsmap = NSStack(self.wsdl)
         self._imports = {}
-        self._opinfo = dict(messages={},
-                            operations={},
-                            bindings={},
-                            port_types={})
+        self._methods = dict(message={},
+                             binding={},
+                             port_type={})
         self._lock = RLock()
         self._lock.acquire()
         try:
@@ -1421,17 +1420,17 @@ class Factory(object):
         self._refs = []
 
     def _process_methods(self, client, wsdl):
-        # change: look up all messages, bindings, operations and portTypes
-        # make lookup hashes of each keyed by name
-        bindings = wsdl.findall('.//{%s}binding' % NS_WSDL)
-        for binding in bindings:
-            self._opinfo['bindings'][binding.get('name')] = binding
-        ptypes = wsdl.findall('.//{%s}portType' % NS_WSDL)
-        for ptype in ptypes:
-            self._opinfo['port_types'][ptype.get('name')] = ptype
-        messages = wsdl.findall('.//{%s}message' % NS_WSDL)
-        for message in messages:
-            self._opinfo['messages'][message.get('name')] = message
+        # catalog the method building blocks we'll need to
+        # look up later on (one wsdl file may reference
+        # method parts defined in another that is imported
+        # so we can't depend on them being in this wsdl)
+        for binding in wsdl.findall('.//{%s}binding' % NS_WSDL):
+            self._methods['binding'][binding.get('name')] = binding
+        for ptype in wsdl.findall('.//{%s}portType' % NS_WSDL):
+            self._methods['port_type'][ptype.get('name')] = ptype
+        for message in wsdl.findall('.//{%s}message' % NS_WSDL):
+            self._methods['message'][message.get('name')] = message
+        # then process each soap port in each service entry
         services = wsdl.findall('.//{%s}service' % NS_WSDL)
         for service in services:
             for port in service.findall('.//{%s}port' % NS_WSDL):
@@ -1447,14 +1446,13 @@ class Factory(object):
         return False
 
     def _process_port(self, client, port):
-        # FIXME look up bindings, portTypes, operations, messages by name
         service = client.service
         location = port[0].get('location')
         binding_name = local_attr(port.get('binding'))
-        binding = self._opinfo['bindings'][binding_name]
+        binding = self._binding(binding_name)
         style = self._binding_style(binding)
         ptype_name = local_attr(binding.get('type'))
-        ptype = self._opinfo['port_types'][ptype_name]
+        ptype = self._port_type(ptype_name)
         for op in binding.findall('{%s}operation' % NS_WSDL):
             name = local_attr(op.attrib['name'])
             params = op.attrib.get('parameterOrder', '').split(' ')
@@ -1474,9 +1472,9 @@ class Factory(object):
                 '{%s}input' % NS_WSDL).attrib['message'])
             out_msg_name = local_attr(port_op.find(
                 '{%s}output' % NS_WSDL).attrib['message'])
-            in_types = self._opinfo['messages'][in_msg_name].findall(
+            in_types = self._message(in_msg_name).findall(
                 '{%s}part' % NS_WSDL)
-            out_types = self._opinfo['messages'][out_msg_name].findall(
+            out_types = self._message(out_msg_name).findall(
                 '{%s}part' % NS_WSDL)
             in_msg = self._make_input_msg(client, name, in_types, params,
                                           op_style, literal, in_headers)
@@ -1484,6 +1482,24 @@ class Factory(object):
                                             op_style, literal, out_headers)
             setattr(service, name,
                     Method(location, name, action, in_msg, out_msg))
+
+    def _binding(self, binding_name):
+        try:
+            return self._methods['binding'][binding_name]
+        except KeyError:
+            raise SyntaxError("No binding found with name '%s'" % binding_name)
+
+    def _port_type(self, ptype_name):
+        try:
+            return self._methods['port_type'][ptype_name]
+        except KeyError:
+            raise SyntaxError("No portType found with name '%s'" % ptype_name)
+
+    def _message(self, message_name):
+        try:
+            return self._methods['message'][message_name]
+        except KeyError:
+            raise SyntaxError("No message found with name '%s'" % message_name)
 
     def _make_input_msg(self, client, name, types, params, op_style, literal,
                         headers):
