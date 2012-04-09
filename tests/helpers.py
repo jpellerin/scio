@@ -1,3 +1,4 @@
+from __future__ import with_statement
 import os
 
 from scio import client, gen
